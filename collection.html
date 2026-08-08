@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Collection | Leg Theory</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: #000;
+      color: #fff;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .page {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* LEFT NAVIGATION */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 24%;
+      height: 100vh;
+      padding: 42px 34px;
+      background: #000;
+      border-right: 1px solid rgba(255, 255, 255, 0.12);
+      z-index: 10;
+    }
+
+    .brand {
+      display: inline-block;
+      color: #fff;
+      text-decoration: none;
+      font-size: 22px;
+      letter-spacing: 0.18em;
+      font-weight: 400;
+      margin-bottom: 70px;
+    }
+
+    .menu-title {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: none;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      text-align: left;
+      font-size: 13px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 10px 0;
+    }
+
+    .arrow {
+      transition: transform 0.25s ease;
+      font-size: 11px;
+    }
+
+    .menu-title.open .arrow {
+      transform: rotate(180deg);
+    }
+
+    .submenu {
+      display: none;
+      padding-left: 14px;
+      margin-bottom: 8px;
+    }
+
+    .submenu.open {
+      display: block;
+    }
+
+    .submenu button,
+    .coming-soon {
+      display: block;
+      width: 100%;
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.58);
+      text-align: left;
+      cursor: pointer;
+      padding: 8px 0;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .submenu button:hover,
+    .submenu button.active {
+      color: #fff;
+    }
+
+    .coming-soon {
+      cursor: default;
+      color: rgba(255, 255, 255, 0.28);
+    }
+
+    /* RIGHT CONTENT */
+    .content {
+      margin-left: 24%;
+      width: 76%;
+      min-height: 100vh;
+      padding: 42px 54px 70px;
+    }
+
+    .product-header {
+      margin-bottom: 32px;
+    }
+
+    .product-label {
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 10px;
+    }
+
+    .product-title {
+      font-size: clamp(34px, 5vw, 68px);
+      font-weight: 300;
+      letter-spacing: 0.05em;
+      margin-bottom: 10px;
+    }
+
+    .product-price {
+      font-size: 15px;
+      letter-spacing: 0.08em;
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    /* IMAGE PLACEHOLDERS */
+    .gallery {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-bottom: 36px;
+    }
+
+    .image-placeholder {
+      min-height: 520px;
+      background: #111;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, 0.22);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .image-placeholder.large {
+      grid-column: 1 / -1;
+      min-height: 720px;
+    }
+
+    .product-info {
+      max-width: 620px;
+      margin-top: 20px;
+    }
+
+    .description {
+      font-size: 16px;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.76);
+      margin-bottom: 28px;
+    }
+
+    .order-note {
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      color: rgba(255, 255, 255, 0.55);
+    }
+
+    .order-button {
+      display: inline-block;
+      padding: 13px 24px;
+      border: 1px solid #fff;
+      color: #fff;
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: 0.25s ease;
+    }
+
+    .order-button:hover {
+      background: #fff;
+      color: #000;
+    }
+
+    /* MOBILE */
+    @media (max-width: 800px) {
+      .page {
+        display: block;
+      }
+
+      .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        padding: 28px 22px 20px;
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      }
+
+      .brand {
+        margin-bottom: 28px;
+      }
+
+      .content {
+        margin-left: 0;
+        width: 100%;
+        padding: 30px 20px 50px;
+      }
+
+      .gallery {
+        grid-template-columns: 1fr;
+      }
+
+      .image-placeholder,
+      .image-placeholder.large {
+        grid-column: auto;
+        min-height: 460px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page">
+
+    <!-- LEFT SIDE -->
+    <aside class="sidebar">
+
+      <a href="index.html" class="brand">
+        LEG THEORY
+      </a>
+
+      <button class="menu-title open" onclick="toggleMenu('collectionMenu', this)">
+        <span>Collection</span>
+        <span class="arrow">⌄</span>
+      </button>
+
+      <div class="submenu open" id="collectionMenu">
+
+        <button class="menu-title open" onclick="toggleMenu('firstDropMenu', this)">
+          <span>First Drop</span>
+          <span class="arrow">⌄</span>
+        </button>
+
+        <div class="submenu open" id="firstDropMenu">
+          <button class="active" onclick="showProduct('black', this)">Black</button>
+          <button onclick="showProduct('red', this)">Red</button>
+          <button onclick="showProduct('white', this)">White</button>
+        </div>
+
+        <div class="coming-soon">
+          New Legwear — Coming Soon
+        </div>
+
+      </div>
+
+    </aside>
+
+    <!-- RIGHT SIDE -->
+    <main class="content">
+
+      <section class="product-header">
+        <div class="product-label" id="productLabel">
+          First Drop
+        </div>
+
+        <h1 class="product-title" id="productTitle">
+          Black
+        </h1>
+
+        <div class="product-price">
+          €65 / pair
+        </div>
+      </section>
+
+      <section class="gallery" id="gallery">
+
+        <div class="image-placeholder large">
+          Main image
+        </div>
+
+        <div class="image-placeholder">
+          Image 2
+        </div>
+
+        <div class="image-placeholder">
+          Image 3
+        </div>
+
+        <div class="image-placeholder large">
+          Image 4
+        </div>
+
+      </section>
+
+      <section class="product-info">
+
+        <p class="description" id="productDescription">
+          Patent leather leg sleeves designed for movement, styling and heels.
+        </p>
+
+        <div class="order-note">
+          To order
+        </div>
+
+        <a
+          class="order-button"
+          href="https://www.instagram.com/thelegtheory/"
+          target="_blank"
+        >
+          DM us on Instagram
+        </a>
+
+      </section>
+
+    </main>
+
+  </div>
+
+  <script>
+    function toggleMenu(id, button) {
+      const menu = document.getElementById(id);
+      menu.classList.toggle('open');
+      button.classList.toggle('open');
+    }
+
+    const products = {
+      black: {
+        title: 'Black',
+        description: 'Patent leather leg sleeves designed for movement, styling and heels.'
+      },
+
+      red: {
+        title: 'Red',
+        description: 'Patent leather leg sleeves in red, designed for movement, styling and heels.'
+      },
+
+      white: {
+        title: 'White',
+        description: 'Patent leather leg sleeves in white, designed for movement, styling and heels.'
+      }
+    };
+
+    function showProduct(color, button) {
+      document.getElementById('productTitle').textContent =
+        products[color].title;
+
+      document.getElementById('productDescription').textContent =
+        products[color].description;
+
+      const buttons =
+        document.querySelectorAll('#firstDropMenu button');
+
+      buttons.forEach(btn =>
+        btn.classList.remove('active')
+      );
+
+      button.classList.add('active');
+
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+  </script>
+
+</body>
+
+</html>
