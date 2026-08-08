@@ -110,6 +110,7 @@
     .coming-soon {
       cursor: default;
       color: rgba(255, 255, 255, 0.28);
+      padding-top: 18px;
     }
 
     /* RIGHT CONTENT */
@@ -117,11 +118,13 @@
       margin-left: 24%;
       width: 76%;
       min-height: 100vh;
-      padding: 42px 54px 70px;
+      padding: 48px 54px 60px;
     }
 
+    /* PRODUCT INFO FIRST */
     .product-header {
-      margin-bottom: 32px;
+      max-width: 650px;
+      margin-bottom: 36px;
     }
 
     .product-label {
@@ -133,7 +136,7 @@
     }
 
     .product-title {
-      font-size: clamp(34px, 5vw, 68px);
+      font-size: clamp(38px, 5vw, 68px);
       font-weight: 300;
       letter-spacing: 0.05em;
       margin-bottom: 10px;
@@ -143,59 +146,21 @@
       font-size: 15px;
       letter-spacing: 0.08em;
       color: rgba(255, 255, 255, 0.75);
-    }
-
-    /* IMAGE PLACEHOLDERS */
-    .gallery {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-      margin-bottom: 36px;
-    }
-
-    .image-placeholder {
-      min-height: 520px;
-      background: #111;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: rgba(255, 255, 255, 0.22);
-      font-size: 11px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    .image-placeholder img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-
-    .image-placeholder.large {
-      grid-column: 1 / -1;
-      min-height: 720px;
-    }
-
-    .product-info {
-      max-width: 620px;
-      margin-top: 20px;
+      margin-bottom: 24px;
     }
 
     .description {
       font-size: 16px;
       line-height: 1.7;
       color: rgba(255, 255, 255, 0.76);
-      margin-bottom: 28px;
+      margin-bottom: 12px;
     }
 
-    .order-note {
+    .product-note {
       font-size: 12px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      margin-bottom: 14px;
-      color: rgba(255, 255, 255, 0.55);
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.45);
+      margin-bottom: 24px;
     }
 
     .order-button {
@@ -213,6 +178,52 @@
     .order-button:hover {
       background: #fff;
       color: #000;
+    }
+
+    /* HORIZONTAL GALLERY */
+    .gallery {
+      display: flex;
+      gap: 18px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding-bottom: 14px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .gallery::-webkit-scrollbar {
+      height: 5px;
+    }
+
+    .gallery::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.28);
+    }
+
+    .gallery-item {
+      flex: 0 0 72%;
+      height: 68vh;
+      min-height: 500px;
+      background: #111;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      scroll-snap-align: start;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .placeholder {
+      color: rgba(255, 255, 255, 0.25);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
     }
 
     /* MOBILE */
@@ -240,14 +251,10 @@
         padding: 30px 20px 50px;
       }
 
-      .gallery {
-        grid-template-columns: 1fr;
-      }
-
-      .image-placeholder,
-      .image-placeholder.large {
-        grid-column: auto;
-        min-height: 460px;
+      .gallery-item {
+        flex: 0 0 88%;
+        height: 65vh;
+        min-height: 430px;
       }
     }
   </style>
@@ -271,12 +278,12 @@
 
       <div class="submenu open" id="collectionMenu">
 
-        <button class="menu-title open" onclick="toggleMenu('firstDropMenu', this)">
+        <button class="menu-title open" onclick="toggleMenu('legSleevesMenu', this)">
           <span>Patent Leather Leg Sleeves</span>
           <span class="arrow">⌄</span>
         </button>
 
-        <div class="submenu open" id="firstDropMenu">
+        <div class="submenu open" id="legSleevesMenu">
           <button class="active" onclick="showProduct('black', this)">Black</button>
           <button onclick="showProduct('red', this)">Red</button>
           <button onclick="showProduct('white', this)">White</button>
@@ -294,7 +301,8 @@
     <main class="content">
 
       <section class="product-header">
-        <div class="product-label" id="productLabel">
+
+        <div class="product-label">
           Patent Leather Leg Sleeves
         </div>
 
@@ -305,81 +313,125 @@
         <div class="product-price">
           €65 / pair
         </div>
-      </section>
-
-<section class="gallery" id="gallery">
-
-    <div class="image-placeholder large">
-        <img src="Black1.jpg" alt="Black patent leather leg sleeves">
-    </div>
-
-    <div class="image-placeholder">
-        <img src="Black2.jpg" alt="Black patent leather leg sleeves">
-    </div>
-
-    <div class="image-placeholder">
-        <img src="Black3.jpg" alt="Black patent leather leg sleeves">
-    </div>
-
-</section>
-
-      <section class="product-info">
 
         <p class="description" id="productDescription">
-          Patent leather leg sleeves designed for movement, styling and heels.
+          Statement leg sleeves designed for heels, movement and styling.
         </p>
 
-        <div class="order-note">
-          To order
-        </div>
+        <p class="product-note">
+          Leg sleeves only. Heels not included.
+        </p>
 
         <a
           class="order-button"
           href="https://www.instagram.com/thelegtheory/"
           target="_blank"
         >
-          DM us on Instagram
+          DM us on Instagram to order
         </a>
 
       </section>
+
+      <section class="gallery" id="gallery"></section>
 
     </main>
 
   </div>
 
   <script>
+
     function toggleMenu(id, button) {
       const menu = document.getElementById(id);
+
       menu.classList.toggle('open');
       button.classList.toggle('open');
     }
 
+
     const products = {
+
       black: {
         title: 'Black',
-        description: 'Patent leather leg sleeves designed for movement, styling and heels.'
+
+        description:
+          'Statement leg sleeves designed for heels, movement and styling.',
+
+        gallery: `
+          <div class="gallery-item">
+            <img src="Black1.jpg" alt="Black patent leather leg sleeves">
+          </div>
+
+          <div class="gallery-item">
+            <img src="Black2.jpg" alt="Black patent leather leg sleeves">
+          </div>
+
+          <div class="gallery-item">
+            <img src="Black3.jpg" alt="Black patent leather leg sleeves">
+          </div>
+        `
       },
+
 
       red: {
         title: 'Red',
-        description: 'Patent leather leg sleeves in red, designed for movement, styling and heels.'
+
+        description:
+          'Statement leg sleeves designed for heels, movement and styling.',
+
+        gallery: `
+          <div class="gallery-item placeholder">
+            Red image coming soon
+          </div>
+
+          <div class="gallery-item placeholder">
+            Red image coming soon
+          </div>
+
+          <div class="gallery-item placeholder">
+            Red image coming soon
+          </div>
+        `
       },
+
 
       white: {
         title: 'White',
-        description: 'Patent leather leg sleeves in white, designed for movement, styling and heels.'
+
+        description:
+          'Statement leg sleeves designed for heels, movement and styling.',
+
+        gallery: `
+          <div class="gallery-item placeholder">
+            White image coming soon
+          </div>
+
+          <div class="gallery-item placeholder">
+            White image coming soon
+          </div>
+
+          <div class="gallery-item placeholder">
+            White image coming soon
+          </div>
+        `
       }
+
     };
 
+
     function showProduct(color, button) {
+
       document.getElementById('productTitle').textContent =
         products[color].title;
 
       document.getElementById('productDescription').textContent =
         products[color].description;
 
+      document.getElementById('gallery').innerHTML =
+        products[color].gallery;
+
+
       const buttons =
-        document.querySelectorAll('#firstDropMenu button');
+        document.querySelectorAll('#legSleevesMenu button');
 
       buttons.forEach(btn =>
         btn.classList.remove('active')
@@ -387,11 +439,15 @@
 
       button.classList.add('active');
 
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
+
+      document.getElementById('gallery').scrollLeft = 0;
     }
+
+
+    /* Load Black when page first opens */
+    document.getElementById('gallery').innerHTML =
+      products.black.gallery;
+
   </script>
 
 </body>
