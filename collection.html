@@ -190,6 +190,91 @@
       color: #000;
     }
 
+    /* ORDER MESSAGE POPUP */
+
+.order-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.82);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 1000;
+}
+
+.order-modal.open {
+  display: flex;
+}
+
+.order-modal-box {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  background: #000;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  padding: 34px;
+}
+
+.modal-close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.modal-title {
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.modal-message {
+  font-size: 15px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  padding: 18px;
+  margin-bottom: 18px;
+}
+
+.copy-button,
+.instagram-button {
+  display: block;
+  width: 100%;
+  padding: 13px 20px;
+  border: 1px solid #fff;
+  background: transparent;
+  color: #fff;
+  text-decoration: none;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 11px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  transition: 0.25s ease;
+}
+
+.copy-button:hover,
+.instagram-button:hover {
+  background: #fff;
+  color: #000;
+}
+
+.copy-confirmation {
+  min-height: 18px;
+  margin-top: 8px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.55);
+  text-align: center;
+}
+    
     .size-selector {
   margin-bottom: 22px;
 }
@@ -457,7 +542,36 @@
       <section class="gallery" id="gallery"></section>
 
     </main>
+    
+<!-- ORDER MESSAGE POPUP -->
+<div class="order-modal" id="orderModal">
+  <div class="order-modal-box">
 
+    <button class="modal-close" onclick="closeOrderModal()">×</button>
+
+    <div class="modal-title">
+      Your message
+    </div>
+
+    <div class="modal-message" id="orderMessage"></div>
+
+    <button class="copy-button" onclick="copyOrderMessage()">
+      Copy message
+    </button>
+
+    <a
+      class="instagram-button"
+      href="https://www.instagram.com/thelegtheory/"
+      target="_blank"
+    >
+      Open Instagram
+    </a>
+
+    <div class="copy-confirmation" id="copyConfirmation"></div>
+
+  </div>
+</div>
+    
   </div>
 
   <script>
@@ -633,16 +747,62 @@ function selectSize(size, button) {
 }
 
 function handleOrderClick(event) {
-  if (!selectedSize && !fitHelpMode) {
-    event.preventDefault();
 
+  event.preventDefault();
+
+  if (!selectedSize && !fitHelpMode) {
     document.getElementById('sizeError').textContent =
       'Please select a size first.';
 
     return false;
   }
 
-  return true;
+  let message = '';
+
+  if (fitHelpMode) {
+
+    message =
+      `Hi! I’m interested in the ${currentColor} Patent Leather Leg Sleeves in size S. I saw that it’s sold out. Could you help me check if size M might work for me?`;
+
+  } else {
+
+    message =
+      `Hi! I’d like to order the ${currentColor} Patent Leather Leg Sleeves in size ${selectedSize}.`;
+
+  }
+
+  document.getElementById('orderMessage').textContent = message;
+
+  document.getElementById('copyConfirmation').textContent = '';
+
+  document.getElementById('orderModal').classList.add('open');
+
+  return false;
+}
+
+    function closeOrderModal() {
+  document.getElementById('orderModal').classList.remove('open');
+}
+
+
+async function copyOrderMessage() {
+
+  const message =
+    document.getElementById('orderMessage').textContent;
+
+  try {
+
+    await navigator.clipboard.writeText(message);
+
+    document.getElementById('copyConfirmation').textContent =
+      'Message copied — paste it into our Instagram DM.';
+
+  } catch (error) {
+
+    document.getElementById('copyConfirmation').textContent =
+      'Please copy the message manually.';
+
+  }
 }
     
   </script>
