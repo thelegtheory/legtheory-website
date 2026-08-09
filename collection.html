@@ -68,6 +68,14 @@
       padding: 10px 0;
     }
 
+    #collectionMenu > .menu-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: #fff;
+  padding-top: 14px;
+  padding-bottom: 12px;
+}
+
     .arrow {
       transition: transform 0.25s ease;
       font-size: 11px;
@@ -88,19 +96,19 @@
     }
 
     .submenu button,
-    .coming-soon {
-      display: block;
-      width: 100%;
-      background: none;
-      border: none;
-      color: rgba(255, 255, 255, 0.58);
-      text-align: left;
-      cursor: pointer;
-      padding: 8px 0;
-      font-size: 12px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
+.coming-soon {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  text-align: left;
+  cursor: pointer;
+  padding: 8px 0;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
 
     .submenu button:hover,
     .submenu button.active {
@@ -128,20 +136,23 @@
     }
 
     .product-label {
-      font-size: 11px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.5);
-      margin-bottom: 10px;
-    }
+  font-size: clamp(34px, 5vw, 68px);
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  text-transform: none;
+  color: #fff;
+  margin-bottom: 10px;
+}
 
-    .product-title {
-      font-size: clamp(38px, 5vw, 68px);
-      font-weight: 300;
-      letter-spacing: 0.05em;
-      margin-bottom: 10px;
-    }
-
+.product-title {
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.65);
+  margin-bottom: 10px;
+}
+    
     .product-price {
       font-size: 15px;
       letter-spacing: 0.08em;
