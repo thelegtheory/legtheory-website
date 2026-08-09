@@ -190,6 +190,74 @@
       color: #000;
     }
 
+    .size-selector {
+  margin-bottom: 22px;
+}
+
+.size-heading {
+  margin-bottom: 14px;
+}
+
+.size-title {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.size-note {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.size-options {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.size-option {
+  width: 92px;
+  padding: 12px 10px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #fff;
+  cursor: pointer;
+  text-align: center;
+  transition: 0.2s ease;
+}
+
+.size-option:hover,
+.size-option.selected {
+  border-color: #fff;
+  background: #fff;
+  color: #000;
+}
+
+.size-letter {
+  display: block;
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+
+.size-range {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+}
+
+.size-confirmation {
+  min-height: 18px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.size-error {
+  min-height: 18px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.55);
+}
+
     /* HORIZONTAL GALLERY */
     .gallery {
       display: flex;
@@ -333,14 +401,48 @@
         <p class="product-note">
           Leg sleeves only. Heels not included.
         </p>
+        
+        <div class="size-selector">
+        
+          <div class="size-heading">
+            <div class="size-title">Choose your size</div>
+            <div class="size-note">Based on your EU shoe size</div>
+          </div>
+        
+          <div class="size-options">
+        
+            <button class="size-option" onclick="selectSize('S', this)">
+              <span class="size-letter">S</span>
+              <span class="size-range">EU 34–35</span>
 
+            </button>
+        
+            <button class="size-option" onclick="selectSize('M', this)">
+              <span class="size-letter">M</span>
+              <span class="size-range">EU 36–38</span>
+            </button>
+        
+            <button class="size-option" onclick="selectSize('L', this)">
+              <span class="size-letter">L</span>
+              <span class="size-range">EU 39–41</span>
+            </button>
+        
+          </div>
+        
+          <div class="size-confirmation" id="sizeConfirmation"></div>
+        
+          <div class="size-error" id="sizeError"></div>
+        
+        </div>
+       
         <a
-          class="order-button"
-          href="https://www.instagram.com/thelegtheory/"
-          target="_blank"
+      class="order-button"
+      href="https://www.instagram.com/thelegtheory/"
+      target="_blank"
+      onclick="return handleOrderClick(event)"
         >
-          DM us on Instagram to order
-        </a>
+      DM us on Instagram to order
+      </a>
 
       </section>
 
@@ -438,9 +540,12 @@
     };
 
 
-    function showProduct(color, button) {
+   function showProduct(color, button) {
 
-      document.getElementById('productTitle').textContent =
+    currentColor = products[color].title;
+    selectedSize = null;
+
+    document.getElementById('productTitle').textContent =
         products[color].title;
 
     document.getElementById('productDescription').innerHTML =
@@ -459,6 +564,13 @@
 
       button.classList.add('active');
 
+     document.querySelectorAll('.size-option').forEach(btn => {
+    btn.classList.remove('selected');
+});
+
+document.getElementById('sizeConfirmation').textContent = '';
+document.getElementById('sizeError').textContent = '';
+
 
       document.getElementById('gallery').scrollLeft = 0;
     }
@@ -468,6 +580,37 @@
     document.getElementById('gallery').innerHTML =
       products.black.gallery;
 
+let selectedSize = null;
+let currentColor = 'Black';
+
+function selectSize(size, button) {
+  selectedSize = size;
+
+  document.querySelectorAll('.size-option').forEach(btn => {
+    btn.classList.remove('selected');
+  });
+
+  button.classList.add('selected');
+
+  document.getElementById('sizeConfirmation').textContent =
+    `${currentColor} · Size ${size}`;
+
+  document.getElementById('sizeError').textContent = '';
+}
+
+function handleOrderClick(event) {
+  if (!selectedSize) {
+    event.preventDefault();
+
+    document.getElementById('sizeError').textContent =
+      'Please select a size first.';
+
+    return false;
+  }
+
+  return true;
+}
+    
   </script>
 
 </body>
