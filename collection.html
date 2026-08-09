@@ -620,10 +620,11 @@
     <p>High-shine patent finish with a soft inner lining for comfort. Side zipper, lace-up fit and elastic heel strap keep the sleeves secure and adjustable.</p>
 `,
         gallery: `
-          <div class="gallery-item placeholder">
-            Red image coming soon
+         
+         <div class="gallery-item">
+          <img src="red1.jpg" alt="Red patent leather leg sleeves">
           </div>
-
+          
           <div class="gallery-item placeholder">
             Red image coming soon
           </div>
@@ -739,9 +740,17 @@ function selectSize(size, button) {
   fitHelpMode = false;
 
   button.classList.add('selected');
+let confirmationText = `${currentColor} · Size ${size}`;
 
-  document.getElementById('sizeConfirmation').textContent =
-    `${currentColor} · Size ${size}`;
+if (
+  currentColor === 'Red' &&
+  (size === 'M' || size === 'L')
+) {
+  confirmationText += ' · Only 1 left';
+}
+
+document.getElementById('sizeConfirmation').textContent =
+  confirmationText;
 
   document.getElementById('sizeError').textContent = '';
 }
