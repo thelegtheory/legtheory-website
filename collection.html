@@ -296,8 +296,8 @@
 
         <div class="submenu open" id="legSleevesMenu">
           <button class="active" onclick="showProduct('black', this)">Black</button>
-          <button onclick="showProduct('red', this)">Red</button>
           <button onclick="showProduct('white', this)">White</button>
+          <button onclick="showProduct('red', this)">Red</button>
         </div>
 
         <div class="coming-soon">
@@ -388,9 +388,11 @@
       red: {
         title: 'Red',
 
-        description:
-          'Statement leg sleeves designed for heels, movement and styling.',
+        description: `
+    <p>Designed for pole and heels dancers to create an over-the-knee boot look with your own platform or regular heels, from sandals to ankle boots.</p>
 
+    <p>High-shine patent finish with a soft inner lining for comfort. Side zipper, lace-up fit and elastic heel strap keep the sleeves secure and adjustable.</p>
+`,
         gallery: `
           <div class="gallery-item placeholder">
             Red image coming soon
@@ -410,8 +412,11 @@
       white: {
         title: 'White',
 
-        description:
-          'Statement leg sleeves designed for heels, movement and styling.',
+        description: `
+    <p>Designed for pole and heels dancers to create an over-the-knee boot look with your own platform or regular heels, from sandals to ankle boots.</p>
+
+    <p>High-shine patent finish with a soft inner lining for comfort. Side zipper, lace-up fit and elastic heel strap keep the sleeves secure and adjustable.</p>
+`,
 
         gallery: `
           <div class="gallery-item placeholder">
@@ -436,8 +441,8 @@
       document.getElementById('productTitle').textContent =
         products[color].title;
 
-      document.getElementById('productDescription').textContent =
-        products[color].description;
+    document.getElementById('productDescription').innerHTML =
+    products[color].description;
 
       document.getElementById('gallery').innerHTML =
         products[color].gallery;
