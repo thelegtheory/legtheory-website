@@ -234,6 +234,32 @@
   color: #000;
 }
 
+    .size-option.sold-out {
+  position: relative;
+  color: rgba(255, 255, 255, 0.38);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.size-option.sold-out::before,
+.size-option.sold-out::after {
+  content: "";
+  position: absolute;
+  left: 10%;
+  top: 50%;
+  width: 80%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.65);
+  pointer-events: none;
+}
+
+.size-option.sold-out::before {
+  transform: rotate(28deg);
+}
+
+.size-option.sold-out::after {
+  transform: rotate(-28deg);
+}
+
 .size-letter {
   display: block;
   font-size: 15px;
@@ -411,7 +437,7 @@
         
           <div class="size-options">
         
-            <button class="size-option" onclick="selectSize('S', this)">
+            <button id="sizeS" class="size-option" onclick="selectSize('S', this)">
               <span class="size-letter">S</span>
               <span class="size-range">EU 34–35</span>
 
@@ -544,6 +570,7 @@
 
     currentColor = products[color].title;
     selectedSize = null;
+    fitHelpMode = false;
 
     document.getElementById('productTitle').textContent =
         products[color].title;
@@ -571,6 +598,13 @@
 document.getElementById('sizeConfirmation').textContent = '';
 document.getElementById('sizeError').textContent = '';
 
+const sizeSButton = document.getElementById('sizeS');
+
+if (currentColor === 'Red' || currentColor === 'White') {
+  sizeSButton.classList.add('sold-out');
+} else {
+  sizeSButton.classList.remove('sold-out');
+}
 
       document.getElementById('gallery').scrollLeft = 0;
     }
@@ -582,13 +616,31 @@ document.getElementById('sizeError').textContent = '';
 
 let selectedSize = null;
 let currentColor = 'Black';
+let fitHelpMode = false;
 
 function selectSize(size, button) {
-  selectedSize = size;
 
   document.querySelectorAll('.size-option').forEach(btn => {
     btn.classList.remove('selected');
   });
+
+  if (
+    size === 'S' &&
+    (currentColor === 'Red' || currentColor === 'White')
+  ) {
+    selectedSize = null;
+    fitHelpMode = true;
+
+    document.getElementById('sizeConfirmation').textContent = '';
+
+    document.getElementById('sizeError').textContent =
+      'Size S is sold out in this color. M may still work depending on fit, DM us and we can help.';
+
+    return;
+  }
+
+  selectedSize = size;
+  fitHelpMode = false;
 
   button.classList.add('selected');
 
@@ -599,7 +651,7 @@ function selectSize(size, button) {
 }
 
 function handleOrderClick(event) {
-  if (!selectedSize) {
+  if (!selectedSize && !fitHelpMode) {
     event.preventDefault();
 
     document.getElementById('sizeError').textContent =
