@@ -804,19 +804,19 @@ let fitHelpMode = false;
 
 const checkoutLinks = {
   Black: {
-    S: 'BLACK_S_STRIPE_LINK',
+    S: 'https://buy.stripe.com/aFa14p7YXejz0vngw10Ny01',
     M: 'https://buy.stripe.com/fZu14p0wv2ARba13Jf0Ny00',
-    L: 'BLACK_L_STRIPE_LINK'
+    L: 'https://buy.stripe.com/dRmaEZbb92ARemd2Fb0Ny02'
   },
 
   White: {
-    M: 'WHITE_M_STRIPE_LINK',
-    L: 'WHITE_L_STRIPE_LINK'
+    M: 'https://buy.stripe.com/cNicN7931grH1zrcfL0Ny03',
+    L: 'https://buy.stripe.com/00w6oJ6UT5N3ce5a7D0Ny04'
   },
 
   Red: {
-    M: 'RED_M_STRIPE_LINK',
-    L: 'RED_L_STRIPE_LINK'
+    M: 'https://buy.stripe.com/4gMcN7a75b7n7XPcfL0Ny05',
+    L: 'https://buy.stripe.com/cNi6oJ4MLejz6TLenT0Ny06'
   }
 };
     
@@ -837,13 +837,25 @@ function selectSize(size, button) {
 
     document.getElementById('sizeError').textContent =
       'Size S is sold out in this color. M may still work depending on fit, DM us and we can help.';
-
+    const buyButton = document.querySelector(
+      '.order-option-box:last-child .order-button'
+    );
+    
+    buyButton.disabled = true;
+    buyButton.classList.add('disabled');
     return;
   }
 
   selectedSize = size;
   fitHelpMode = false;
 
+  const buyButton = document.querySelector(
+    '.order-option-box:last-child .order-button'
+  );
+  
+  buyButton.disabled = false;
+  buyButton.classList.remove('disabled');
+  
   button.classList.add('selected');
 let confirmationText = `${currentColor} · Size ${size}`;
 
