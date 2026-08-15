@@ -125,8 +125,8 @@
 
     /* RIGHT CONTENT */
     .content {
-      margin-left: 24%;
-      width: 76%;
+      margin-left: 0;
+      width: 100%;
       min-height: 100vh;
       padding: 48px 54px 60px;
     }
@@ -515,39 +515,6 @@
 <body>
 
   <div class="page">
-
-    <!-- LEFT SIDE -->
-    <aside class="sidebar">
-
-      <a href="index.html" class="brand">
-        LEG THEORY
-      </a>
-
-      <button class="menu-title open" onclick="toggleMenu('collectionMenu', this)">
-        <span>Collection</span>
-        <span class="arrow">⌄</span>
-      </button>
-
-      <div class="submenu open" id="collectionMenu">
-
-        <button class="menu-title open" onclick="toggleMenu('legSleevesMenu', this)">
-          <span>Patent Leather Leg Sleeves</span>
-          <span class="arrow">⌄</span>
-        </button>
-
-        <div class="submenu open" id="legSleevesMenu">
-          <button class="active" onclick="showProduct('black', this)">Black</button>
-          <button onclick="showProduct('white', this)">White</button>
-          <button onclick="showProduct('red', this)">Red</button>
-        </div>
-
-        <div class="coming-soon">
-          Mesh Legwear — Coming Soon
-        </div>
-
-      </div>
-
-    </aside>
 
     <!-- RIGHT SIDE -->
     <main class="content">
