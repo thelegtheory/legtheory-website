@@ -193,24 +193,61 @@
       color: #000;
     }
 
-    .instagram-help {
-  margin-top: 16px;
+    .order-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 20px;
+  margin-bottom: 24px;
+}
+
+.order-option-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.order-option-box .order-button {
+  width: 100%;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  text-align: center;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.order-option-note {
+  margin-top: 8px;
+  min-height: 32px;
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.45);
 }
 
-.instagram-help span {
-  margin-right: 6px;
+/* Instagram = slightly more prominent */
+.order-option-box:first-child .order-button {
+  background: #fff;
+  color: #000;
 }
 
-.instagram-help a {
-  color: rgba(255, 255, 255, 0.8);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-.instagram-help a:hover {
+/* Stripe = secondary */
+.order-option-box:last-child .order-button {
+  background: transparent;
   color: #fff;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .order-options {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .order-option-note {
+    min-height: 0;
+  }
 }
 
     /* ORDER MESSAGE POPUP */
@@ -551,35 +588,35 @@
         
         </div>
        
-        <button
+        <div class="order-options">
 
-  class="order-button"
+  <div class="order-option-box">
+    <a
+      class="order-button"
+      href="https://www.instagram.com/thelegtheory/"
+      target="_blank"
+      onclick="return handleOrderClick(event)"
+    >
+      DM us on Instagram to order
+    </a>
 
-  onclick="buyNow()"
+    <div class="order-option-note">
+      Questions about sizing, fit or shipping? We’ll help you directly.
+    </div>
+  </div>
 
->
+  <div class="order-option-box">
+    <button
+      class="order-button"
+      onclick="buyNow()"
+    >
+      Buy now — €65
+    </button>
 
-  Buy now — €65
-
-</button>
-
-<div class="instagram-help">
-
-  <span>Questions about sizing or fit?</span>
-
-  <a
-
-    href="https://www.instagram.com/thelegtheory/"
-
-    target="_blank"
-
-    onclick="return handleOrderClick(event)"
-
-  >
-
-    DM us on Instagram
-
-  </a>
+    <div class="order-option-note">
+      Prefer a quick checkout? We aim to ship within 1 working day.
+    </div>
+  </div>
 
 </div>
 
