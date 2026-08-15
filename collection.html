@@ -193,6 +193,26 @@
       color: #000;
     }
 
+    .instagram-help {
+  margin-top: 16px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.instagram-help span {
+  margin-right: 6px;
+}
+
+.instagram-help a {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.instagram-help a:hover {
+  color: #fff;
+}
+
     /* ORDER MESSAGE POPUP */
 
 .order-modal {
@@ -531,14 +551,37 @@
         
         </div>
        
-        <a
-      class="order-button"
-      href="https://www.instagram.com/thelegtheory/"
-      target="_blank"
-      onclick="return handleOrderClick(event)"
-        >
-      DM us on Instagram to order
-      </a>
+        <button
+
+  class="order-button"
+
+  onclick="buyNow()"
+
+>
+
+  Buy now — €65
+
+</button>
+
+<div class="instagram-help">
+
+  <span>Questions about sizing or fit?</span>
+
+  <a
+
+    href="https://www.instagram.com/thelegtheory/"
+
+    target="_blank"
+
+    onclick="return handleOrderClick(event)"
+
+  >
+
+    DM us on Instagram
+
+  </a>
+
+</div>
 
       </section>
 
@@ -718,6 +761,24 @@ let selectedSize = null;
 let currentColor = 'Black';
 let fitHelpMode = false;
 
+const checkoutLinks = {
+  Black: {
+    S: 'BLACK_S_STRIPE_LINK',
+    M: 'https://buy.stripe.com/fZu14p0wv2ARba13Jf0Ny00',
+    L: 'BLACK_L_STRIPE_LINK'
+  },
+
+  White: {
+    M: 'WHITE_M_STRIPE_LINK',
+    L: 'WHITE_L_STRIPE_LINK'
+  },
+
+  Red: {
+    M: 'RED_M_STRIPE_LINK',
+    L: 'RED_L_STRIPE_LINK'
+  }
+};
+    
 function selectSize(size, button) {
 
   document.querySelectorAll('.size-option').forEach(btn => {
@@ -815,6 +876,30 @@ async function copyOrderMessage() {
       'Please copy the message manually.';
 
   }
+}
+
+function buyNow() {
+
+  if (!selectedSize) {
+
+    document.getElementById('sizeError').textContent =
+      'Please select a size first.';
+
+    return;
+  }
+
+  const link =
+    checkoutLinks[currentColor]?.[selectedSize];
+
+  if (!link) {
+
+    document.getElementById('sizeError').textContent =
+      'This size is currently unavailable.';
+
+    return;
+  }
+
+  window.location.href = link;
 }
     
   </script>
