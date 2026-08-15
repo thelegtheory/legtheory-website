@@ -456,15 +456,15 @@
 .carousel-viewport {
   display: flex;
   width: 100%;
-  aspect-ratio: 2 / 3;
-  gap: 0;
   overflow-x: auto;
   overflow-y: hidden;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  background: #111;
+  gap: 0;
+  background: transparent;
+  align-items: flex-start;
 }
 
 .carousel-viewport::-webkit-scrollbar {
@@ -473,27 +473,23 @@
 
 .gallery-item {
   flex: 0 0 100%;
-  width: 100%;
   min-width: 100%;
-  max-width: 100%;
+  width: 100%;
   height: auto;
   scroll-snap-align: start;
   scroll-snap-stop: always;
   overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #111;
+  display: block;
+  background: transparent;
   box-sizing: border-box;
 }
 
 .gallery-item img {
   width: 100%;
   height: auto;
-  object-fit: cover;
   display: block;
 }
-
+    
 .carousel-dots {
   display: flex;
   justify-content: center;
@@ -562,12 +558,12 @@
 
 .menu-trigger {
   position: fixed;
-  top: 24px;
-  left: 26px;
-  width: 30px;
-  height: 24px;
-  padding: 0;
-  background: none;
+  top: 22px;
+  left: 18px;
+  width: 44px;
+  height: 40px;
+  padding: 8px 10px;
+  background: #000;
   border: none;
   cursor: pointer;
   z-index: 997;
