@@ -236,20 +236,21 @@
   color: #000;
 }
 
-.order-button.disabled,
-.order-button:disabled {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.25);
-  color: rgba(255, 255, 255, 0.35);
+.order-option-box .order-button.disabled,
+.order-option-box .order-button:disabled {
+  background: #3a3a3a;
+  border-color: #555;
+  color: #888;
   cursor: default;
   pointer-events: none;
   opacity: 1;
 }
 
-.order-button.disabled:hover,
-.order-button:disabled:hover {
-  background: rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.35);
+.order-option-box .order-button.disabled:hover,
+.order-option-box .order-button:disabled:hover {
+  background: #3a3a3a;
+  border-color: #555;
+  color: #888;
 }
     
 /* Mobile */
@@ -842,25 +843,29 @@ function selectSize(size, button) {
     btn.classList.remove('selected');
   });
 
-  if (
-    size === 'S' &&
-    (currentColor === 'Red' || currentColor === 'White')
-  ) {
-    selectedSize = null;
-    fitHelpMode = true;
+ if (
+  size === 'S' &&
+  (currentColor === 'Red' || currentColor === 'White')
+) {
+  selectedSize = size;
+  fitHelpMode = true;
 
-    document.getElementById('sizeConfirmation').textContent = '';
+  button.classList.add('selected');
 
-    document.getElementById('sizeError').textContent =
-      'Size S is sold out in this color. M may still work depending on fit, DM us and we can help.';
-    const buyButton = document.querySelector(
-      '.order-option-box:last-child .order-button'
-    );
-    
-    buyButton.disabled = true;
-    buyButton.classList.add('disabled');
-    return;
-  }
+  document.getElementById('sizeConfirmation').textContent = '';
+
+  document.getElementById('sizeError').textContent =
+    'Size S is sold out in this color. M may still work depending on fit, DM us and we can help.';
+
+  const buyButton = document.querySelector(
+    '.order-option-box:last-child .order-button'
+  );
+
+  buyButton.disabled = true;
+  buyButton.classList.add('disabled');
+
+  return;
+}
 
   selectedSize = size;
   fitHelpMode = false;
