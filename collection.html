@@ -236,6 +236,22 @@
   color: #000;
 }
 
+.order-button.disabled,
+.order-button:disabled {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.35);
+  cursor: default;
+  pointer-events: none;
+  opacity: 1;
+}
+
+.order-button.disabled:hover,
+.order-button:disabled:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.35);
+}
+    
 /* Mobile */
 @media (max-width: 600px) {
   .order-options {
