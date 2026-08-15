@@ -472,7 +472,7 @@
 .gallery-item img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   display: block;
 }
 
@@ -1011,7 +1011,9 @@
         btn.classList.remove('active')
       );
 
-      button.classList.add('active');
+      if (button) {
+  button.classList.add('active');
+};
 
      document.querySelectorAll('.size-option').forEach(btn => {
     btn.classList.remove('selected');
@@ -1287,6 +1289,19 @@ function initCarousel() {
       dot.classList.toggle('active', dotIndex === index);
     });
   };
+}
+
+const urlParams = new URLSearchParams(window.location.search);
+const requestedColor = urlParams.get('color')?.toLowerCase();
+
+if (requestedColor && products[requestedColor]) {
+  const drawerButton = Array.from(
+    document.querySelectorAll('.drawer-link')
+  ).find(btn =>
+    btn.textContent.trim().toLowerCase() === requestedColor
+  );
+
+  showProduct(requestedColor, drawerButton || null);
 }
     
   </script>
