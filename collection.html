@@ -263,13 +263,16 @@
   .order-option-note {
     min-height: 0;
   }
-    .product-header {
-  margin-top: 40px;
-}
+
+  .product-header {
+    margin-top: 0;
+  }
+
   .content {
-  padding-left: 56px;
-  padding-right: 20px;
-}
+    padding-top: 86px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
 }
     
 @media (min-width: 601px) {
@@ -557,18 +560,15 @@
 /* PRODUCT PAGE MENU */
 
 .menu-trigger {
-  position: fixed;
-  top: 22px;
-  left: 18px;
-  width: 44px;
-  height: 40px;
-  padding: 8px 10px;
-  background: #000;
+  position: static;
+  width: 30px;
+  height: 28px;
+  padding: 0;
+  background: none;
   border: none;
   cursor: pointer;
-  z-index: 997;
 }
-
+    
 .menu-trigger span {
   display: block;
   width: 24px;
@@ -684,11 +684,6 @@
 }
 
 @media (max-width: 600px) {
-  .menu-trigger {
-    top: 22px;
-    left: 20px;
-  }
-
   .collection-drawer {
     width: 88vw;
     padding: 34px 28px;
@@ -698,12 +693,67 @@
     margin-top: 54px;
   }
 }
+
+.mobile-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 58px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #000;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  z-index: 996;
+}
+
+.mobile-nav-brand {
+  color: #fff;
+  text-decoration: none;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+}
+
+@media (min-width: 601px) {
+  .mobile-nav {
+    background: transparent;
+    border-bottom: none;
+    pointer-events: none;
+  }
+
+  .mobile-nav .menu-trigger {
+    pointer-events: auto;
+  }
+
+  .mobile-nav-brand {
+    display: none;
+  }
+}
     
   </style>
 </head>
 
 <body>
 
+  <header class="mobile-nav">
+  <button
+    class="menu-trigger"
+    type="button"
+    onclick="openCollectionDrawer()"
+    aria-label="Open menu"
+  >
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <a href="index.html" class="mobile-nav-brand">
+    LEG THEORY
+  </a>
+</header>
+  
 <button
   class="menu-trigger"
   type="button"
