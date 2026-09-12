@@ -1078,6 +1078,14 @@ if (currentColor === 'Red' || currentColor === 'White') {
   sizeSButton.classList.remove('sold-out');
 }
 
+const sizeLButton = document.getElementById('sizeL');
+
+if (currentColor === 'Red') {
+  sizeLButton.classList.add('sold-out');
+} else {
+  sizeLButton.classList.remove('sold-out');
+}
+     
       document.getElementById('gallery').scrollLeft = 0;
     }
 
