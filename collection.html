@@ -1116,8 +1116,8 @@ function selectSize(size, button) {
   });
 
  if (
-  size === 'S' &&
-  (currentColor === 'Red' || currentColor === 'White')
+  (size === 'S' && (currentColor === 'Red' || currentColor === 'White')) ||
+  (size === 'L' && currentColor === 'Red')
 ) {
   selectedSize = size;
   fitHelpMode = true;
@@ -1127,7 +1127,7 @@ function selectSize(size, button) {
   document.getElementById('sizeConfirmation').textContent = '';
 
   document.getElementById('sizeError').textContent =
-    'Size S is sold out in this color. M may still work depending on fit, DM us and we can help.';
+    `Size ${size} is sold out in this color. M may still work depending on fit, DM us and we can help.`;
 
   const buyButton = document.querySelector(
     '.order-option-box:last-child .order-button'
@@ -1154,7 +1154,7 @@ let confirmationText = `${currentColor} · Size ${size}`;
 
 if (
   currentColor === 'Red' &&
-  (size === 'M' || size === 'L')
+  size === 'M'
 ) {
   confirmationText += ' · Only 1 left';
 }
