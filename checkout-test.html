@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leg Theory Checkout Test</title>
+</head>
+
+<body style="background:#111;color:white;font-family:Arial;padding:40px;">
+
+  <h2>Leg Theory Checkout Test</h2>
+
+  <p>This is only a Stripe sandbox test.</p>
+
+  <button onclick="startCheckout('nl')" style="padding:15px 25px;margin:10px;">
+    Test Netherlands Shipping
+  </button>
+
+  <button onclick="startCheckout('eu')" style="padding:15px 25px;margin:10px;">
+    Test EU Shipping
+  </button>
+
+  <p id="status"></p>
+
+  <script>
+    async function startCheckout(shippingZone) {
+      const status = document.getElementById('status');
+      status.textContent = 'Creating checkout...';
+
+      try {
+        const response = await fetch('/api/create-checkout', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ shippingZone })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          console.error(data);
+          status.textContent = 'Something went wrong. Check the response.';
+          return;
+        }
+
+        window.location.href = data.url;
+
+      } catch (error) {
+        console.error(error);
+        status.textContent = 'Could not connect to checkout.';
+      }
+    }
+  </script>
+
+</body>
+</html>
