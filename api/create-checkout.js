@@ -3,17 +3,25 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { shippingZone } = req.body || {};
+  const { country } = req.body || {};
 
-  const isNL = shippingZone === 'nl';
-
-  const allowedCountries = isNL
-    ? ['NL']
-    : ['BE'];
-
-  const shippingAmount = isNL ? 450 : 800;
-  const shippingName = isNL ? 'NL Shipping' : 'EU Shipping';
-
+  const SHIPPING = {
+    NL: { amount: 450, name: 'NL Shipping' },
+    BE: { amount: 800, name: 'EU Shipping' },
+    DE: { amount: 800, name: 'EU Shipping' },
+    FR: { amount: 800, name: 'EU Shipping' }
+  };
+  
+  const shipping = SHIPPING[country];
+  
+  if (!shipping) {
+    return res.status(400).json({ error: 'Invalid shipping country' });
+  }
+  
+  const allowedCountries = [country];
+  const shippingAmount = shipping.amount;
+  const shippingName = shipping.name;
+  
   const params = new URLSearchParams();
 
   params.append('mode', 'payment');
