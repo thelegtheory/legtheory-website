@@ -3,7 +3,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { country } = req.body || {};
+  const { country, product } = req.body || {};
 
   const SHIPPING = {
     NL: { amount: 450, name: 'NL Shipping' },
@@ -21,6 +21,44 @@ export default async function handler(req, res) {
   const allowedCountries = [country];
   const shippingAmount = shipping.amount;
   const shippingName = shipping.name;
+
+const PRODUCTS = {
+  'red-m': {
+    name: 'Patent Leather Leg Sleeves - Red M',
+    amount: 6500
+  },
+  'white-m': {
+    name: 'Patent Leather Leg Sleeves - White M',
+    amount: 6500
+  },
+  'white-l': {
+    name: 'Patent Leather Leg Sleeves - White L',
+    amount: 6500
+  },
+  'black-s': {
+    name: 'Patent Leather Leg Sleeves - Black S',
+    amount: 6500
+  },
+  'black-m': {
+    name: 'Patent Leather Leg Sleeves - Black M',
+    amount: 6500
+  },
+  'black-l': {
+    name: 'Patent Leather Leg Sleeves - Black L',
+    amount: 6500
+  },
+
+  'mesh-long': {
+    name: 'Sheer Mesh Legwear - Long 95cm',
+    amount: 3500
+  }
+};
+
+  const selectedProduct = PRODUCTS[product];
+
+if (!selectedProduct) {
+  return res.status(400).json({ error: 'Invalid product' });
+}
   
   const params = new URLSearchParams();
 
@@ -43,12 +81,12 @@ export default async function handler(req, res) {
 
   params.append(
     'line_items[0][price_data][product_data][name]',
-    'Leg Theory Test Product'
+    selectedProduct.name
   );
 
   params.append(
     'line_items[0][price_data][unit_amount]',
-    '100'
+    String(selectedProduct.amount)
   );
 
   params.append(
