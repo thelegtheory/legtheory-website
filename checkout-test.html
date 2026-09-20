@@ -12,18 +12,26 @@
 
   <p>This is only a Stripe sandbox test.</p>
 
-  <button onclick="startCheckout('nl')" style="padding:15px 25px;margin:10px;">
-    Test Netherlands Shipping
-  </button>
+ <button onclick="startCheckout('NL')" style="padding:15px 25px;margin:10px;">
+  Netherlands
+</button>
 
-  <button onclick="startCheckout('eu')" style="padding:15px 25px;margin:10px;">
-    Test EU Shipping
-  </button>
+<button onclick="startCheckout('BE')" style="padding:15px 25px;margin:10px;">
+  Belgium
+</button>
+
+<button onclick="startCheckout('DE')" style="padding:15px 25px;margin:10px;">
+  Germany
+</button>
+
+<button onclick="startCheckout('FR')" style="padding:15px 25px;margin:10px;">
+  France
+</button>
 
   <p id="status"></p>
 
   <script>
-    async function startCheckout(shippingZone) {
+    async function startCheckout(country) {
       const status = document.getElementById('status');
       status.textContent = 'Creating checkout...';
 
@@ -33,7 +41,7 @@
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ shippingZone })
+          body: JSON.stringify({ country })
         });
 
         const data = await response.json();
