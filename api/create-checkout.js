@@ -11,7 +11,7 @@ export default async function handler(req, res) {
     ? ['NL']
     : ['BE'];
 
-  const shippingAmount = isNL ? 495 : 1100;
+  const shippingAmount = isNL ? 450 : 800;
   const shippingName = isNL ? 'NL Shipping' : 'EU Shipping';
 
   const params = new URLSearchParams();
