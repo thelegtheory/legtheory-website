@@ -12,7 +12,21 @@
 
   <p>This is only a Stripe sandbox test.</p>
 
- <button onclick="startCheckout('NL')" style="padding:15px 25px;margin:10px;">
+ <h3>Choose product</h3>
+
+<select id="product" style="padding:12px;margin:10px;">
+  <option value="red-m">Red M</option>
+  <option value="white-m">White M</option>
+  <option value="white-l">White L</option>
+  <option value="black-s">Black S</option>
+  <option value="black-m">Black M</option>
+  <option value="black-l">Black L</option>
+  <option value="mesh-long">Mesh Legwear Long 95cm</option>
+</select>
+
+<h3>Choose shipping country</h3>
+
+<button onclick="startCheckout('NL')" style="padding:15px 25px;margin:10px;">
   Netherlands
 </button>
 
@@ -32,33 +46,38 @@
 
   <script>
     async function startCheckout(country) {
-      const status = document.getElementById('status');
-      status.textContent = 'Creating checkout...';
+  const status = document.getElementById('status');
+  const product = document.getElementById('product').value;
 
-      try {
-        const response = await fetch('/api/create-checkout', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ country })
-        });
+  status.textContent = 'Creating checkout...';
 
-        const data = await response.json();
+  try {
+    const response = await fetch('/api/create-checkout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        country,
+        product
+      })
+    });
 
-        if (!response.ok) {
-          console.error(data);
-          status.textContent = 'Something went wrong. Check the response.';
-          return;
-        }
+    const data = await response.json();
 
-        window.location.href = data.url;
-
-      } catch (error) {
-        console.error(error);
-        status.textContent = 'Could not connect to checkout.';
-      }
+    if (!response.ok) {
+      console.error(data);
+      status.textContent = 'Something went wrong. Check the response.';
+      return;
     }
+
+    window.location.href = data.url;
+
+  } catch (error) {
+    console.error(error);
+    status.textContent = 'Could not connect to checkout.';
+  }
+}
   </script>
 
 </body>
