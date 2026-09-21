@@ -1521,10 +1521,15 @@ async function startCheckout(country) {
     const data = await response.json();
 
     if (!response.ok) {
-      console.error(data);
-      alert('Checkout could not be created. Please try again.');
-      return;
-    }
+  console.error(data);
+
+  alert(
+    'Checkout error: ' +
+    (data.error?.message || data.error || JSON.stringify(data))
+  );
+
+  return;
+}
 
     window.location.href = data.url;
 
