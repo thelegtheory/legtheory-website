@@ -719,6 +719,16 @@
   letter-spacing: 0.18em;
 }
 
+    .cart-trigger {
+  background: none;
+  border: none;
+  color: #fff;
+  font-family: inherit;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+}
+
 @media (min-width: 601px) {
   .mobile-nav {
     background: transparent;
@@ -755,6 +765,15 @@
   <a href="index.html" class="mobile-nav-brand">
     LEG THEORY
   </a>
+    
+<button
+  type="button"
+  class="cart-trigger"
+  onclick="openCart()"
+>
+  CART (<span id="cartCount">0</span>)
+</button>
+    
 </header>
 
   <div
@@ -898,17 +917,17 @@
   </div>
 
   <div class="order-option-box">
-    <button
-      class="order-button"
-      onclick="buyNow()"
-    >
-      Buy now — €65
-    </button>
+  <button
+    class="order-button"
+    onclick="addToCart()"
+  >
+    Add to cart — €65
+  </button>
 
-    <div class="order-option-note">
-      Prefer a quick checkout? We aim to ship within 1 working day.
-    </div>
+  <div class="order-option-note">
+    Add one or more items, then checkout together with one shipping fee.
   </div>
+</div>
 
 </div>
 
@@ -952,6 +971,38 @@
 
   </div>
 </div>
+    
+    <!-- CART POPUP -->
+<div class="order-modal" id="cartModal">
+  <div class="order-modal-box">
+
+    <button class="modal-close" onclick="closeCart()">×</button>
+
+    <div class="modal-title">
+      Your cart
+    </div>
+
+    <div id="cartItems"></div>
+
+    <div
+      id="cartTotal"
+      style="
+        margin-top: 18px;
+        margin-bottom: 18px;
+        font-size: 15px;
+      "
+    ></div>
+
+    <button
+      class="copy-button"
+      onclick="checkoutCart()"
+    >
+      Checkout
+    </button>
+
+  </div>
+</div>
+    
     <!-- SHIPPING COUNTRY POPUP -->
 <div class="order-modal" id="shippingModal">
   <div class="order-modal-box">
@@ -1262,8 +1313,26 @@ function getSelectedProductKey() {
 
   return `${color}-${size}`;
 }
+let cart = JSON.parse(localStorage.getItem('legTheoryCart') || '[]');
 
-function buyNow() {
+function saveCart() {
+  localStorage.setItem('legTheoryCart', JSON.stringify(cart));
+  updateCartCount();
+}
+
+function updateCartCount() {
+  const count = cart.reduce((total, item) => {
+    return total + item.quantity;
+  }, 0);
+
+  const cartCount = document.getElementById('cartCount');
+
+  if (cartCount) {
+    cartCount.textContent = count;
+  }
+}
+
+function addToCart() {
 
   if (!selectedSize) {
     document.getElementById('sizeError').textContent =
@@ -1277,24 +1346,165 @@ function buyNow() {
     return;
   }
 
-  document.getElementById('shippingModal').classList.add('open');
+  const product = getSelectedProductKey();
+
+  if (!product) return;
+
+  const existingItem = cart.find(item =>
+    item.product === product
+  );
+
+  if (existingItem) {
+
+    if (product === 'red-m') {
+      alert('Only 1 Red M is currently available.');
+      return;
+    }
+
+    existingItem.quantity += 1;
+
+  } else {
+
+    cart.push({
+      product,
+      quantity: 1
+    });
+
+  }
+
+  saveCart();
+
+  document.getElementById('sizeConfirmation').textContent =
+    `${currentColor} · Size ${selectedSize} added to cart`;
 }
 
-function closeShippingModal() {
+function openCart() {
+  renderCart();
+  document.getElementById('cartModal').classList.add('open');
+}
+
+function closeCart() {
+  document.getElementById('cartModal').classList.remove('open');
+}
+
+function renderCart() {
+  const cartItems = document.getElementById('cartItems');
+  const cartTotal = document.getElementById('cartTotal');
+
+  if (!cartItems || !cartTotal) return;
+
+  if (cart.length === 0) {
+    cartItems.innerHTML =
+      '<div class="modal-message">Your cart is empty.</div>';
+
+    cartTotal.textContent = '';
+    return;
+  }
+
+  let html = '';
+  let total = 0;
+
+  cart.forEach((item, index) => {
+    const price = 65;
+
+    total += price * item.quantity;
+
+    html += `
+      <div style="border-bottom:1px solid rgba(255,255,255,0.15); padding:14px 0;">
+        <div style="margin-bottom:8px;">
+          ${formatProductName(item.product)}
+        </div>
+
+        <div style="display:flex; align-items:center; gap:10px;">
+          <button
+            class="copy-button"
+            style="width:38px; margin:0; padding:8px;"
+            onclick="changeCartQuantity(${index}, -1)"
+          >
+            −
+          </button>
+
+          <span>${item.quantity}</span>
+
+          <button
+            class="copy-button"
+            style="width:38px; margin:0; padding:8px;"
+            onclick="changeCartQuantity(${index}, 1)"
+          >
+            +
+          </button>
+
+          <button
+            class="copy-button"
+            style="width:auto; margin:0 0 0 auto; padding:8px 12px;"
+            onclick="removeCartItem(${index})"
+          >
+            Remove
+          </button>
+        </div>
+      </div>
+    `;
+  });
+
+  cartItems.innerHTML = html;
+  cartTotal.textContent = `Subtotal: €${total.toFixed(2)}`;
+}
+
+function formatProductName(productKey) {
+  const [color, size] = productKey.split('-');
+
+  return `${capitalize(color)} · Size ${size.toUpperCase()} · €65`;
+}
+
+function capitalize(text) {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+function changeCartQuantity(index, change) {
+  if (!cart[index]) return;
+
+  const item = cart[index];
+
+  if (
+    item.product === 'red-m' &&
+    item.quantity + change > 1
+  ) {
+    alert('Only 1 Red M is currently available.');
+    return;
+  }
+
+  item.quantity += change;
+
+  if (item.quantity <= 0) {
+    cart.splice(index, 1);
+  }
+
+  saveCart();
+  renderCart();
+}
+
+function removeCartItem(index) {
+  cart.splice(index, 1);
+  saveCart();
+  renderCart();
+}
+
+function checkoutCart() {
+  if (cart.length === 0) {
+    alert('Your cart is empty.');
+    return;
+  }
+
+  closeCart();
+  document.getElementById('shippingModal').classList.add('open');
+}
+    
+    
+    function closeShippingModal() {
   document.getElementById('shippingModal').classList.remove('open');
 }
 
 async function startCheckout(country) {
-
-  const product = getSelectedProductKey();
-
-  if (!product) {
-    document.getElementById('sizeError').textContent =
-      'Please select a size first.';
-    closeShippingModal();
-    return;
-  }
-
   try {
 
     const response = await fetch('/api/create-checkout', {
@@ -1303,9 +1513,9 @@ async function startCheckout(country) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        country,
-        product
-      })
+      country,
+      items: cart
+        })
     });
 
     const data = await response.json();
@@ -1435,6 +1645,8 @@ applyColorFromUrl();
 window.addEventListener('pageshow', () => {
   applyColorFromUrl();
 });
+
+    updateCartCount();
     
   </script>
 
