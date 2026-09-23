@@ -80,6 +80,57 @@ async function verifyStripeSignature(
   return signatures.includes(expectedSignature);
 }
 
+function escapeHtml(value = '') {
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
+async function sendEmail(env, {
+  to,
+  subject,
+  html,
+  idempotencyKey
+}) {
+  if (!env.RESEND_API_KEY || !to) {
+    return false;
+  }
+
+  try {
+    const response = await fetch(
+      'https://api.resend.com/emails',
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${env.RESEND_API_KEY}`,
+          'Content-Type': 'application/json',
+          'Idempotency-Key': idempotencyKey
+        },
+        body: JSON.stringify({
+          from: 'Leg Theory <hello@legtheory.com>',
+          to: [to],
+          subject,
+          html
+        })
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.text();
+      console.error('Resend error:', error);
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Email sending failed:', error);
+    return false;
+  }
+}
+
 export async function onRequestPost({
   request,
   env
@@ -299,6 +350,167 @@ if (!validLiveSignature && !validTestSignature) {
       session.id
     )
     .run();
+
+   /*
+    Send order confirmation emails.
+    Email failure must not invalidate an already-paid order.
+  */
+
+  const customerEmail =
+    session.customer_details?.email ||
+    session.customer_email ||
+    '';
+
+  const customerName =
+    session.customer_details?.name ||
+    'there';
+
+  const safeCustomerName =
+    escapeHtml(customerName);
+
+  const orderLines = cart
+    .map(item => {
+      const product = escapeHtml(item.product);
+      const quantity = Number(item.quantity);
+
+      return `
+        <li style="margin-bottom:8px;">
+          ${product} × ${quantity}
+        </li>
+      `;
+    })
+    .join('');
+
+  const total =
+    typeof session.amount_total === 'number'
+      ? `€${(session.amount_total / 100).toFixed(2)}`
+      : '';
+
+  /*
+    CUSTOMER CONFIRMATION
+  */
+  if (customerEmail) {
+    await sendEmail(env, {
+      to: customerEmail,
+      subject: 'Your Leg Theory order is confirmed ✨',
+      idempotencyKey:
+        `legtheory-customer-${session.id}`,
+      html: `
+        <div style="
+          font-family:Arial,Helvetica,sans-serif;
+          max-width:600px;
+          margin:0 auto;
+          padding:32px 20px;
+          color:#111;
+          line-height:1.6;
+        ">
+
+          <div style="
+            font-size:13px;
+            letter-spacing:0.18em;
+            margin-bottom:36px;
+          ">
+            LEG THEORY
+          </div>
+
+          <h2 style="
+            font-weight:400;
+            margin-bottom:20px;
+          ">
+            Thank you for your order, ${safeCustomerName}.
+          </h2>
+
+          <p>
+            Your payment was successful and we’ve received your order.
+          </p>
+
+          <p style="margin-top:24px;">
+            <strong>Your order</strong>
+          </p>
+
+          <ul>
+            ${orderLines}
+          </ul>
+
+          ${
+            total
+              ? `<p><strong>Total paid:</strong> ${total}</p>`
+              : ''
+          }
+
+          <p style="margin-top:28px;">
+            We aim to ship within 1 working day.
+          </p>
+
+          <p>
+            If you have any questions, simply reply to this email
+            or message us on Instagram.
+          </p>
+
+          <p style="margin-top:32px;">
+            Love,<br>
+            Leg Theory
+          </p>
+
+        </div>
+      `
+    });
+  }
+
+  /*
+    OWNER NOTIFICATION
+  */
+  if (env.ORDER_NOTIFICATION_EMAIL) {
+    await sendEmail(env, {
+      to: env.ORDER_NOTIFICATION_EMAIL,
+      subject: `New paid Leg Theory order${total ? ` — ${total}` : ''}`,
+      idempotencyKey:
+        `legtheory-owner-${session.id}`,
+      html: `
+        <div style="
+          font-family:Arial,Helvetica,sans-serif;
+          max-width:600px;
+          margin:0 auto;
+          padding:32px 20px;
+          color:#111;
+          line-height:1.6;
+        ">
+
+          <h2>New paid order 🎉</h2>
+
+          <p>
+            <strong>Customer:</strong>
+            ${safeCustomerName}
+          </p>
+
+          <p>
+            <strong>Email:</strong>
+            ${escapeHtml(customerEmail || 'Not available')}
+          </p>
+
+          ${
+            total
+              ? `<p><strong>Total paid:</strong> ${total}</p>`
+              : ''
+          }
+
+          <p>
+            <strong>Items:</strong>
+          </p>
+
+          <ul>
+            ${orderLines}
+          </ul>
+
+          <p>
+            <strong>Stripe Checkout Session:</strong><br>
+            ${escapeHtml(session.id)}
+          </p>
+
+        </div>
+      `
+    });
+  }
 
   return json({
     received: true,
