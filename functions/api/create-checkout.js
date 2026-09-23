@@ -33,8 +33,7 @@ export async function onRequest({ request, env }) {
   const PRODUCTS = {
     'red-m': {
       name: 'Patent Leather Leg Sleeves - Red M',
-      amount: 6500,
-      maxQuantity: 1
+      amount: 6500
     },
     'white-m': {
       name: 'Patent Leather Leg Sleeves - White M',
@@ -73,23 +72,9 @@ export async function onRequest({ request, env }) {
     return json({ error: 'Checkout is not configured yet' }, 503);
   }
 
-  /*
-    Supports the new cart:
-
-    {
-      country: "NL",
-      items: [
-        { product: "black-m", quantity: 1 },
-        { product: "white-l", quantity: 1 }
-      ]
-    }
-
-    Also keeps the old single-product format working:
-    {
-      country: "NL",
-      product: "black-m"
-    }
-  */
+  if (!env.DB) {
+    return json({ error: 'Inventory database is not configured' }, 503);
+  }
 
   let requestedItems;
 
@@ -109,12 +94,6 @@ export async function onRequest({ request, env }) {
   if (requestedItems.length > 20) {
     return json({ error: 'Too many different items in cart' }, 400);
   }
-
-  /*
-    Combine duplicate product keys before checkout.
-    This also prevents somebody bypassing the Red M stock
-    limit by submitting Red M twice as separate lines.
-  */
 
   const quantities = new Map();
 
@@ -153,17 +132,31 @@ export async function onRequest({ request, env }) {
   for (const [productKey, quantity] of quantities.entries()) {
     const selectedProduct = PRODUCTS[productKey];
 
-    if (
-      selectedProduct.maxQuantity &&
-      quantity > selectedProduct.maxQuantity
-    ) {
+    const stockRow = await env.DB
+      .prepare(
+        'SELECT stock FROM inventory WHERE product_key = ?'
+      )
+      .bind(productKey)
+      .first();
+
+    if (!stockRow) {
       return json({
-        error: `${selectedProduct.name} has limited stock`
+        error: `Inventory not found for ${selectedProduct.name}`
       }, 400);
     }
 
-    if (quantity > 10) {
-      return json({ error: 'Invalid quantity' }, 400);
+    const stock = Number(stockRow.stock);
+
+    if (stock <= 0) {
+      return json({
+        error: `${selectedProduct.name} is sold out`
+      }, 400);
+    }
+
+    if (quantity > stock) {
+      return json({
+        error: `Only ${stock} available for ${selectedProduct.name}`
+      }, 400);
     }
 
     checkoutItems.push({
@@ -190,10 +183,6 @@ export async function onRequest({ request, env }) {
     `${origin}/collection.html?checkout=cancelled`
   );
 
-  /*
-    Add every cart product as a separate Stripe line item.
-  */
-
   checkoutItems.forEach((item, index) => {
     params.append(
       `line_items[${index}][price_data][currency]`,
@@ -214,20 +203,17 @@ export async function onRequest({ request, env }) {
       `line_items[${index}][quantity]`,
       String(item.quantity)
     );
-  });
 
-  /*
-    Only allow the country selected on your website.
-  */
+    params.append(
+      `line_items[${index}][price_data][product_data][metadata][product_key]`,
+      item.productKey
+    );
+  });
 
   params.append(
     'shipping_address_collection[allowed_countries][0]',
     country
   );
-
-  /*
-    ONE shipping charge for the entire cart.
-  */
 
   params.append(
     'shipping_options[0][shipping_rate_data][type]',
@@ -270,7 +256,7 @@ export async function onRequest({ request, env }) {
       return json({
         error:
           session?.error?.message ||
-          'Checkout could not be created. Please try again or contact us on Instagram.'
+          'Checkout could not be created. Please try again.'
       }, 502);
     }
 
