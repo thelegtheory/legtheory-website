@@ -182,8 +182,7 @@ export async function onRequest({ request, env }) {
     )
   );
   params.append(
-    'success_url',
-    `${origin}/?checkout=success`
+    'success_url': `${origin}/success.html`,
   );
 
   params.append(
