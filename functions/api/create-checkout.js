@@ -182,8 +182,9 @@ export async function onRequest({ request, env }) {
     )
   );
   params.append(
-    'success_url': `${origin}/success.html`,
-  );
+  'success_url',
+  `${origin}/success.html`
+);
 
   params.append(
     'cancel_url',
