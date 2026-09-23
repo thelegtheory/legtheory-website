@@ -106,18 +106,25 @@ export async function onRequestPost({
   const stripeSignature =
     request.headers.get('stripe-signature');
 
-  const isValid =
-    await verifyStripeSignature(
-      rawBody,
-      stripeSignature,
-      env.STRIPE_WEBHOOK_SECRET
-    );
+  const validLiveSignature =
+  env.STRIPE_WEBHOOK_SECRET
+    ? await verifyStripeSignature(
+        rawBody,
+        stripeSignature,
+        env.STRIPE_WEBHOOK_SECRET
+      )
+    : false;
 
-  if (!isValid) {
-    return json({
-      error: 'Invalid Stripe signature'
-    }, 400);
-  }
+const validTestSignature =
+  env.STRIPE_TEST_WEBHOOK_SECRET
+    ? await verifyStripeSignature(
+        rawBody,
+        stripeSignature,
+        env.STRIPE_TEST_WEBHOOK_SECRET
+      )
+    : false;
+
+if (!validLiveSignature && !validTestSignature) {
 
   let event;
 
