@@ -68,7 +68,7 @@ export async function onRequest({ request, env }) {
     return json({ error: 'Invalid shipping country' }, 400);
   }
 
-  if (!env.STRIPE_SECRET_KEY) {
+  if (!env.STRIPE_TEST_SECRET_KEY) {
     return json({ error: 'Checkout is not configured yet' }, 503);
   }
 
@@ -249,7 +249,7 @@ export async function onRequest({ request, env }) {
       {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${env.STRIPE_SECRET_KEY}`,
+          Authorization: `Bearer ${env.STRIPE_TEST_SECRET_KEY}`,
           'Content-Type': 'application/x-www-form-urlencoded'
         },
         body: params
