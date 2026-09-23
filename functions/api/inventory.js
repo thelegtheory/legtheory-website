@@ -23,13 +23,14 @@ export async function onRequestGet({ env }) {
       `)
       .all();
 
-    const inventory = {};
+    const availability = {};
 
     for (const row of result.results) {
-      inventory[row.product_key] = Number(row.stock);
+      availability[row.product_key] =
+        Number(row.stock) > 0 ? 1 : 0;
     }
 
-    return json(inventory);
+    return json(availability);
 
   } catch (error) {
     console.error('Inventory error:', error);
