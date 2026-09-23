@@ -461,6 +461,27 @@ if (!validLiveSignature && !validTestSignature) {
     OWNER NOTIFICATION
   */
   if (env.ORDER_NOTIFICATION_EMAIL) {
+
+  const shipping =
+    session.shipping_details ||
+    session.customer_details;
+  
+  const address =
+    shipping?.address || {};
+  
+  const shippingAddress = [
+    shipping?.name,
+    address.line1,
+    address.line2,
+    address.postal_code,
+    address.city,
+    address.state,
+    address.country
+  ]
+    .filter(Boolean)
+    .map(escapeHtml)
+    .join('<br>');
+      
     await sendEmail(env, {
       to: env.ORDER_NOTIFICATION_EMAIL,
       subject: `New paid Leg Theory order${total ? ` — ${total}` : ''}`,
@@ -487,6 +508,11 @@ if (!validLiveSignature && !validTestSignature) {
             <strong>Email:</strong>
             ${escapeHtml(customerEmail || 'Not available')}
           </p>
+
+          <p>
+          <strong>Shipping address:</strong><br>
+          ${shippingAddress || 'Not available'}
+        </p>
 
           ${
             total
