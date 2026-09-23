@@ -90,11 +90,14 @@ export async function onRequestPost({
     }, 503);
   }
 
-  if (!env.STRIPE_WEBHOOK_SECRET) {
-    return json({
-      error: 'Webhook secret is not configured'
-    }, 503);
-  }
+ if (
+  !env.STRIPE_WEBHOOK_SECRET &&
+  !env.STRIPE_TEST_WEBHOOK_SECRET
+) {
+  return json({
+    error: 'Webhook secret is not configured'
+  }, 503);
+}
 
   /*
     IMPORTANT:
@@ -125,6 +128,10 @@ const validTestSignature =
     : false;
 
 if (!validLiveSignature && !validTestSignature) {
+  return json({
+    error: 'Invalid Stripe signature'
+  }, 400);
+}
 
   let event;
 
