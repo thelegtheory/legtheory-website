@@ -172,7 +172,15 @@ export async function onRequest({ request, env }) {
   const params = new URLSearchParams();
 
   params.append('mode', 'payment');
-
+  params.append(
+    'metadata[cart]',
+    JSON.stringify(
+      checkoutItems.map(item => ({
+        product: item.productKey,
+        quantity: item.quantity
+      }))
+    )
+  );
   params.append(
     'success_url',
     `${origin}/?checkout=success`
