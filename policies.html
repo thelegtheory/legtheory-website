@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Policies | Leg Theory</title>
+  <title>Leg Theory</title>
 
   <style>
     * {
@@ -14,321 +14,606 @@
       box-sizing: border-box;
     }
 
-    html {
-      scroll-behavior: smooth;
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      background: #000;
+      font-family: Arial, Helvetica, sans-serif;
     }
 
     body {
-      background: #000;
       color: #fff;
-      font-family: Arial, Helvetica, sans-serif;
-      padding: 28px;
     }
 
-    .page {
+    /* HERO */
+
+    .hero {
+      position: relative;
       width: 100%;
-      max-width: 760px;
-      margin: 0 auto;
-      padding: 50px 0 80px;
+      height: 100vh;
+      overflow: hidden;
+      background: #000;
     }
 
-    .brand {
-      display: inline-block;
-      color: rgba(255,255,255,0.7);
-      text-decoration: none;
-      font-size: 13px;
-      letter-spacing: 0.22em;
-      margin-bottom: 70px;
+    .hero-video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      z-index: 1;
     }
 
-    h1 {
-      font-size: clamp(34px, 7vw, 64px);
-      font-weight: 300;
-      letter-spacing: 0.03em;
-      margin-bottom: 55px;
+    .hero-poster {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      z-index: 2;
+      transition: opacity 0.2s ease;
     }
 
-    section {
-      margin-bottom: 52px;
+    .hero-poster.hidden {
+      opacity: 0;
+      pointer-events: none;
     }
 
-    h2 {
-      font-size: 14px;
-      font-weight: 500;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      margin-bottom: 20px;
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.18);
+      z-index: 2;
     }
 
-    p {
-      font-size: 15px;
-      line-height: 1.8;
-      color: rgba(255,255,255,0.72);
-      margin-bottom: 14px;
-    }
+    /* HOMEPAGE MENU */
 
-    .small {
-      font-size: 12px;
-      line-height: 1.7;
-      color: rgba(255,255,255,0.45);
-    }
+    .site-menu {
+      position: absolute;
+      top: 28px;
+      right: 32px;
+      z-index: 5;
 
-    .note {
-      padding: 26px;
-      border: 1px solid rgba(255,255,255,0.18);
-    }
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
 
-    .note p:last-child {
-      margin-bottom: 0;
-    }
-
-    a {
-      color: #fff;
-    }
-
-    .action-button {
-      display: inline-block;
-      margin-top: 10px;
-      padding: 14px 24px;
-      border: 1px solid #fff;
-      color: #fff;
-      text-decoration: none;
       font-size: 11px;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      transition: 0.2s ease;
     }
 
-    .action-button:hover {
+    .site-menu > a,
+    .info-toggle {
+      display: block;
+      padding: 5px 0;
+
+      color: rgba(255,255,255,0.82);
+      background: none;
+      border: none;
+
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+
+      text-decoration: none;
+      text-align: right;
+
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .site-menu > a:hover,
+    .info-toggle:hover {
+      color: #fff;
+    }
+
+    .info-links {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+
+      margin-top: 0;
+
+      transition:
+        max-height 0.3s ease,
+        opacity 0.25s ease,
+        margin-top 0.25s ease;
+    }
+
+    .info-links.open {
+      max-height: 150px;
+      opacity: 1;
+      margin-top: 4px;
+    }
+
+    .info-links a {
+      display: block;
+      padding: 4px 0;
+
+      color: rgba(255,255,255,0.58);
+      text-decoration: none;
+
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+
+      transition: color 0.2s ease;
+    }
+
+    .info-links a:hover {
+      color: #fff;
+    }
+
+    /* HERO CONTENT */
+
+    .hero-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 3;
+
+      width: 100%;
+      text-align: center;
+      color: #fff;
+    }
+
+    .hero-content h1 {
+      font-size: clamp(42px, 8vw, 110px);
+      font-weight: 300;
+      letter-spacing: 0.18em;
+      margin-bottom: 30px;
+      white-space: nowrap;
+    }
+
+    .collection-button {
+      display: inline-block;
+
+      padding: 13px 25px;
+
+      border: 1px solid #fff;
+      color: #fff;
+      background: transparent;
+
+      text-decoration: none;
+      text-transform: uppercase;
+
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+
+      transition: 0.25s ease;
+    }
+
+    .collection-button:hover {
       background: #fff;
       color: #000;
     }
 
-    .divider {
-      height: 1px;
-      background: rgba(255,255,255,0.12);
-      margin: 52px 0;
+    /* COLLECTION DRAWER */
+
+    .collection-overlay {
+      position: fixed;
+      inset: 0;
+
+      background: rgba(0, 0, 0, 0.55);
+
+      opacity: 0;
+      visibility: hidden;
+
+      transition:
+        opacity 0.35s ease,
+        visibility 0.35s ease;
+
+      z-index: 998;
     }
 
-    .footer-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 18px;
-      font-size: 11px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
+    .collection-overlay.open {
+      opacity: 1;
+      visibility: visible;
     }
 
-    .footer-links a {
-      color: rgba(255,255,255,0.55);
+    .collection-drawer {
+      position: fixed;
+      top: 0;
+      left: 0;
+
+      width: min(420px, 88vw);
+      height: 100vh;
+
+      background: #000;
+      border-right: 1px solid rgba(255,255,255,0.15);
+
+      transform: translateX(-100%);
+      transition: transform 0.4s ease;
+
+      z-index: 999;
+      padding: 44px 36px;
+    }
+
+    .collection-drawer.open {
+      transform: translateX(0);
+    }
+
+    .drawer-close {
+      position: absolute;
+      top: 22px;
+      right: 24px;
+
+      background: none;
+      border: none;
+      color: #fff;
+
+      font-size: 28px;
+      font-weight: 200;
+
+      cursor: pointer;
+    }
+
+    .drawer-content {
+      margin-top: 70px;
+    }
+
+    .drawer-label {
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      color: #fff;
+      margin-bottom: 34px;
+    }
+
+    .drawer-product-title {
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      line-height: 1.4;
+      color: #fff;
+      margin-bottom: 18px;
+    }
+
+    .drawer-link {
+      display: block;
+      padding: 9px 0 9px 22px;
+
+      color: rgba(255,255,255,0.62);
       text-decoration: none;
+
+      font-size: 14px;
+      letter-spacing: 0.12em;
+
+      transition: color 0.2s ease;
     }
 
-    .footer-links a:hover {
+    .drawer-link:hover {
       color: #fff;
     }
 
+    .drawer-coming-soon {
+      margin-top: 34px;
+
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      line-height: 1.4;
+
+      color: rgba(255,255,255,0.52);
+    }
+
+    /* MOBILE */
+
     @media (max-width: 600px) {
-      body {
-        padding: 22px;
+
+      .site-menu {
+        top: 22px;
+        right: 22px;
       }
 
-      .page {
-        padding-top: 36px;
+      .site-menu > a,
+      .info-toggle {
+        font-size: 10px;
       }
 
-      .brand {
-        margin-bottom: 55px;
+      .info-links a {
+        font-size: 9px;
       }
 
-      section {
-        margin-bottom: 44px;
+      .hero-content h1 {
+        font-size: 11vw;
+        letter-spacing: 0.12em;
+        margin-bottom: 24px;
       }
 
-      .note {
-        padding: 22px;
+      .collection-button {
+        padding: 12px 22px;
+        font-size: 11px;
+      }
+
+      .collection-drawer {
+        width: 88vw;
+        padding: 34px 28px;
+      }
+
+      .drawer-content {
+        margin-top: 58px;
       }
     }
+
   </style>
 </head>
 
 <body>
 
-  <main class="page">
+  <!-- COLLECTION DRAWER OVERLAY -->
 
-    <a href="index.html" class="brand">
-      LEG THEORY
-    </a>
+  <div
+    class="collection-overlay"
+    id="collectionOverlay"
+    onclick="closeCollectionDrawer()"
+  ></div>
 
-    <h1>
-      Policies
-    </h1>
 
-    <section>
-      <h2>Shipping</h2>
+  <!-- COLLECTION DRAWER -->
 
-      <p>
-        We usually aim to dispatch orders within 1 working day after payment has been received.
-      </p>
+  <aside
+    class="collection-drawer"
+    id="collectionDrawer"
+  >
 
-      <p>
-        Direct checkout is currently available for the Netherlands, Belgium, Germany and France.
-        For delivery to other EU countries, please contact us via Instagram
-        <a href="https://www.instagram.com/thelegtheory/" target="_blank" rel="noopener noreferrer">
-          @thelegtheory
-        </a>
-        or email
-        <a href="mailto:hello@legtheory.com">hello@legtheory.com</a>
-        before placing your order.
-      </p>
+    <button
+      class="drawer-close"
+      type="button"
+      onclick="closeCollectionDrawer()"
+      aria-label="Close collection"
+    >
+      ×
+    </button>
 
-      <p>
-        Once your order has been shipped, we will follow up with tracking details by email or Instagram,
-        depending on how your order was placed.
-      </p>
+    <div class="drawer-content">
 
-      <p class="small">
-        During temporary holiday dispatch periods or other exceptional circumstances,
-        a different dispatch timeline may apply. Any such change will be clearly communicated
-        on the website before purchase.
-      </p>
-    </section>
-
-    <section>
-      <h2>Returns</h2>
-
-      <p>
-        If you change your mind about your purchase, you may start a return using our
-        withdrawal / return form.
-      </p>
-
-      <p>
-        You are welcome to carefully inspect and try the item for fit, as you would in a physical store.
-        Please handle the product gently and avoid wearing, stretching, creasing, staining,
-        damaging or altering it beyond what is necessary to assess the product and fit.
-      </p>
-
-      <p>
-        Once your return reaches us, we aim to inspect it and process any eligible refund within 1 working day.
-        As Leg Theory is run by one person, there may occasionally be a short delay.
-      </p>
-
-      <p>
-        Return shipping costs for a normal change-of-mind return are paid by the customer.
-      </p>
-
-      <p>
-        Please do not send anything back before receiving return instructions from us.
-        The return address will be provided after your request has been received.
-      </p>
-
-      <a class="action-button" href="withdraw.html">
-        Withdraw / Return an Order
-      </a>
-    </section>
-
-    <section>
-      <h2>A Note from Leg Theory</h2>
-
-      <div class="note">
-
-        <p>
-          Leg Theory is a one-person independent label, and every order is packed and handled personally.
-        </p>
-
-        <p>
-          We want you to love what you order, so if you are unsure about sizing, fit, shipping
-          or anything else before purchasing, please message us on Instagram
-          <a href="https://www.instagram.com/thelegtheory/" target="_blank" rel="noopener noreferrer">
-            @thelegtheory
-          </a>.
-          We are always happy to help.
-        </p>
-
-        <p>
-          We kindly encourage thoughtful purchases rather than ordering multiple options simply to try and return.
-          Returns are absolutely possible, but for a very small shop, shipping and return costs have a much bigger
-          impact than they do for large retailers.
-        </p>
-
-        <p>
-          Thank you for keeping that in mind when you shop with us. ♡
-        </p>
-
+      <div class="drawer-label">
+        COLLECTION
       </div>
-    </section>
 
-    <section>
-      <h2>Wrong or Faulty Items</h2>
+      <div class="drawer-product-title">
+        PATENT LEATHER LEG SLEEVES
+      </div>
 
-      <p>
-        If you receive an incorrect or faulty item, please contact us as soon as possible via Instagram
-        <a href="https://www.instagram.com/thelegtheory/" target="_blank" rel="noopener noreferrer">
-          @thelegtheory
-        </a>
-        or by email at
-        <a href="mailto:hello@legtheory.com">hello@legtheory.com</a>.
-      </p>
+      <a
+        class="drawer-link"
+        href="collection.html?color=Black"
+      >
+        BLACK
+      </a>
 
-      <p>
-        We will work with you to resolve the issue and provide the appropriate next steps and return instructions.
-      </p>
-    </section>
+      <a
+        class="drawer-link"
+        href="collection.html?color=White"
+      >
+        WHITE
+      </a>
 
-    <section>
-      <h2>Refunds</h2>
+      <a
+        class="drawer-link"
+        href="collection.html?color=Red"
+      >
+        RED
+      </a>
 
-      <p>
-        Eligible refunds are normally issued to the original payment method.
-      </p>
+      <div class="drawer-coming-soon">
+        MESH LEGWEAR — COMING SOON
+      </div>
 
-      <p>
-        Once a returned item reaches us, we will inspect its condition before the final refund amount is determined.
-      </p>
-
-      <p>
-        If a product has been handled beyond what is necessary to assess its nature, characteristics and fit,
-        any resulting diminished value may be taken into account where applicable.
-      </p>
-    </section>
-
-    <section>
-      <h2>Contact</h2>
-
-      <p>
-        Need help before ordering? For the quickest response, message us on Instagram
-        <a href="https://www.instagram.com/thelegtheory/" target="_blank" rel="noopener noreferrer">
-          @thelegtheory
-        </a>.
-      </p>
-
-      <p>
-        If you are unsure about size, fit, shipping or anything else, please ask before placing your order.
-        We would much rather help you choose the right item from the start.
-      </p>
-
-      <p>
-        You can also email us at
-        <a href="mailto:hello@legtheory.com">hello@legtheory.com</a>.
-      </p>
-
-      <p class="small">
-        We usually respond very quickly, but response times can occasionally vary as Leg Theory is run by one person.
-      </p>
-    </section>
-
-    <div class="divider"></div>
-
-    <div class="footer-links">
-      <a href="index.html">Home</a>
-      <a href="collection.html">Shop</a>
-      <a href="about.html">About</a>
-      <a href="withdraw.html">Withdraw / Return</a>
-      <a href="terms.html">Terms</a>
-      <a href="privacy.html">Privacy</a>
     </div>
 
-  </main>
+  </aside>
+
+
+  <!-- HERO -->
+
+  <section class="hero">
+
+    <video
+      class="hero-video"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="auto"
+    >
+      <source
+        src="hero%20vid.mov"
+        type="video/quicktime"
+      >
+
+      Your browser does not support the video tag.
+    </video>
+
+    <img
+      src="hero-poster.jpg"
+      class="hero-poster"
+      alt=""
+    >
+
+    <div class="overlay"></div>
+
+
+    <!-- TOP-RIGHT MENU -->
+
+    <nav class="site-menu">
+
+      <a href="about.html">
+        About Leg Theory
+      </a>
+
+      <a href="policies.html">
+        Policies
+      </a>
+
+      <button
+        class="info-toggle"
+        id="infoToggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="infoLinks"
+        onclick="toggleInfo(event)"
+      >
+        + Info
+      </button>
+
+      <div
+        class="info-links"
+        id="infoLinks"
+      >
+
+        <a href="terms.html">
+          Terms
+        </a>
+
+        <a href="privacy.html">
+          Privacy
+        </a>
+
+        <a href="mailto:hello@legtheory.com">
+          Contact
+        </a>
+
+      </div>
+
+    </nav>
+
+
+    <!-- CENTER -->
+
+    <div class="hero-content">
+
+      <h1>
+        LEG THEORY
+      </h1>
+
+      <a
+        class="collection-button"
+        href="#"
+        onclick="openCollectionDrawer(); return false;"
+      >
+        View Collection
+      </a>
+
+    </div>
+
+  </section>
+
+
+  <script>
+
+    function openCollectionDrawer() {
+
+      closeInfo();
+
+      document
+        .getElementById('collectionDrawer')
+        .classList.add('open');
+
+      document
+        .getElementById('collectionOverlay')
+        .classList.add('open');
+
+      document.body.style.overflow = 'hidden';
+    }
+
+
+    function closeCollectionDrawer() {
+
+      document
+        .getElementById('collectionDrawer')
+        .classList.remove('open');
+
+      document
+        .getElementById('collectionOverlay')
+        .classList.remove('open');
+
+      document.body.style.overflow = '';
+    }
+
+
+    function toggleInfo(event) {
+
+      event.stopPropagation();
+
+      const infoLinks =
+        document.getElementById('infoLinks');
+
+      const infoToggle =
+        document.getElementById('infoToggle');
+
+      const isOpen =
+        infoLinks.classList.contains('open');
+
+      if (isOpen) {
+        closeInfo();
+      } else {
+        infoLinks.classList.add('open');
+        infoToggle.textContent = '− Info';
+        infoToggle.setAttribute('aria-expanded', 'true');
+      }
+    }
+
+
+    function closeInfo() {
+
+      const infoLinks =
+        document.getElementById('infoLinks');
+
+      const infoToggle =
+        document.getElementById('infoToggle');
+
+      infoLinks.classList.remove('open');
+      infoToggle.textContent = '+ Info';
+      infoToggle.setAttribute('aria-expanded', 'false');
+    }
+
+
+    document.addEventListener('click', event => {
+
+      if (!event.target.closest('.site-menu')) {
+        closeInfo();
+      }
+
+    });
+
+
+    document.addEventListener('keydown', event => {
+
+      if (event.key === 'Escape') {
+        closeInfo();
+        closeCollectionDrawer();
+      }
+
+    });
+
+
+    const heroVideo =
+      document.querySelector('.hero-video');
+
+    const heroPoster =
+      document.querySelector('.hero-poster');
+
+
+    heroVideo.addEventListener('playing', () => {
+      heroPoster.classList.add('hidden');
+    });
+
+  </script>
 
 </body>
 
