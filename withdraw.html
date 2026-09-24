@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Withdraw from an Order | Leg Theory</title>
+  <title>Withdraw / Return an Order | Leg Theory</title>
 
   <style>
     * {
@@ -198,13 +198,14 @@
     <p class="intro">
       Use this form if you wish to exercise your right of withdrawal or start a return for an online purchase.
       Please enter the details used when placing your order so we can identify it.
-      You will receive confirmation by email after your request has been submitted.
+      You will receive a confirmation by email after your request has been submitted.
     </p>
 
     <form id="withdrawForm">
 
       <div class="field">
         <label for="name">Full name</label>
+
         <input
           id="name"
           name="name"
@@ -216,6 +217,7 @@
 
       <div class="field">
         <label for="email">Email used for the order</label>
+
         <input
           id="email"
           name="email"
@@ -227,6 +229,7 @@
 
       <div class="field">
         <label for="orderDate">Order date</label>
+
         <input
           id="orderDate"
           name="orderDate"
@@ -260,7 +263,7 @@
         ></textarea>
 
         <span class="help">
-          If you are withdrawing from the entire order, you can simply write “entire order”.
+          If this applies to the entire order, you can simply write “entire order”.
         </span>
       </div>
 
@@ -275,6 +278,7 @@
       </div>
 
       <div class="checkbox-row">
+
         <input
           id="confirmation"
           name="confirmation"
@@ -285,6 +289,7 @@
         <label for="confirmation">
           I confirm that I wish to withdraw from or return the purchase described above.
         </label>
+
       </div>
 
       <button type="submit" id="submitButton">
@@ -296,7 +301,9 @@
     <div class="status" id="statusMessage"></div>
 
     <div class="links">
-      <a href="policies.html">Policies</a>
+      <a href="policies.html">Shipping & Returns</a>
+      <a href="terms.html">Terms</a>
+      <a href="privacy.html">Privacy</a>
       <a href="collection.html">Shop</a>
       <a href="mailto:hello@legtheory.com">Contact</a>
     </div>
@@ -326,6 +333,7 @@
       };
 
       try {
+
         const response = await fetch('/api/withdraw', {
           method: 'POST',
           headers: {
@@ -339,29 +347,32 @@
         if (!response.ok) {
           throw new Error(
             data.error ||
-            'Your withdrawal request could not be submitted.'
+            'Your request could not be submitted.'
           );
         }
 
         form.style.display = 'none';
 
         statusMessage.style.display = 'block';
+
         statusMessage.innerHTML = `
-          <strong>Withdrawal request received.</strong><br><br>
-          We have received your request and sent a confirmation to
+          <strong>Request received.</strong><br><br>
+          We have received your withdrawal / return request and sent a confirmation to
           ${escapeHtml(payload.email)}.<br><br>
-          We will review the order details and follow up with return instructions
-          where applicable.
+          We will review the order status and follow up with the appropriate next steps or return instructions.
         `;
 
       } catch (error) {
+
         statusMessage.style.display = 'block';
+
         statusMessage.textContent =
           error.message ||
-          'Something went wrong. Please email hello@legtheory.com.';
+          'Something went wrong. Please email hello@legtheory.com or contact us on Instagram.';
 
         button.disabled = false;
         button.textContent = 'Submit request';
+
       }
     });
 
