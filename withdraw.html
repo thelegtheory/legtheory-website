@@ -48,7 +48,20 @@
       font-size: 15px;
       line-height: 1.8;
       color: rgba(255,255,255,0.68);
-      margin-bottom: 48px;
+      margin-bottom: 36px;
+    }
+
+    .small-note {
+      padding: 20px;
+      margin-bottom: 44px;
+      border: 1px solid rgba(255,255,255,0.16);
+      font-size: 12px;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.58);
+    }
+
+    .small-note a {
+      color: #fff;
     }
 
     .field {
@@ -196,10 +209,19 @@
     </h1>
 
     <p class="intro">
-      Use this form if you wish to exercise your right of withdrawal or start a return for an online purchase.
+      Use this form if you wish to withdraw from your online purchase or start a return.
       Please enter the details used when placing your order so we can identify it.
       You will receive a confirmation by email after your request has been submitted.
     </p>
+
+    <div class="small-note">
+      Leg Theory is a one-person independent label. If you are unsure about sizing, fit or anything else
+      before ordering, you are always welcome to message us on Instagram
+      <a href="https://www.instagram.com/thelegtheory/" target="_blank" rel="noopener noreferrer">
+        @thelegtheory
+      </a>.
+      We are happy to help you choose before you purchase.
+    </div>
 
     <form id="withdrawForm">
 
@@ -301,7 +323,7 @@
     <div class="status" id="statusMessage"></div>
 
     <div class="links">
-      <a href="policies.html">Shipping & Returns</a>
+      <a href="policies.html">Policies</a>
       <a href="terms.html">Terms</a>
       <a href="privacy.html">Privacy</a>
       <a href="collection.html">Shop</a>
@@ -359,7 +381,7 @@
           <strong>Request received.</strong><br><br>
           We have received your withdrawal / return request and sent a confirmation to
           ${escapeHtml(payload.email)}.<br><br>
-          We will review the order status and follow up with the appropriate next steps or return instructions.
+          We will check the order status and follow up with the appropriate next steps or return instructions.
         `;
 
       } catch (error) {
@@ -368,7 +390,7 @@
 
         statusMessage.textContent =
           error.message ||
-          'Something went wrong. Please email hello@legtheory.com or contact us on Instagram.';
+          'Something went wrong. Please email hello@legtheory.com or message us on Instagram.';
 
         button.disabled = false;
         button.textContent = 'Submit request';
