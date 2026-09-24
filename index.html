@@ -71,37 +71,90 @@
       z-index: 2;
     }
 
-    /* TOP NAV */
+    /* HOMEPAGE MENU */
 
-    .top-nav {
+    .site-menu {
       position: absolute;
       top: 28px;
       right: 32px;
       z-index: 5;
 
       display: flex;
-      align-items: center;
-      gap: 24px;
+      flex-direction: column;
+      align-items: flex-end;
+
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
     }
 
-    .top-nav a,
-    .top-nav button {
+    .site-menu > a,
+    .info-toggle {
+      display: block;
+
+      padding: 5px 0;
+
+      color: rgba(255,255,255,0.82);
       background: none;
       border: none;
-      color: rgba(255, 255, 255, 0.82);
-      text-decoration: none;
 
       font-family: Arial, Helvetica, sans-serif;
       font-size: 11px;
       letter-spacing: 0.12em;
       text-transform: uppercase;
 
+      text-decoration: none;
+      text-align: right;
+
       cursor: pointer;
+
       transition: color 0.2s ease;
     }
 
-    .top-nav a:hover,
-    .top-nav button:hover {
+    .site-menu > a:hover,
+    .info-toggle:hover {
+      color: #fff;
+    }
+
+    .info-links {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+
+      transition:
+        max-height 0.3s ease,
+        opacity 0.25s ease,
+        margin-top 0.25s ease;
+
+      margin-top: 0;
+    }
+
+    .info-links.open {
+      max-height: 180px;
+      opacity: 1;
+      margin-top: 4px;
+    }
+
+    .info-links a {
+      display: block;
+
+      padding: 4px 0;
+
+      color: rgba(255,255,255,0.58);
+      text-decoration: none;
+
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+
+      transition: color 0.2s ease;
+    }
+
+    .info-links a:hover {
       color: #fff;
     }
 
@@ -116,7 +169,7 @@
 
       width: 100%;
       text-align: center;
-      color: white;
+      color: #fff;
     }
 
     .hero-content h1 {
@@ -129,10 +182,11 @@
 
     .collection-button {
       display: inline-block;
+
       padding: 13px 25px;
 
-      border: 1px solid white;
-      color: white;
+      border: 1px solid #fff;
+      color: #fff;
       background: transparent;
 
       text-decoration: none;
@@ -146,102 +200,8 @@
     }
 
     .collection-button:hover {
-      background: white;
-      color: black;
-    }
-
-    /* BOTTOM NAV */
-
-    .bottom-nav {
-      position: absolute;
-      left: 30px;
-      right: 30px;
-      bottom: 26px;
-      z-index: 5;
-
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-
-      pointer-events: none;
-    }
-
-    .bottom-group {
-      position: relative;
-      pointer-events: auto;
-    }
-
-    .bottom-toggle {
-      background: none;
-      border: none;
-      color: rgba(255, 255, 255, 0.72);
-
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 11px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-
-      cursor: pointer;
-      padding: 8px 0;
-      transition: color 0.2s ease;
-    }
-
-    .bottom-toggle:hover {
-      color: #fff;
-    }
-
-    .bottom-menu {
-      position: absolute;
-      bottom: 36px;
-
-      min-width: 210px;
-      padding: 18px 20px;
-
-      background: rgba(0, 0, 0, 0.92);
-      border: 1px solid rgba(255, 255, 255, 0.16);
-
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(8px);
-
-      transition:
-        opacity 0.2s ease,
-        visibility 0.2s ease,
-        transform 0.2s ease;
-    }
-
-    .bottom-menu.open {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
-    }
-
-    .bottom-group.help .bottom-menu {
-      left: 0;
-    }
-
-    .bottom-group.info .bottom-menu {
-      right: 0;
-      text-align: right;
-    }
-
-    .bottom-menu a {
-      display: block;
-
-      padding: 8px 0;
-
-      color: rgba(255, 255, 255, 0.7);
-      text-decoration: none;
-
-      font-size: 11px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-
-      transition: color 0.2s ease;
-    }
-
-    .bottom-menu a:hover {
-      color: #fff;
+      background: #fff;
+      color: #000;
     }
 
     /* COLLECTION DRAWER */
@@ -249,6 +209,7 @@
     .collection-overlay {
       position: fixed;
       inset: 0;
+
       background: rgba(0, 0, 0, 0.55);
 
       opacity: 0;
@@ -275,7 +236,7 @@
       height: 100vh;
 
       background: #000;
-      border-right: 1px solid rgba(255, 255, 255, 0.15);
+      border-right: 1px solid rgba(255,255,255,0.15);
 
       transform: translateX(-100%);
       transition: transform 0.4s ease;
@@ -330,7 +291,7 @@
 
       padding: 9px 0 9px 22px;
 
-      color: rgba(255, 255, 255, 0.62);
+      color: rgba(255,255,255,0.62);
       text-decoration: none;
 
       font-size: 14px;
@@ -351,17 +312,25 @@
       letter-spacing: 0.12em;
       line-height: 1.4;
 
-      color: rgba(255, 255, 255, 0.52);
+      color: rgba(255,255,255,0.52);
     }
 
     /* MOBILE */
 
     @media (max-width: 600px) {
 
-      .top-nav {
+      .site-menu {
         top: 22px;
         right: 22px;
-        gap: 18px;
+      }
+
+      .site-menu > a,
+      .info-toggle {
+        font-size: 10px;
+      }
+
+      .info-links a {
+        font-size: 9px;
       }
 
       .hero-content h1 {
@@ -373,16 +342,6 @@
       .collection-button {
         padding: 12px 22px;
         font-size: 11px;
-      }
-
-      .bottom-nav {
-        left: 22px;
-        right: 22px;
-        bottom: 20px;
-      }
-
-      .bottom-menu {
-        min-width: 190px;
       }
 
       .collection-drawer {
@@ -494,20 +453,51 @@
     <div class="overlay"></div>
 
 
-    <!-- TOP NAV -->
+    <!-- TOP-RIGHT MENU -->
 
-    <nav class="top-nav">
-
-      <button
-        type="button"
-        onclick="openCollectionDrawer()"
-      >
-        Shop
-      </button>
+    <nav class="site-menu">
 
       <a href="about.html">
-        About
+        About Leg Theory
       </a>
+
+      <a href="policies.html">
+        Policies
+      </a>
+
+      <button
+        class="info-toggle"
+        id="infoToggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="infoLinks"
+        onclick="toggleInfo(event)"
+      >
+        + Info
+      </button>
+
+      <div
+        class="info-links"
+        id="infoLinks"
+      >
+
+        <a href="withdraw.html">
+          Withdraw / Return
+        </a>
+
+        <a href="terms.html">
+          Terms
+        </a>
+
+        <a href="privacy.html">
+          Privacy
+        </a>
+
+        <a href="mailto:hello@legtheory.com">
+          Contact
+        </a>
+
+      </div>
 
     </nav>
 
@@ -530,95 +520,14 @@
 
     </div>
 
-
-    <!-- BOTTOM NAV -->
-
-    <div class="bottom-nav">
-
-      <!-- HELP -->
-
-      <div class="bottom-group help">
-
-        <button
-          class="bottom-toggle"
-          type="button"
-          onclick="toggleBottomMenu('helpMenu', event)"
-        >
-          Help
-        </button>
-
-        <div
-          class="bottom-menu"
-          id="helpMenu"
-        >
-
-          <a href="policies.html">
-            Policies
-          </a>
-
-          <a href="withdraw.html">
-            Withdraw / Return
-          </a>
-
-          <a href="mailto:hello@legtheory.com">
-            Contact
-          </a>
-
-          <a
-            href="https://www.instagram.com/thelegtheory/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Instagram
-          </a>
-
-        </div>
-
-      </div>
-
-
-      <!-- INFO -->
-
-      <div class="bottom-group info">
-
-        <button
-          class="bottom-toggle"
-          type="button"
-          onclick="toggleBottomMenu('infoMenu', event)"
-        >
-          + Info
-        </button>
-
-        <div
-          class="bottom-menu"
-          id="infoMenu"
-        >
-
-          <a href="terms.html">
-            Terms
-          </a>
-
-          <a href="privacy.html">
-            Privacy
-          </a>
-
-          <a href="terms.html">
-            Business Information
-          </a>
-
-        </div>
-
-      </div>
-
-    </div>
-
   </section>
 
 
   <script>
 
     function openCollectionDrawer() {
-      closeBottomMenus();
+
+      closeInfo();
 
       document
         .getElementById('collectionDrawer')
@@ -646,38 +555,52 @@
     }
 
 
-    function toggleBottomMenu(menuId, event) {
+    function toggleInfo(event) {
 
       event.stopPropagation();
 
-      const selectedMenu =
-        document.getElementById(menuId);
+      const infoLinks =
+        document.getElementById('infoLinks');
 
-      const wasOpen =
-        selectedMenu.classList.contains('open');
+      const infoToggle =
+        document.getElementById('infoToggle');
 
-      closeBottomMenus();
+      const isOpen =
+        infoLinks.classList.contains('open');
 
-      if (!wasOpen) {
-        selectedMenu.classList.add('open');
+      if (isOpen) {
+        closeInfo();
+      } else {
+        infoLinks.classList.add('open');
+        infoToggle.textContent = '− Info';
+        infoToggle.setAttribute('aria-expanded', 'true');
       }
     }
 
 
-    function closeBottomMenus() {
+    function closeInfo() {
 
-      document
-        .querySelectorAll('.bottom-menu')
-        .forEach(menu => {
-          menu.classList.remove('open');
-        });
+      const infoLinks =
+        document.getElementById('infoLinks');
+
+      const infoToggle =
+        document.getElementById('infoToggle');
+
+      infoLinks.classList.remove('open');
+
+      infoToggle.textContent = '+ Info';
+
+      infoToggle.setAttribute(
+        'aria-expanded',
+        'false'
+      );
     }
 
 
     document.addEventListener('click', event => {
 
-      if (!event.target.closest('.bottom-group')) {
-        closeBottomMenus();
+      if (!event.target.closest('.site-menu')) {
+        closeInfo();
       }
 
     });
@@ -686,7 +609,7 @@
     document.addEventListener('keydown', event => {
 
       if (event.key === 'Escape') {
-        closeBottomMenus();
+        closeInfo();
         closeCollectionDrawer();
       }
 
