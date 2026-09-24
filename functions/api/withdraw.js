@@ -269,18 +269,31 @@ export async function onRequestPost({ request, env }) {
         <p style="line-height:1.7;">
           Once a returned item reaches us, we will inspect its condition
           and aim to process any eligible refund within 1 working day.
+          As Leg Theory is run by one person, there may occasionally be a short delay.
         </p>
 
         <p style="line-height:1.7;">
           Please do not send anything back before receiving return instructions from us.
         </p>
 
+        <div style="
+          margin-top:34px;
+          padding:20px;
+          background:#f6f6f6;
+          font-size:13px;
+          line-height:1.7;
+        ">
+          Leg Theory is a one-person independent label.
+          If you have any questions about sizing, fit or your order,
+          please feel free to message us on Instagram before or after purchasing.
+          We are always happy to help.
+        </div>
+
         <p style="
           line-height:1.7;
           margin-top:32px;
         ">
-          If you have any questions, simply reply to this email
-          or message us on Instagram
+          You can reply to this email or message us on Instagram
           <a
             href="https://www.instagram.com/thelegtheory/"
             style="color:#111;"
@@ -374,6 +387,18 @@ export async function onRequestPost({ request, env }) {
               `
               : ''
           }
+
+          <div style="
+            margin-top:30px;
+            padding:18px;
+            background:#f6f6f6;
+            font-size:13px;
+            line-height:1.7;
+          ">
+            Check the order status before replying:
+            not yet shipped, in transit, or already delivered.
+            Then send the customer the appropriate next steps.
+          </div>
 
           <p style="
             margin-top:30px;
