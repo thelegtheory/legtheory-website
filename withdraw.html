@@ -161,8 +161,13 @@
       color: rgba(255,255,255,0.75);
     }
 
-    .links {
-      margin-top: 50px;
+    .divider {
+      height: 1px;
+      background: rgba(255,255,255,0.12);
+      margin: 52px 0 40px;
+    }
+
+    .footer-links {
       display: flex;
       flex-wrap: wrap;
       gap: 18px;
@@ -171,12 +176,12 @@
       text-transform: uppercase;
     }
 
-    .links a {
+    .footer-links a {
       color: rgba(255,255,255,0.55);
       text-decoration: none;
     }
 
-    .links a:hover {
+    .footer-links a:hover {
       color: #fff;
     }
 
@@ -227,47 +232,23 @@
 
       <div class="field">
         <label for="name">Full name</label>
-
-        <input
-          id="name"
-          name="name"
-          type="text"
-          autocomplete="name"
-          required
-        >
+        <input id="name" name="name" type="text" autocomplete="name" required>
       </div>
 
       <div class="field">
         <label for="email">Email used for the order</label>
-
-        <input
-          id="email"
-          name="email"
-          type="email"
-          autocomplete="email"
-          required
-        >
+        <input id="email" name="email" type="email" autocomplete="email" required>
       </div>
 
       <div class="field">
         <label for="orderDate">Order date</label>
-
-        <input
-          id="orderDate"
-          name="orderDate"
-          type="date"
-          required
-        >
+        <input id="orderDate" name="orderDate" type="date" required>
       </div>
 
       <div class="field">
         <label for="scope">What would you like to withdraw or return?</label>
 
-        <select
-          id="scope"
-          name="scope"
-          required
-        >
+        <select id="scope" name="scope" required>
           <option value="">Select an option</option>
           <option value="entire-order">Entire order</option>
           <option value="part-of-order">Part of the order</option>
@@ -322,12 +303,13 @@
 
     <div class="status" id="statusMessage"></div>
 
-    <div class="links">
-      <a href="policies.html">Policies</a>
-      <a href="terms.html">Terms</a>
-      <a href="privacy.html">Privacy</a>
+    <div class="divider"></div>
+
+    <div class="footer-links">
+      <a href="index.html">Home</a>
       <a href="collection.html">Shop</a>
-      <a href="mailto:hello@legtheory.com">Contact</a>
+      <a href="about.html">About</a>
+      <a href="policies.html">Policies</a>
     </div>
 
   </main>
