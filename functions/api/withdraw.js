@@ -103,7 +103,7 @@ export async function onRequestPost({ request, env }) {
 
   if (!orderDate) {
     return json({
-      error: 'Please enter the approximate order date.'
+      error: 'Please enter the order date.'
     }, 400);
   }
 
@@ -112,7 +112,7 @@ export async function onRequestPost({ request, env }) {
     scope !== 'part-of-order'
   ) {
     return json({
-      error: 'Please select what you would like to withdraw.'
+      error: 'Please select what you would like to withdraw or return.'
     }, 400);
   }
 
@@ -162,7 +162,7 @@ export async function onRequestPost({ request, env }) {
     console.error('Withdrawal database error:', error);
 
     return json({
-      error: 'Your withdrawal could not be recorded. Please try again.'
+      error: 'Your request could not be recorded. Please try again.'
     }, 500);
   }
 
@@ -186,7 +186,8 @@ export async function onRequestPost({ request, env }) {
 
   const customerEmailSent = await sendEmail(env, {
     to: email,
-    subject: 'Your Leg Theory withdrawal has been received',
+
+    subject: 'Your Leg Theory withdrawal / return request has been received',
 
     idempotencyKey: `legtheory-withdraw-customer-${requestId}`,
 
@@ -212,7 +213,7 @@ export async function onRequestPost({ request, env }) {
           font-weight: 400;
           margin: 0 0 24px;
         ">
-          Withdrawal received
+          Request received
         </h1>
 
         <p style="line-height:1.7;">
@@ -220,7 +221,7 @@ export async function onRequestPost({ request, env }) {
         </p>
 
         <p style="line-height:1.7;">
-          We have received and registered your withdrawal.
+          We have received and registered your withdrawal / return request.
         </p>
 
         <div style="
@@ -239,7 +240,7 @@ export async function onRequestPost({ request, env }) {
           ${safeOrderDate}
           <br><br>
 
-          <strong>Withdrawal</strong><br>
+          <strong>Request</strong><br>
           ${escapeHtml(scopeLabel)}
           <br><br>
 
@@ -249,29 +250,43 @@ export async function onRequestPost({ request, env }) {
         </div>
 
         <p style="line-height:1.7;">
-          If your order has not yet been handed to the carrier, we will cancel the shipment
-          and process the next steps accordingly.
+          If your order has not yet been handed to the carrier,
+          we will cancel the shipment where possible and follow up with the next steps.
         </p>
-        
+
         <p style="line-height:1.7;">
-          If your order has already been handed to the carrier, we may not be able to stop
-          delivery. We will let you know the appropriate next step. Depending on the carrier
-          and delivery status, you may be able to refuse delivery or return the parcel after receipt.
+          If your order has already been handed to the carrier,
+          we may not be able to stop delivery.
+          We will let you know the appropriate next step depending on the carrier
+          and delivery status.
         </p>
-        
+
         <p style="line-height:1.7;">
-          For returned goods, reimbursement may be withheld until we receive the goods back
-          or you provide evidence that they have been sent back.
+          If the parcel has already been delivered,
+          we will provide return instructions and the return address.
         </p>
-        
+
         <p style="line-height:1.7;">
-          Please do not send anything back before receiving the return instructions from us.
+          Once a returned item reaches us, we will inspect its condition
+          and aim to process any eligible refund within 1 working day.
         </p>
+
+        <p style="line-height:1.7;">
+          Please do not send anything back before receiving return instructions from us.
+        </p>
+
         <p style="
           line-height:1.7;
           margin-top:32px;
         ">
-          If you have any questions, simply reply to this email or message us on Instagram.
+          If you have any questions, simply reply to this email
+          or message us on Instagram
+          <a
+            href="https://www.instagram.com/thelegtheory/"
+            style="color:#111;"
+          >
+            @thelegtheory
+          </a>.
         </p>
 
         <p style="margin-top:30px;">
@@ -290,7 +305,7 @@ export async function onRequestPost({ request, env }) {
     ownerEmailSent = await sendEmail(env, {
       to: env.ORDER_NOTIFICATION_EMAIL,
 
-      subject: 'New Leg Theory withdrawal received',
+      subject: 'New Leg Theory withdrawal / return request',
 
       idempotencyKey: `legtheory-withdraw-owner-${requestId}`,
 
@@ -316,7 +331,7 @@ export async function onRequestPost({ request, env }) {
             font-weight: 400;
             margin-bottom: 26px;
           ">
-            ↩ New withdrawal received
+            ↩ New withdrawal / return request
           </h1>
 
           <p style="line-height:1.8;">
@@ -340,7 +355,7 @@ export async function onRequestPost({ request, env }) {
           </p>
 
           <p style="line-height:1.8;">
-            <strong>Withdrawal</strong><br>
+            <strong>Request</strong><br>
             ${escapeHtml(scopeLabel)}
           </p>
 
