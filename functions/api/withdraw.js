@@ -235,7 +235,7 @@ export async function onRequestPost({ request, env }) {
           ${escapeHtml(submittedDisplay)}
           <br><br>
 
-          <strong>Approximate order date</strong><br>
+          <strong>Order date</strong><br>
           ${safeOrderDate}
           <br><br>
 
@@ -249,24 +249,24 @@ export async function onRequestPost({ request, env }) {
         </div>
 
         <p style="line-height:1.7;">
-          If your order has not yet been dispatched, we will stop shipment where possible
+          If your order has not yet been handed to the carrier, we will cancel the shipment
           and process the next steps accordingly.
         </p>
-
+        
         <p style="line-height:1.7;">
-          If your order has already been dispatched or delivered, we will follow up with
-          the appropriate return instructions.
+          If your order has already been handed to the carrier, we may not be able to stop
+          delivery. We will let you know the appropriate next step. Depending on the carrier
+          and delivery status, you may be able to refuse delivery or return the parcel after receipt.
         </p>
-
+        
         <p style="line-height:1.7;">
-          For returned goods, reimbursement may be held until we receive the goods back
-          or receive evidence that they have been sent back.
+          For returned goods, reimbursement may be withheld until we receive the goods back
+          or you provide evidence that they have been sent back.
         </p>
-
+        
         <p style="line-height:1.7;">
           Please do not send anything back before receiving the return instructions from us.
         </p>
-
         <p style="
           line-height:1.7;
           margin-top:32px;
@@ -335,7 +335,7 @@ export async function onRequestPost({ request, env }) {
           </p>
 
           <p style="line-height:1.8;">
-            <strong>Approximate order date</strong><br>
+            <strong>Order date</strong><br>
             ${safeOrderDate}
           </p>
 
