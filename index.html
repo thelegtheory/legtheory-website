@@ -91,7 +91,6 @@
     .site-menu > a,
     .info-toggle {
       display: block;
-
       padding: 5px 0;
 
       color: rgba(255,255,255,0.82);
@@ -107,7 +106,6 @@
       text-align: right;
 
       cursor: pointer;
-
       transition: color 0.2s ease;
     }
 
@@ -125,23 +123,22 @@
       flex-direction: column;
       align-items: flex-end;
 
+      margin-top: 0;
+
       transition:
         max-height 0.3s ease,
         opacity 0.25s ease,
         margin-top 0.25s ease;
-
-      margin-top: 0;
     }
 
     .info-links.open {
-      max-height: 180px;
+      max-height: 150px;
       opacity: 1;
       margin-top: 4px;
     }
 
     .info-links a {
       display: block;
-
       padding: 4px 0;
 
       color: rgba(255,255,255,0.58);
@@ -242,7 +239,6 @@
       transition: transform 0.4s ease;
 
       z-index: 999;
-
       padding: 44px 36px;
     }
 
@@ -288,7 +284,6 @@
 
     .drawer-link {
       display: block;
-
       padding: 9px 0 9px 22px;
 
       color: rgba(255,255,255,0.62);
@@ -481,10 +476,6 @@
         id="infoLinks"
       >
 
-        <a href="withdraw.html">
-          Withdraw / Return
-        </a>
-
         <a href="terms.html">
           Terms
         </a>
@@ -587,13 +578,8 @@
         document.getElementById('infoToggle');
 
       infoLinks.classList.remove('open');
-
       infoToggle.textContent = '+ Info';
-
-      infoToggle.setAttribute(
-        'aria-expanded',
-        'false'
-      );
+      infoToggle.setAttribute('aria-expanded', 'false');
     }
 
 
