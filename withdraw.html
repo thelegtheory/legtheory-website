@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Withdraw from an Order | Leg Theory</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #000;
+      color: #fff;
+      font-family: Arial, Helvetica, sans-serif;
+      padding: 28px;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 50px 0 80px;
+    }
+
+    .brand {
+      display: inline-block;
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      font-size: 13px;
+      letter-spacing: 0.22em;
+      margin-bottom: 70px;
+    }
+
+    h1 {
+      font-size: clamp(34px, 7vw, 60px);
+      font-weight: 300;
+      letter-spacing: 0.03em;
+      margin-bottom: 26px;
+    }
+
+    .intro {
+      font-size: 15px;
+      line-height: 1.8;
+      color: rgba(255,255,255,0.68);
+      margin-bottom: 48px;
+    }
+
+    .field {
+      margin-bottom: 26px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.7);
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.28);
+      color: #fff;
+      padding: 15px;
+      font: inherit;
+      border-radius: 0;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #fff;
+    }
+
+    select {
+      background: #000;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .help {
+      display: block;
+      margin-top: 8px;
+      font-size: 11px;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.42);
+    }
+
+    .checkbox-row {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      margin: 34px 0;
+    }
+
+    .checkbox-row input {
+      width: auto;
+      margin-top: 4px;
+    }
+
+    .checkbox-row label {
+      margin: 0;
+      font-size: 12px;
+      line-height: 1.6;
+      letter-spacing: 0;
+      text-transform: none;
+      color: rgba(255,255,255,0.72);
+    }
+
+    button {
+      width: 100%;
+      padding: 16px 20px;
+      background: #fff;
+      color: #000;
+      border: 1px solid #fff;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: 0.45;
+      cursor: default;
+    }
+
+    .status {
+      display: none;
+      margin-top: 30px;
+      padding: 20px;
+      border: 1px solid rgba(255,255,255,0.2);
+      font-size: 13px;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.75);
+    }
+
+    .links {
+      margin-top: 50px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .links a {
+      color: rgba(255,255,255,0.55);
+      text-decoration: none;
+    }
+
+    .links a:hover {
+      color: #fff;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 22px;
+      }
+
+      .page {
+        padding-top: 36px;
+      }
+
+      .brand {
+        margin-bottom: 55px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="page">
+
+    <a href="index.html" class="brand">
+      LEG THEORY
+    </a>
+
+    <h1>
+      Withdraw from an order
+    </h1>
+
+    <p class="intro">
+      Use this form if you wish to exercise your right of withdrawal for an online purchase.
+      Please enter the details used when placing your order so we can identify it.
+      You will receive confirmation by email after your request has been submitted.
+    </p>
+
+    <form id="withdrawForm">
+
+      <div class="field">
+        <label for="name">Full name</label>
+        <input
+          id="name"
+          name="name"
+          type="text"
+          autocomplete="name"
+          required
+        >
+      </div>
+
+      <div class="field">
+        <label for="email">Email used for the order</label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          autocomplete="email"
+          required
+        >
+      </div>
+
+      <div class="field">
+        <label for="orderDate">Approximate order date</label>
+        <input
+          id="orderDate"
+          name="orderDate"
+          type="date"
+          required
+        >
+      </div>
+
+      <div class="field">
+        <label for="scope">What would you like to withdraw?</label>
+
+        <select
+          id="scope"
+          name="scope"
+          required
+        >
+          <option value="">Select an option</option>
+          <option value="entire-order">Entire order</option>
+          <option value="part-of-order">Part of the order</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="items">Item(s)</label>
+
+        <textarea
+          id="items"
+          name="items"
+          placeholder="For example: Patent Leather Leg Sleeves, Black, Size M"
+          required
+        ></textarea>
+
+        <span class="help">
+          If you are withdrawing from the entire order, you can simply write “entire order”.
+        </span>
+      </div>
+
+      <div class="field">
+        <label for="message">Additional information (optional)</label>
+
+        <textarea
+          id="message"
+          name="message"
+          placeholder="Anything else you would like us to know."
+        ></textarea>
+      </div>
+
+      <div class="checkbox-row">
+        <input
+          id="confirmation"
+          name="confirmation"
+          type="checkbox"
+          required
+        >
+
+        <label for="confirmation">
+          I confirm that I wish to withdraw from the purchase described above.
+        </label>
+      </div>
+
+      <button type="submit" id="submitButton">
+        Submit withdrawal
+      </button>
+
+    </form>
+
+    <div class="status" id="statusMessage"></div>
+
+    <div class="links">
+      <a href="policies.html">Policies</a>
+      <a href="collection.html">Shop</a>
+      <a href="mailto:hello@legtheory.com">Contact</a>
+    </div>
+
+  </main>
+
+  <script>
+    const form = document.getElementById('withdrawForm');
+    const button = document.getElementById('submitButton');
+    const statusMessage = document.getElementById('statusMessage');
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      button.disabled = true;
+      button.textContent = 'Submitting...';
+
+      statusMessage.style.display = 'none';
+
+      const payload = {
+        name: document.getElementById('name').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        orderDate: document.getElementById('orderDate').value,
+        scope: document.getElementById('scope').value,
+        items: document.getElementById('items').value.trim(),
+        message: document.getElementById('message').value.trim()
+      };
+
+      try {
+        const response = await fetch('/api/withdraw', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(
+            data.error ||
+            'Your withdrawal request could not be submitted.'
+          );
+        }
+
+        form.style.display = 'none';
+
+        statusMessage.style.display = 'block';
+        statusMessage.innerHTML = `
+          <strong>Withdrawal request received.</strong><br><br>
+          We have received your request and sent a confirmation to
+          ${escapeHtml(payload.email)}.<br><br>
+          We will review the order details and follow up with return instructions
+          where applicable.
+        `;
+
+      } catch (error) {
+        statusMessage.style.display = 'block';
+        statusMessage.textContent =
+          error.message ||
+          'Something went wrong. Please email hello@legtheory.com.';
+
+        button.disabled = false;
+        button.textContent = 'Submit withdrawal';
+      }
+    });
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+  </script>
+
+</body>
+
+</html>
