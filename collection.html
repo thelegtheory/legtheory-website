@@ -1621,29 +1621,11 @@
 
       if (!product) return;
 
-      const stock =
-        inventoryAvailability[product];
-
       const existingItem =
-        cart.find(
-          item =>
-            item.product === product
-        );
-
-      const currentQuantity =
-        existingItem
-          ? existingItem.quantity
-          : 0;
-
-      if (
-        typeof stock === 'number' &&
-        currentQuantity >= stock
-      ) {
-        alert(
-          'No more stock is currently available for this size.'
-        );
-        return;
-      }
+  cart.find(
+    item =>
+      item.product === product
+  );
 
       if (existingItem) {
 
@@ -1820,24 +1802,6 @@
 
       const item =
         cart[index];
-
-      const stock =
-        inventoryAvailability[
-          item.product
-        ];
-
-      if (
-        change > 0 &&
-        typeof stock === 'number' &&
-        item.quantity >= stock
-      ) {
-
-        alert(
-          'No more stock is currently available for this size.'
-        );
-
-        return;
-      }
 
       item.quantity += change;
 
