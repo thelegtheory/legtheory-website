@@ -448,20 +448,6 @@ export async function onRequestPost({
               : ''
           }
 
-          <!-- TEMPORARY HOLIDAY DISPATCH NOTICE -->
-          <div style="
-            margin-top:28px;
-            padding:18px;
-            background:#f6f6f6;
-            font-size:14px;
-            line-height:1.7;
-          ">
-            <strong>A quick shipping note:</strong><br>
-            Leg Theory is a one-person shop, and I’ll be away for a short holiday break.
-            Orders placed 26 September–5 October will be dispatched from 7 October.
-            I’ll follow up with your tracking details once your order is on the way.
-          </div>
-
           <p style="margin-top:28px;">
             If you have any questions, simply reply to this email
             or message us on Instagram.
