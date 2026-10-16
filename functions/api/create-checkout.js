@@ -39,8 +39,8 @@ export async function onRequest({ request, env }) {
 
   /*
     type is used for the cart rules:
-    - garters can only be bought together with mesh legwear
-      (never more pairs of garters than pairs of mesh)
+    - garters can only be bought together with mesh legwear in
+      the same colour (never more pairs of garters than pairs of mesh)
     - one pair of garters is complimentary for every
       sleeves + mesh pair in the same order
   */
@@ -76,14 +76,16 @@ export async function onRequest({ request, env }) {
       type: 'sleeves'
     },
     'mesh-long': {
-      name: 'Sheer Mesh Legwear - Long 95cm',
+      name: 'Sheer Mesh Legwear - Black',
       amount: 3500,
-      type: 'mesh'
+      type: 'mesh',
+      color: 'black'
     },
     'leg-garters': {
-      name: 'Leg Garters',
+      name: 'Leg Garters - Black',
       amount: 200,
-      type: 'garters'
+      type: 'garters',
+      color: 'black'
     }
   };
 
@@ -177,6 +179,27 @@ export async function onRequest({ request, env }) {
     }, 400);
   }
 
+  const countByTypeAndColor = (type, color) =>
+    [...quantities.entries()]
+      .filter(([key]) =>
+        PRODUCTS[key].type === type &&
+        PRODUCTS[key].color === color
+      )
+      .reduce((sum, [, quantity]) => sum + quantity, 0);
+
+  for (const [key, quantity] of quantities.entries()) {
+    const product = PRODUCTS[key];
+
+    if (
+      product.type === 'garters' &&
+      quantity > countByTypeAndColor('mesh', product.color)
+    ) {
+      return json({
+        error: 'Leg garters are available together with the mesh legwear in the same colour.'
+      }, 400);
+    }
+  }
+
   const complimentaryGarters =
     Math.min(sleevesCount, meshCount, gartersCount);
 
@@ -224,10 +247,14 @@ export async function onRequest({ request, env }) {
     €0 line so the customer sees them on the payment page.
   */
   const lineItems = [];
+  let freeGartersLeft = complimentaryGarters;
 
   for (const item of checkoutItems) {
-    if (item.type === 'garters' && complimentaryGarters > 0) {
-      const paidQuantity = item.quantity - complimentaryGarters;
+    if (item.type === 'garters' && freeGartersLeft > 0) {
+      const freeQuantity = Math.min(item.quantity, freeGartersLeft);
+      const paidQuantity = item.quantity - freeQuantity;
+
+      freeGartersLeft -= freeQuantity;
 
       if (paidQuantity > 0) {
         lineItems.push({ ...item, quantity: paidQuantity });
@@ -235,9 +262,9 @@ export async function onRequest({ request, env }) {
 
       lineItems.push({
         ...item,
-        name: 'Leg Garters - complimentary with leg sleeves + mesh',
+        name: `${item.name} - complimentary with leg sleeves + mesh`,
         amount: 0,
-        quantity: complimentaryGarters
+        quantity: freeQuantity
       });
     } else {
       lineItems.push(item);

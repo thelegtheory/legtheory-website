@@ -888,9 +888,10 @@
         class="drawer-link"
         type="button"
         data-product="mesh"
-        onclick="selectDrawerMesh(this)"
+        data-color="black"
+        onclick="selectDrawerMesh('black', this)"
       >
-        LONG · 95 CM
+        BLACK
       </button>
 
     </div>
@@ -1064,8 +1065,11 @@
           Sheer Mesh Legwear
         </div>
 
-        <h2 class="product-title">
-          Long · 95 cm
+        <h2
+          class="product-title"
+          id="meshTitle"
+        >
+          Black
         </h2>
 
         <div class="product-price">
@@ -1490,28 +1494,52 @@
       FR: { label: 'France', price: 8 }
     };
 
-    const MESH_KEY = 'mesh-long';
-    const GARTERS_KEY = 'leg-garters';
+    /*
+      MESH COLOURS
+      Each colour has its own mesh stock and its own garters.
+      New colour later (e.g. beige): add a line here, a menu link
+      in the drawer, and the same keys in create-checkout.js.
+    */
+    const MESH_COLORS = {
+      black: {
+        title: 'Black',
+        meshKey: 'mesh-long',
+        gartersKey: 'leg-garters'
+      }
+    };
+
+    let currentMeshColor = 'black';
+
+    const meshKey = () =>
+      MESH_COLORS[currentMeshColor].meshKey;
+
+    const gartersKey = () =>
+      MESH_COLORS[currentMeshColor].gartersKey;
 
     let gartersSelected = false;
 
 
     function getProductInfo(productKey) {
 
-      if (productKey === MESH_KEY) {
-        return {
-          type: 'mesh',
-          name: 'Sheer Mesh Legwear · Long 95 cm',
-          price: 35
-        };
-      }
+      for (const color of Object.values(MESH_COLORS)) {
 
-      if (productKey === GARTERS_KEY) {
-        return {
-          type: 'garters',
-          name: 'Leg Garters',
-          price: 2
-        };
+        if (productKey === color.meshKey) {
+          return {
+            type: 'mesh',
+            color: color.title,
+            name: `Sheer Mesh Legwear · ${color.title}`,
+            price: 35
+          };
+        }
+
+        if (productKey === color.gartersKey) {
+          return {
+            type: 'garters',
+            color: color.title,
+            name: `Leg Garters · ${color.title}`,
+            price: 2
+          };
+        }
       }
 
       const [color, size] =
@@ -1564,8 +1592,7 @@
 
       return (
         itemsTotal -
-        getComplimentaryGarters() *
-        getProductInfo(GARTERS_KEY).price
+        getComplimentaryGarters() * 2
       );
     }
 
@@ -1584,32 +1611,52 @@
     }
 
 
+    function getCartQuantity(productKey) {
+
+      const item =
+        cart.find(entry => entry.product === productKey);
+
+      return item ? item.quantity : 0;
+    }
+
+
+    function isGartersKey(productKey) {
+
+      return getProductInfo(productKey).type === 'garters';
+    }
+
+
+    function getMatchingMeshKey(gartersProductKey) {
+
+      const color =
+        Object.values(MESH_COLORS).find(entry =>
+          entry.gartersKey === gartersProductKey
+        );
+
+      return color ? color.meshKey : null;
+    }
+
+
     /*
-      Garters can't be bought without mesh legwear,
-      and never more pairs than mesh pairs.
+      Garters can't be bought without mesh legwear in the
+      same colour, and never more pairs than mesh pairs.
     */
     function enforceGarterRule() {
 
-      const meshCount =
-        countCartType('mesh');
+      cart = cart.filter(item => {
 
-      const garters =
-        cart.find(item =>
-          item.product === GARTERS_KEY
-        );
+        if (!isGartersKey(item.product)) return true;
 
-      if (!garters) return;
+        const meshCount =
+          getCartQuantity(getMatchingMeshKey(item.product));
 
-      if (meshCount === 0) {
-        cart = cart.filter(item =>
-          item.product !== GARTERS_KEY
-        );
-        return;
-      }
+        if (meshCount === 0) return false;
 
-      if (garters.quantity > meshCount) {
-        garters.quantity = meshCount;
-      }
+        item.quantity =
+          Math.min(item.quantity, meshCount);
+
+        return true;
+      });
     }
 
 
@@ -2101,7 +2148,7 @@
             <div style="margin-bottom:8px;">
               ${formatProductName(item.product)}
               ${
-                item.product === GARTERS_KEY &&
+                isGartersKey(item.product) &&
                 complimentaryGarters > 0
                   ? `<div class="cart-line-price" style="font-size:12px;margin-top:4px;">
                        ${complimentaryGarters} pair${complimentaryGarters > 1 ? 's' : ''} complimentary with leg sleeves + mesh
@@ -2218,8 +2265,8 @@
 
   if (
     change > 0 &&
-    item.product === GARTERS_KEY &&
-    item.quantity >= countCartType('mesh')
+    isGartersKey(item.product) &&
+    item.quantity >= getCartQuantity(getMatchingMeshKey(item.product))
   ) {
     alert(
       'Leg garters can be added once per pair of mesh legwear.'
@@ -2377,9 +2424,17 @@
     let meshCarouselReady = false;
 
 
-    function showMesh(drawerButton) {
+    function showMesh(drawerButton, color = 'black') {
 
       showSection('mesh');
+
+      currentMeshColor =
+        MESH_COLORS[color] ? color : 'black';
+
+      document
+        .getElementById('meshTitle')
+        .textContent =
+        MESH_COLORS[currentMeshColor].title;
 
       document
         .querySelectorAll('.drawer-link')
@@ -2404,9 +2459,9 @@
     }
 
 
-    function selectDrawerMesh(drawerButton) {
+    function selectDrawerMesh(color, drawerButton) {
 
-      showMesh(drawerButton);
+      showMesh(drawerButton, color);
 
       closeCollectionDrawer();
 
@@ -2426,10 +2481,10 @@
         document.getElementById('garterOption');
 
       const meshSoldOut =
-        inventoryAvailability[MESH_KEY] === 0;
+        inventoryAvailability[meshKey()] === 0;
 
       const gartersSoldOut =
-        inventoryAvailability[GARTERS_KEY] === 0;
+        inventoryAvailability[gartersKey()] === 0;
 
       meshButton.disabled = meshSoldOut;
       meshButton.classList.toggle('disabled', meshSoldOut);
@@ -2466,12 +2521,12 @@
         document.getElementById('meshConfirmation');
 
       const meshItem =
-        cart.find(item => item.product === MESH_KEY);
+        cart.find(item => item.product === meshKey());
 
       const meshQuantity =
         (meshItem ? meshItem.quantity : 0) + 1;
 
-      if (!(await hasEnoughStock(MESH_KEY, meshQuantity))) {
+      if (!(await hasEnoughStock(meshKey(), meshQuantity))) {
         confirmation.textContent =
           'No more mesh legwear is currently available.';
         return;
@@ -2482,12 +2537,12 @@
       if (addGarters) {
 
         const gartersItem =
-          cart.find(item => item.product === GARTERS_KEY);
+          cart.find(item => item.product === gartersKey());
 
         const gartersQuantity =
           (gartersItem ? gartersItem.quantity : 0) + 1;
 
-        if (!(await hasEnoughStock(GARTERS_KEY, gartersQuantity))) {
+        if (!(await hasEnoughStock(gartersKey(), gartersQuantity))) {
           addGarters = false;
         }
       }
@@ -2495,18 +2550,18 @@
       if (meshItem) {
         meshItem.quantity += 1;
       } else {
-        cart.push({ product: MESH_KEY, quantity: 1 });
+        cart.push({ product: meshKey(), quantity: 1 });
       }
 
       if (addGarters) {
 
         const gartersItem =
-          cart.find(item => item.product === GARTERS_KEY);
+          cart.find(item => item.product === gartersKey());
 
         if (gartersItem) {
           gartersItem.quantity += 1;
         } else {
-          cart.push({ product: GARTERS_KEY, quantity: 1 });
+          cart.push({ product: gartersKey(), quantity: 1 });
         }
       }
 
@@ -2525,10 +2580,13 @@
 
       event.preventDefault();
 
+      const colorTitle =
+        MESH_COLORS[currentMeshColor].title;
+
       const message =
         gartersSelected
-          ? 'Hi! I’d like to order the Sheer Mesh Legwear (Long 95 cm) with the leg garters.'
-          : 'Hi! I’d like to order the Sheer Mesh Legwear (Long 95 cm).';
+          ? `Hi! I’d like to order the ${colorTitle} Sheer Mesh Legwear with the leg garters.`
+          : `Hi! I’d like to order the ${colorTitle} Sheer Mesh Legwear.`;
 
       document
         .getElementById('orderMessage')
@@ -2730,19 +2788,25 @@
           window.location.search
         );
 
-      if (
-        urlParams.get('product')?.toLowerCase() === 'mesh'
-      ) {
-        showMesh(
-          document.querySelector('.drawer-link[data-product="mesh"]')
-        );
-        return;
-      }
-
       const requestedColor =
         urlParams
           .get('color')
           ?.toLowerCase();
+
+      if (
+        urlParams.get('product')?.toLowerCase() === 'mesh'
+      ) {
+        const meshColor =
+          MESH_COLORS[requestedColor] ? requestedColor : 'black';
+
+        showMesh(
+          document.querySelector(
+            `.drawer-link[data-product="mesh"][data-color="${meshColor}"]`
+          ),
+          meshColor
+        );
+        return;
+      }
 
       if (
         !requestedColor ||
@@ -2754,7 +2818,7 @@
       const drawerButton =
         Array.from(
           document.querySelectorAll(
-            '.drawer-link'
+            '.drawer-link:not([data-product="mesh"])'
           )
         ).find(btn =>
           btn
