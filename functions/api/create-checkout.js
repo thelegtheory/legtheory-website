@@ -25,8 +25,7 @@ export async function onRequest({ request, env }) {
 
   /*
     Shipping (amounts in cents).
-    Orders of FREE_SHIPPING_FROM or more (after any complimentary
-    items) ship free to every country below.
+    Orders of FREE_SHIPPING_FROM or more ship free to every country below.
   */
   const FREE_SHIPPING_FROM = 10000;
 
@@ -41,8 +40,6 @@ export async function onRequest({ request, env }) {
     type is used for the cart rules:
     - garters can only be bought together with mesh legwear in
       the same colour (never more pairs of garters than pairs of mesh)
-    - one pair of garters is complimentary for every
-      sleeves + mesh pair in the same order
   */
   const PRODUCTS = {
     'red-m': {
@@ -163,7 +160,6 @@ export async function onRequest({ request, env }) {
       .filter(([key]) => PRODUCTS[key].type === type)
       .reduce((sum, [, quantity]) => sum + quantity, 0);
 
-  const sleevesCount = countByType('sleeves');
   const meshCount = countByType('mesh');
   const gartersCount = countByType('garters');
 
@@ -199,9 +195,6 @@ export async function onRequest({ request, env }) {
       }, 400);
     }
   }
-
-  const complimentaryGarters =
-    Math.min(sleevesCount, meshCount, gartersCount);
 
   const checkoutItems = [];
 
@@ -242,34 +235,7 @@ export async function onRequest({ request, env }) {
     });
   }
 
-  /*
-    Stripe line items. Complimentary garters get their own
-    €0 line so the customer sees them on the payment page.
-  */
-  const lineItems = [];
-  let freeGartersLeft = complimentaryGarters;
-
-  for (const item of checkoutItems) {
-    if (item.type === 'garters' && freeGartersLeft > 0) {
-      const freeQuantity = Math.min(item.quantity, freeGartersLeft);
-      const paidQuantity = item.quantity - freeQuantity;
-
-      freeGartersLeft -= freeQuantity;
-
-      if (paidQuantity > 0) {
-        lineItems.push({ ...item, quantity: paidQuantity });
-      }
-
-      lineItems.push({
-        ...item,
-        name: `${item.name} - complimentary with leg sleeves + mesh`,
-        amount: 0,
-        quantity: freeQuantity
-      });
-    } else {
-      lineItems.push(item);
-    }
-  }
+  const lineItems = checkoutItems;
 
   const subtotal = lineItems.reduce(
     (sum, item) => sum + item.amount * item.quantity,

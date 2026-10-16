@@ -1735,20 +1735,6 @@
     }
 
 
-    /*
-      One pair of garters is complimentary for every
-      sleeves + mesh pair in the same order.
-    */
-    function getComplimentaryGarters() {
-
-      return Math.min(
-        countCartType('sleeves'),
-        countCartType('mesh'),
-        countCartType('garters')
-      );
-    }
-
-
     function getCartSubtotal() {
 
       const itemsTotal =
@@ -1759,10 +1745,7 @@
           0
         );
 
-      return (
-        itemsTotal -
-        getComplimentaryGarters() * 2
-      );
+      return itemsTotal;
     }
 
 
@@ -2303,9 +2286,6 @@
 
       let html = '';
 
-      const complimentaryGarters =
-        getComplimentaryGarters();
-
       cart.forEach((item, index) => {
 
         html += `
@@ -2316,14 +2296,6 @@
 
             <div style="margin-bottom:8px;">
               ${formatProductName(item.product)}
-              ${
-                isGartersKey(item.product) &&
-                complimentaryGarters > 0
-                  ? `<div class="cart-line-price" style="font-size:12px;margin-top:4px;">
-                       ${complimentaryGarters} pair${complimentaryGarters > 1 ? 's' : ''} complimentary with leg sleeves + mesh
-                     </div>`
-                  : ''
-              }
             </div>
 
             <div style="
