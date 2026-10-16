@@ -26,8 +26,12 @@ export async function onRequestGet({ env }) {
     const availability = {};
 
     for (const row of result.results) {
+      /*
+        0 = sold out, 1 = only one left, 2 = more than one.
+        Exact stock is never exposed.
+      */
       availability[row.product_key] =
-        Number(row.stock) > 0 ? 1 : 0;
+        Math.max(0, Math.min(Number(row.stock) || 0, 2));
     }
 
     return json(availability);

@@ -1151,6 +1151,12 @@
           €35 / pair
         </div>
 
+        <div
+          class="size-confirmation"
+          id="meshStockNote"
+          style="margin-top:-14px; margin-bottom:10px;"
+        ></div>
+
 
         <section class="product-carousel">
 
@@ -2018,8 +2024,7 @@
         `${currentColor} · Size ${size}`;
 
       if (
-        currentColor === 'Red' &&
-        size === 'M'
+        inventoryAvailability[productKey] === 1
       ) {
         confirmationText += ' · Only 1 left';
       }
@@ -2670,6 +2675,18 @@
       document
         .getElementById('garterAddon')
         .hidden = gartersSoldOut;
+
+      document
+        .getElementById('meshStockNote')
+        .textContent =
+        inventoryAvailability[meshKey()] === 1 ? 'Only 1 left' : '';
+
+      document
+        .querySelector('#garterOption .addon-title')
+        .textContent =
+        inventoryAvailability[gartersKey()] === 1
+          ? 'Add a pair of leg garters — €2 · Only 1 left'
+          : 'Add a pair of leg garters — €2';
 
       if (gartersSoldOut) {
         gartersSelected = false;

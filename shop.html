@@ -178,6 +178,16 @@
       text-decoration: line-through;
     }
 
+    .card-last {
+      margin-top: 6px;
+
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+
+      color: rgba(255,255,255,0.82);
+    }
+
     /* FOOTER */
 
     .collection-footer {
@@ -300,8 +310,28 @@
         document
           .querySelectorAll('.card-sizes .size')
           .forEach(size => {
-            if (availability[size.dataset.key] !== 1) {
+            const level = availability[size.dataset.key];
+
+            if (!level) {
               size.classList.add('unavailable');
+            }
+
+            if (level === 1) {
+              const card = size.closest('.product-card');
+              let note = card.querySelector('.card-last');
+
+              if (!note) {
+                note = document.createElement('div');
+                note.className = 'card-last';
+                card.appendChild(note);
+                note.dataset.sizes = '';
+              }
+
+              const label = size.textContent.trim();
+              note.dataset.sizes = note.dataset.sizes
+                ? `${note.dataset.sizes}, ${label}`
+                : label;
+              note.textContent = `Only 1 left in ${note.dataset.sizes}`;
             }
           });
       })
