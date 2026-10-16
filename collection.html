@@ -461,7 +461,8 @@
 
     .order-options {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr;
+      max-width: 650px;
       gap: 12px;
 
       margin-top: 20px;
@@ -752,6 +753,26 @@
       color: rgba(255,255,255,0.6);
     }
 
+    .copy-button.primary {
+      background: #fff;
+      color: #000;
+    }
+
+    .copy-button.primary:hover {
+      background: transparent;
+      color: #fff;
+    }
+
+    .cart-button-note {
+      margin-top: -2px;
+      margin-bottom: 18px;
+      font-size: 11px;
+    }
+
+    #orderMessage {
+      white-space: pre-line;
+    }
+
     .cart-note {
       margin-bottom: 18px;
 
@@ -853,7 +874,7 @@
 <body>
 
   <div class="shipping-banner">
-    Free shipping on orders of €100 or more
+    Free shipping over €100 · NL · BE · DE · FR
   </div>
 
   <header class="mobile-nav">
@@ -1065,25 +1086,6 @@
 
           <div class="order-option-box">
 
-            <a
-              class="order-button"
-              href="https://www.instagram.com/thelegtheory/"
-              target="_blank"
-              rel="noopener noreferrer"
-              onclick="return handleOrderClick(event)"
-            >
-              DM ON INSTAGRAM TO ORDER
-            </a>
-
-            <div class="order-option-note">
-              Sizing, shipping, or Amsterdam pickup? Message us directly.
-            </div>
-
-          </div>
-
-
-          <div class="order-option-box">
-
             <button
               class="order-button"
               onclick="addToCart()"
@@ -1224,25 +1226,6 @@
 
 
         <div class="order-options">
-
-          <div class="order-option-box">
-
-            <a
-              class="order-button"
-              href="https://www.instagram.com/thelegtheory/"
-              target="_blank"
-              rel="noopener noreferrer"
-              onclick="return handleMeshOrderClick(event)"
-            >
-              DM ON INSTAGRAM TO ORDER
-            </a>
-
-            <div class="order-option-note">
-              Styling, shipping, or Amsterdam pickup? Message us directly.
-            </div>
-
-          </div>
-
 
           <div class="order-option-box">
 
@@ -1461,11 +1444,26 @@
       ></div>
 
       <button
-        class="copy-button"
+        class="copy-button primary"
         onclick="checkoutCart()"
       >
         Checkout
       </button>
+
+      <div class="cart-note cart-button-note">
+        Direct checkout for the Netherlands, Belgium, Germany and France.
+      </div>
+
+      <button
+        class="copy-button"
+        onclick="orderCartViaInstagram()"
+      >
+        Order via Instagram
+      </button>
+
+      <div class="cart-note cart-button-note">
+        Other countries or Amsterdam pickup? Order via Instagram.
+      </div>
 
     </div>
 
@@ -1985,8 +1983,8 @@
 
         document
           .getElementById('sizeError')
-          .textContent =
-          `Size ${size} is sold out in this color. Another size may still work depending on fit. DM us and we can help.`;
+          .innerHTML =
+          `Size ${size} is sold out in this color. Another size may still work depending on fit. <a href="https://www.instagram.com/thelegtheory/" onclick="return handleOrderClick(event)" style="color:#fff;">DM us and we can help.</a>`;
 
         const buyButton =
           document.querySelector(
@@ -2494,6 +2492,37 @@
     }
 
 
+    function orderCartViaInstagram() {
+
+      if (cart.length === 0) {
+        alert('Your cart is empty.');
+        return;
+      }
+
+      const lines =
+        cart
+          .map(item =>
+            `· ${getProductInfo(item.product).name} × ${item.quantity}`
+          )
+          .join('\n');
+
+      document
+        .getElementById('orderMessage')
+        .textContent =
+        `Hi! I’d like to order:\n${lines}\n\nSubtotal: €${getCartSubtotal().toFixed(2)}`;
+
+      document
+        .getElementById('copyConfirmation')
+        .textContent = '';
+
+      closeCart();
+
+      document
+        .getElementById('orderModal')
+        .classList.add('open');
+    }
+
+
     function closeShippingModal() {
 
       document
@@ -2749,35 +2778,6 @@
           : (gartersSelected
               ? 'Mesh legwear added to cart. The leg garters are currently unavailable.'
               : 'Mesh legwear added to cart');
-    }
-
-
-    function handleMeshOrderClick(event) {
-
-      event.preventDefault();
-
-      const colorTitle =
-        MESH_COLORS[currentMeshColor].title;
-
-      const message =
-        gartersSelected
-          ? `Hi! I’d like to order the ${colorTitle} Sheer Mesh Legwear with the leg garters.`
-          : `Hi! I’d like to order the ${colorTitle} Sheer Mesh Legwear.`;
-
-      document
-        .getElementById('orderMessage')
-        .textContent =
-        message;
-
-      document
-        .getElementById('copyConfirmation')
-        .textContent = '';
-
-      document
-        .getElementById('orderModal')
-        .classList.add('open');
-
-      return false;
     }
 
 
