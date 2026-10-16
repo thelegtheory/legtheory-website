@@ -641,18 +641,53 @@
 
     /* MESH: GARTERS ADD-ON */
 
+    .addon-row {
+      display: flex;
+      align-items: flex-start;
+
+      width: 100%;
+      max-width: 650px;
+      margin-bottom: 8px;
+
+      border: 1px solid rgba(255,255,255,0.28);
+      transition: border-color 0.2s ease;
+    }
+
+    .addon-row:hover,
+    .addon-row.selected {
+      border-color: #fff;
+    }
+
+    .addon-thumb {
+      flex: 0 0 72px;
+      width: 72px;
+      height: 72px;
+      margin: 14px 0 14px 14px;
+      padding: 0;
+
+      background: none;
+      border: none;
+
+      cursor: zoom-in;
+    }
+
+    .addon-thumb img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
     .addon-option {
       display: flex;
       align-items: flex-start;
       gap: 14px;
 
-      width: 100%;
-      max-width: 650px;
-      margin-bottom: 8px;
+      flex: 1;
       padding: 16px 18px;
 
       background: transparent;
-      border: 1px solid rgba(255,255,255,0.28);
+      border: none;
 
       color: #fff;
       font-family: inherit;
@@ -660,11 +695,6 @@
 
       cursor: pointer;
       transition: border-color 0.2s ease;
-    }
-
-    .addon-option:hover,
-    .addon-option.selected {
-      border-color: #fff;
     }
 
     .addon-check {
@@ -1131,27 +1161,41 @@
         </section>
 
 
-        <button
-          type="button"
-          class="addon-option"
-          id="garterOption"
-          aria-pressed="false"
-          onclick="toggleGarters()"
+        <div
+          class="addon-row"
+          id="garterAddon"
         >
-          <span class="addon-check"></span>
+          <button
+            type="button"
+            class="addon-thumb"
+            onclick="openGarterGallery()"
+            aria-label="View leg garter photos"
+          >
+            <img src="Garters1.jpg" alt="A pair of black leg garters with gold hardware">
+          </button>
 
-          <span>
-            <span class="addon-title">
-              Add leg garters — €2
-            </span>
+          <button
+            type="button"
+            class="addon-option"
+            id="garterOption"
+            aria-pressed="false"
+            onclick="toggleGarters()"
+          >
+            <span class="addon-check"></span>
 
-            <span class="addon-text">
-              Minimal adjustable bands, worn over the mesh at the top of the thigh.
-              Thread the side tie through the loop for extra hold.
-              Also striking on their own.
+            <span>
+              <span class="addon-title">
+                Add a pair of leg garters — €2
+              </span>
+
+              <span class="addon-text">
+                Minimal adjustable bands, worn over the mesh at the top of the thigh.
+                Thread the side tie through the loop for extra hold.
+                Also striking on their own.
+              </span>
             </span>
-          </span>
-        </button>
+          </button>
+        </div>
 
         <div
           class="size-confirmation"
@@ -1207,8 +1251,8 @@
           </p>
 
           <p>
-            Cut from 90% nylon and 10% spandex: light, stretchy and breathable,
-            with a soft, second-skin feel against the leg.
+            Fine and featherlight, the mesh stretches with you and breathes through
+            every routine, with a soft, second-skin feel against the leg.
           </p>
 
           <p>
@@ -1309,6 +1353,54 @@
       <div
         class="copy-confirmation"
         id="copyConfirmation"
+      ></div>
+
+    </div>
+
+  </div>
+
+
+  <!-- GARTER PHOTOS -->
+
+  <div
+    class="order-modal"
+    id="garterModal"
+    onclick="if (event.target === this) closeGarterGallery()"
+  >
+
+    <div class="order-modal-box">
+
+      <button
+        class="modal-close"
+        onclick="closeGarterGallery()"
+      >
+        ×
+      </button>
+
+      <div class="modal-title">
+        Leg garters · One pair
+      </div>
+
+      <div
+        class="carousel-viewport"
+        id="garterGallery"
+      >
+        <div class="gallery-item">
+          <img src="Garters1.jpg" alt="A pair of black leg garters with gold hardware">
+        </div>
+
+        <div class="gallery-item">
+          <img src="Garters2.jpg" alt="Leg garters worn high on both thighs" loading="lazy">
+        </div>
+
+        <div class="gallery-item">
+          <img src="Garters3.jpg" alt="Close-up of the gold buckle on a worn leg garter" loading="lazy">
+        </div>
+      </div>
+
+      <div
+        class="carousel-dots"
+        id="garterDots"
       ></div>
 
     </div>
@@ -2554,11 +2646,41 @@
           ? 'Sold out'
           : (gartersSelected ? 'Add to cart — €37' : 'Add to cart — €35');
 
-      garterOption.hidden = gartersSoldOut;
+      document
+        .getElementById('garterAddon')
+        .hidden = gartersSoldOut;
 
       if (gartersSoldOut) {
         gartersSelected = false;
       }
+    }
+
+
+    let garterGalleryReady = false;
+
+
+    function openGarterGallery() {
+
+      document
+        .getElementById('garterModal')
+        .classList.add('open');
+
+      if (!garterGalleryReady) {
+        initCarousel('garterGallery', 'garterDots');
+        garterGalleryReady = true;
+      }
+
+      document
+        .getElementById('garterGallery')
+        .scrollLeft = 0;
+    }
+
+
+    function closeGarterGallery() {
+
+      document
+        .getElementById('garterModal')
+        .classList.remove('open');
     }
 
 
@@ -2569,8 +2691,13 @@
       const option =
         document.getElementById('garterOption');
 
-      option.classList.toggle('selected', gartersSelected);
       option.setAttribute('aria-pressed', String(gartersSelected));
+
+      document
+        .getElementById('garterAddon')
+        .classList.toggle('selected', gartersSelected);
+
+      option.classList.toggle('selected', gartersSelected);
 
       applyMeshAvailability();
     }
