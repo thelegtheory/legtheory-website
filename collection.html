@@ -620,6 +620,83 @@
       text-align: center;
     }
 
+    /* MESH: GARTERS ADD-ON */
+
+    .addon-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+
+      width: 100%;
+      max-width: 650px;
+      margin-bottom: 8px;
+      padding: 16px 18px;
+
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.28);
+
+      color: #fff;
+      font-family: inherit;
+      text-align: left;
+
+      cursor: pointer;
+      transition: border-color 0.2s ease;
+    }
+
+    .addon-option:hover,
+    .addon-option.selected {
+      border-color: #fff;
+    }
+
+    .addon-check {
+      flex: 0 0 16px;
+      width: 16px;
+      height: 16px;
+      margin-top: 2px;
+
+      border: 1px solid rgba(255,255,255,0.6);
+    }
+
+    .addon-option.selected .addon-check {
+      background: #fff;
+      border-color: #fff;
+      box-shadow: inset 0 0 0 3px #000;
+    }
+
+    .addon-title {
+      display: block;
+      margin-bottom: 4px;
+
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .addon-text {
+      display: block;
+
+      font-size: 12px;
+      line-height: 1.6;
+
+      color: rgba(255,255,255,0.55);
+    }
+
+    /* CART + SHIPPING NOTES */
+
+    .cart-line-price {
+      color: rgba(255,255,255,0.6);
+    }
+
+    .cart-note {
+      margin-bottom: 18px;
+
+      font-size: 12px;
+      line-height: 1.6;
+      letter-spacing: 0.04em;
+
+      color: rgba(255,255,255,0.55);
+    }
+
 .collection-footer {
   display: flex;
   flex-wrap: wrap;
@@ -800,9 +877,21 @@
         RED
       </button>
 
-      <div class="drawer-coming-soon">
-        MESH LEGWEAR — COMING SOON
+      <div
+        class="drawer-product-title"
+        style="margin-top:34px;"
+      >
+        SHEER MESH LEGWEAR
       </div>
+
+      <button
+        class="drawer-link"
+        type="button"
+        data-product="mesh"
+        onclick="selectDrawerMesh(this)"
+      >
+        LONG · 95 CM
+      </button>
 
     </div>
 
@@ -813,7 +902,10 @@
 
     <main class="content">
 
-      <section class="product-header">
+      <section
+        class="product-header"
+        id="sleevesProduct"
+      >
 
         <div class="product-label">
           Patent Leather Leg Sleeves
@@ -959,6 +1051,143 @@
 
       </section>
 
+
+      <!-- MESH LEGWEAR -->
+
+      <section
+        class="product-header"
+        id="meshProduct"
+        hidden
+      >
+
+        <div class="product-label">
+          Sheer Mesh Legwear
+        </div>
+
+        <h2 class="product-title">
+          Long · 95 cm
+        </h2>
+
+        <div class="product-price">
+          €35 / pair
+        </div>
+
+
+        <section class="product-carousel">
+
+          <div
+            class="carousel-viewport"
+            id="meshGallery"
+          >
+            <div class="gallery-item">
+              <img src="Mesh1.jpg" alt="Sheer mesh legwear" onerror="this.parentElement.remove()">
+            </div>
+
+            <div class="gallery-item">
+              <img src="Mesh2.jpg" alt="Sheer mesh legwear" onerror="this.parentElement.remove()">
+            </div>
+
+            <div class="gallery-item">
+              <img src="Mesh3.jpg" alt="Sheer mesh legwear" onerror="this.parentElement.remove()">
+            </div>
+          </div>
+
+          <div
+            class="carousel-dots"
+            id="meshCarouselDots"
+          ></div>
+
+        </section>
+
+
+        <button
+          type="button"
+          class="addon-option"
+          id="garterOption"
+          aria-pressed="false"
+          onclick="toggleGarters()"
+        >
+          <span class="addon-check"></span>
+
+          <span>
+            <span class="addon-title">
+              Add leg garters — €2
+            </span>
+
+            <span class="addon-text">
+              Minimal adjustable bands, worn over the mesh at the top of the thigh.
+              Thread the side tie through the loop for extra hold.
+              Also striking on their own.
+            </span>
+          </span>
+        </button>
+
+        <div
+          class="size-confirmation"
+          id="meshConfirmation"
+        ></div>
+
+
+        <div class="order-options">
+
+          <div class="order-option-box">
+
+            <a
+              class="order-button"
+              href="https://www.instagram.com/thelegtheory/"
+              target="_blank"
+              rel="noopener noreferrer"
+              onclick="return handleMeshOrderClick(event)"
+            >
+              DM ON INSTAGRAM TO ORDER
+            </a>
+
+            <div class="order-option-note">
+              Styling, shipping, or Amsterdam pickup? Message us directly.
+            </div>
+
+          </div>
+
+
+          <div class="order-option-box">
+
+            <button
+              class="order-button"
+              id="meshAddButton"
+              onclick="addMeshToCart()"
+            >
+              Add to cart — €35
+            </button>
+
+            <div class="order-option-note">
+              Add one or more items, then checkout together with one shipping fee.
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="description">
+          <p>
+            Two long panels of sheer 20D mesh, falling to about 95 cm.
+            Tie them at the hip or waist, or attach them to your shorts.
+            The open inner leg keeps every line of movement visible.
+          </p>
+
+          <p>
+            Light and stretchy, made for heels.
+            The side ties hold the legwear in place on their own;
+            the garters add extra security on slimmer legs.
+          </p>
+        </div>
+
+        <p class="product-note">
+          Shorts and heels not included. Leg garters are available only with the mesh legwear.
+        </p>
+
+      </section>
+
     <footer class="collection-footer">
       <a href="policies.html">Shipping & Returns</a>
       <a href="policies.html">Policies</a>
@@ -1053,6 +1282,11 @@
         "
       ></div>
 
+      <div
+        class="cart-note"
+        id="cartShippingNote"
+      ></div>
+
       <button
         class="copy-button"
         onclick="checkoutCart()"
@@ -1089,8 +1323,14 @@
         Choose your shipping country
       </div>
 
+      <div
+        class="cart-note"
+        id="shippingNote"
+      ></div>
+
       <button
         class="copy-button"
+        data-country="NL"
         onclick="startCheckout('NL')"
       >
         Netherlands — €4.50
@@ -1098,6 +1338,7 @@
 
       <button
         class="copy-button"
+        data-country="BE"
         onclick="startCheckout('BE')"
       >
         Belgium — €8
@@ -1105,6 +1346,7 @@
 
       <button
         class="copy-button"
+        data-country="DE"
         onclick="startCheckout('DE')"
       >
         Germany — €8
@@ -1112,6 +1354,7 @@
 
       <button
         class="copy-button"
+        data-country="FR"
         onclick="startCheckout('FR')"
       >
         France — €8
@@ -1232,6 +1475,144 @@
       );
 
 
+    /*
+      PRICING + SHIPPING
+      Keep in sync with functions/api/create-checkout.js —
+      the checkout function is what actually charges.
+    */
+
+    const FREE_SHIPPING_FROM = 100;
+
+    const SHIPPING_PRICES = {
+      NL: { label: 'Netherlands', price: 4.5 },
+      BE: { label: 'Belgium', price: 8 },
+      DE: { label: 'Germany', price: 8 },
+      FR: { label: 'France', price: 8 }
+    };
+
+    const MESH_KEY = 'mesh-long';
+    const GARTERS_KEY = 'leg-garters';
+
+    let gartersSelected = false;
+
+
+    function getProductInfo(productKey) {
+
+      if (productKey === MESH_KEY) {
+        return {
+          type: 'mesh',
+          name: 'Sheer Mesh Legwear · Long 95 cm',
+          price: 35
+        };
+      }
+
+      if (productKey === GARTERS_KEY) {
+        return {
+          type: 'garters',
+          name: 'Leg Garters',
+          price: 2
+        };
+      }
+
+      const [color, size] =
+        productKey.split('-');
+
+      return {
+        type: 'sleeves',
+        name: `Patent Leather Leg Sleeves · ${capitalize(color)} · Size ${(size || '').toUpperCase()}`,
+        price: 65
+      };
+    }
+
+
+    function countCartType(type) {
+
+      return cart
+        .filter(item =>
+          getProductInfo(item.product).type === type
+        )
+        .reduce(
+          (total, item) => total + item.quantity,
+          0
+        );
+    }
+
+
+    /*
+      One pair of garters is complimentary for every
+      sleeves + mesh pair in the same order.
+    */
+    function getComplimentaryGarters() {
+
+      return Math.min(
+        countCartType('sleeves'),
+        countCartType('mesh'),
+        countCartType('garters')
+      );
+    }
+
+
+    function getCartSubtotal() {
+
+      const itemsTotal =
+        cart.reduce(
+          (total, item) =>
+            total +
+            getProductInfo(item.product).price * item.quantity,
+          0
+        );
+
+      return (
+        itemsTotal -
+        getComplimentaryGarters() *
+        getProductInfo(GARTERS_KEY).price
+      );
+    }
+
+
+    function qualifiesForFreeShipping() {
+
+      return getCartSubtotal() >= FREE_SHIPPING_FROM;
+    }
+
+
+    function formatEuro(amount) {
+
+      return Number.isInteger(amount)
+        ? `€${amount}`
+        : `€${amount.toFixed(2)}`;
+    }
+
+
+    /*
+      Garters can't be bought without mesh legwear,
+      and never more pairs than mesh pairs.
+    */
+    function enforceGarterRule() {
+
+      const meshCount =
+        countCartType('mesh');
+
+      const garters =
+        cart.find(item =>
+          item.product === GARTERS_KEY
+        );
+
+      if (!garters) return;
+
+      if (meshCount === 0) {
+        cart = cart.filter(item =>
+          item.product !== GARTERS_KEY
+        );
+        return;
+      }
+
+      if (garters.quantity > meshCount) {
+        garters.quantity = meshCount;
+      }
+    }
+
+
     async function loadInventoryAvailability() {
 
       try {
@@ -1251,6 +1632,7 @@
           await response.json();
 
         applyInventoryAvailability();
+        applyMeshAvailability();
 
       } catch (error) {
 
@@ -1297,7 +1679,21 @@
     }
 
 
+    function showSection(section) {
+
+      document
+        .getElementById('sleevesProduct')
+        .hidden = section !== 'sleeves';
+
+      document
+        .getElementById('meshProduct')
+        .hidden = section !== 'mesh';
+    }
+
+
     function showProduct(color, button) {
+
+      showSection('sleeves');
 
       currentColor =
         products[color].title;
@@ -1690,14 +2086,11 @@
       }
 
       let html = '';
-      let total = 0;
+
+      const complimentaryGarters =
+        getComplimentaryGarters();
 
       cart.forEach((item, index) => {
-
-        const price = 65;
-
-        total +=
-          price * item.quantity;
 
         html += `
           <div style="
@@ -1707,6 +2100,14 @@
 
             <div style="margin-bottom:8px;">
               ${formatProductName(item.product)}
+              ${
+                item.product === GARTERS_KEY &&
+                complimentaryGarters > 0
+                  ? `<div class="cart-line-price" style="font-size:12px;margin-top:4px;">
+                       ${complimentaryGarters} pair${complimentaryGarters > 1 ? 's' : ''} complimentary with leg sleeves + mesh
+                     </div>`
+                  : ''
+              }
             </div>
 
             <div style="
@@ -1765,20 +2166,32 @@
       cartItems.innerHTML = html;
 
       cartTotal.textContent =
-        `Subtotal: €${total.toFixed(2)}`;
+        `Subtotal: €${getCartSubtotal().toFixed(2)}`;
+
+      renderShippingNote('cartShippingNote');
+    }
+
+
+    function renderShippingNote(elementId) {
+
+      const note =
+        document.getElementById(elementId);
+
+      if (!note) return;
+
+      note.textContent =
+        qualifiesForFreeShipping()
+          ? 'Your order ships free.'
+          : `Free shipping on orders of €${FREE_SHIPPING_FROM} or more.`;
     }
 
 
     function formatProductName(productKey) {
 
-      const [color, size] =
-        productKey.split('-');
+      const info =
+        getProductInfo(productKey);
 
-      return `
-        Patent Leather Leg Sleeves ·
-        ${capitalize(color)} ·
-        Size ${size.toUpperCase()} · €65
-      `;
+      return `${info.name} · ${formatEuro(info.price)}`;
 
     }
 
@@ -1802,6 +2215,17 @@
 
   const item =
     cart[index];
+
+  if (
+    change > 0 &&
+    item.product === GARTERS_KEY &&
+    item.quantity >= countCartType('mesh')
+  ) {
+    alert(
+      'Leg garters can be added once per pair of mesh legwear.'
+    );
+    return;
+  }
 
   if (change > 0) {
 
@@ -1828,6 +2252,7 @@
     cart.splice(index, 1);
   }
 
+  enforceGarterRule();
   saveCart();
   renderCart();
 }
@@ -1837,6 +2262,7 @@
 
       cart.splice(index, 1);
 
+      enforceGarterRule();
       saveCart();
       renderCart();
 
@@ -1855,6 +2281,23 @@
       }
 
       closeCart();
+
+      const free =
+        qualifiesForFreeShipping();
+
+      document
+        .querySelectorAll('#shippingModal [data-country]')
+        .forEach(button => {
+
+          const option =
+            SHIPPING_PRICES[button.dataset.country];
+
+          button.textContent =
+            `${option.label} — ${free ? 'Free' : formatEuro(option.price)}`;
+
+        });
+
+      renderShippingNote('shippingNote');
 
       document
         .getElementById('shippingModal')
@@ -1927,6 +2370,183 @@
     }
 
 
+    /*
+      MESH LEGWEAR
+    */
+
+    let meshCarouselReady = false;
+
+
+    function showMesh(drawerButton) {
+
+      showSection('mesh');
+
+      document
+        .querySelectorAll('.drawer-link')
+        .forEach(btn => {
+          btn.classList.remove('active');
+        });
+
+      if (drawerButton) {
+        drawerButton.classList.add('active');
+      }
+
+      if (!meshCarouselReady) {
+        initCarousel('meshGallery', 'meshCarouselDots');
+        meshCarouselReady = true;
+      }
+
+      document
+        .getElementById('meshConfirmation')
+        .textContent = '';
+
+      applyMeshAvailability();
+    }
+
+
+    function selectDrawerMesh(drawerButton) {
+
+      showMesh(drawerButton);
+
+      closeCollectionDrawer();
+
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+
+
+    function applyMeshAvailability() {
+
+      const meshButton =
+        document.getElementById('meshAddButton');
+
+      const garterOption =
+        document.getElementById('garterOption');
+
+      const meshSoldOut =
+        inventoryAvailability[MESH_KEY] === 0;
+
+      const gartersSoldOut =
+        inventoryAvailability[GARTERS_KEY] === 0;
+
+      meshButton.disabled = meshSoldOut;
+      meshButton.classList.toggle('disabled', meshSoldOut);
+      meshButton.textContent =
+        meshSoldOut
+          ? 'Sold out'
+          : (gartersSelected ? 'Add to cart — €37' : 'Add to cart — €35');
+
+      garterOption.hidden = gartersSoldOut;
+
+      if (gartersSoldOut) {
+        gartersSelected = false;
+      }
+    }
+
+
+    function toggleGarters() {
+
+      gartersSelected = !gartersSelected;
+
+      const option =
+        document.getElementById('garterOption');
+
+      option.classList.toggle('selected', gartersSelected);
+      option.setAttribute('aria-pressed', String(gartersSelected));
+
+      applyMeshAvailability();
+    }
+
+
+    async function addMeshToCart() {
+
+      const confirmation =
+        document.getElementById('meshConfirmation');
+
+      const meshItem =
+        cart.find(item => item.product === MESH_KEY);
+
+      const meshQuantity =
+        (meshItem ? meshItem.quantity : 0) + 1;
+
+      if (!(await hasEnoughStock(MESH_KEY, meshQuantity))) {
+        confirmation.textContent =
+          'No more mesh legwear is currently available.';
+        return;
+      }
+
+      let addGarters = gartersSelected;
+
+      if (addGarters) {
+
+        const gartersItem =
+          cart.find(item => item.product === GARTERS_KEY);
+
+        const gartersQuantity =
+          (gartersItem ? gartersItem.quantity : 0) + 1;
+
+        if (!(await hasEnoughStock(GARTERS_KEY, gartersQuantity))) {
+          addGarters = false;
+        }
+      }
+
+      if (meshItem) {
+        meshItem.quantity += 1;
+      } else {
+        cart.push({ product: MESH_KEY, quantity: 1 });
+      }
+
+      if (addGarters) {
+
+        const gartersItem =
+          cart.find(item => item.product === GARTERS_KEY);
+
+        if (gartersItem) {
+          gartersItem.quantity += 1;
+        } else {
+          cart.push({ product: GARTERS_KEY, quantity: 1 });
+        }
+      }
+
+      saveCart();
+
+      confirmation.textContent =
+        addGarters
+          ? 'Mesh legwear and leg garters added to cart'
+          : (gartersSelected
+              ? 'Mesh legwear added to cart. The leg garters are currently unavailable.'
+              : 'Mesh legwear added to cart');
+    }
+
+
+    function handleMeshOrderClick(event) {
+
+      event.preventDefault();
+
+      const message =
+        gartersSelected
+          ? 'Hi! I’d like to order the Sheer Mesh Legwear (Long 95 cm) with the leg garters.'
+          : 'Hi! I’d like to order the Sheer Mesh Legwear (Long 95 cm).';
+
+      document
+        .getElementById('orderMessage')
+        .textContent =
+        message;
+
+      document
+        .getElementById('copyConfirmation')
+        .textContent = '';
+
+      document
+        .getElementById('orderModal')
+        .classList.add('open');
+
+      return false;
+    }
+
+
     function openCollectionDrawer() {
 
       document
@@ -1985,14 +2605,17 @@
     }
 
 
-    function initCarousel() {
+    function initCarousel(
+      galleryId = 'gallery',
+      dotsId = 'carouselDots'
+    ) {
 
       const gallery =
-        document.getElementById('gallery');
+        document.getElementById(galleryId);
 
       const dotsContainer =
         document.getElementById(
-          'carouselDots'
+          dotsId
         );
 
       if (
@@ -2107,6 +2730,15 @@
           window.location.search
         );
 
+      if (
+        urlParams.get('product')?.toLowerCase() === 'mesh'
+      ) {
+        showMesh(
+          document.querySelector('.drawer-link[data-product="mesh"]')
+        );
+        return;
+      }
+
       const requestedColor =
         urlParams
           .get('color')
@@ -2156,7 +2788,8 @@
       }
     );
 
-    updateCartCount();
+    enforceGarterRule();
+    saveCart();
     loadInventoryAvailability();
 
   </script>

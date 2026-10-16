@@ -23,6 +23,13 @@ export async function onRequest({ request, env }) {
 
   const { country, product, items } = body || {};
 
+  /*
+    Shipping (amounts in cents).
+    Orders of FREE_SHIPPING_FROM or more (after any complimentary
+    items) ship free to every country below.
+  */
+  const FREE_SHIPPING_FROM = 10000;
+
   const SHIPPING = {
     NL: { amount: 450, name: 'NL Shipping' },
     BE: { amount: 800, name: 'EU Shipping' },
@@ -30,34 +37,53 @@ export async function onRequest({ request, env }) {
     FR: { amount: 800, name: 'EU Shipping' }
   };
 
+  /*
+    type is used for the cart rules:
+    - garters can only be bought together with mesh legwear
+      (never more pairs of garters than pairs of mesh)
+    - one pair of garters is complimentary for every
+      sleeves + mesh pair in the same order
+  */
   const PRODUCTS = {
     'red-m': {
       name: 'Patent Leather Leg Sleeves - Red M',
-      amount: 6500
+      amount: 6500,
+      type: 'sleeves'
     },
     'white-m': {
       name: 'Patent Leather Leg Sleeves - White M',
-      amount: 6500
+      amount: 6500,
+      type: 'sleeves'
     },
     'white-l': {
       name: 'Patent Leather Leg Sleeves - White L',
-      amount: 6500
+      amount: 6500,
+      type: 'sleeves'
     },
     'black-s': {
       name: 'Patent Leather Leg Sleeves - Black S',
-      amount: 6500
+      amount: 6500,
+      type: 'sleeves'
     },
     'black-m': {
       name: 'Patent Leather Leg Sleeves - Black M',
-      amount: 6500
+      amount: 6500,
+      type: 'sleeves'
     },
     'black-l': {
       name: 'Patent Leather Leg Sleeves - Black L',
-      amount: 6500
+      amount: 6500,
+      type: 'sleeves'
     },
     'mesh-long': {
       name: 'Sheer Mesh Legwear - Long 95cm',
-      amount: 3500
+      amount: 3500,
+      type: 'mesh'
+    },
+    'leg-garters': {
+      name: 'Leg Garters',
+      amount: 200,
+      type: 'garters'
     }
   };
 
@@ -127,6 +153,33 @@ export async function onRequest({ request, env }) {
     );
   }
 
+  /*
+    Cart rules for the garters add-on.
+  */
+  const countByType = type =>
+    [...quantities.entries()]
+      .filter(([key]) => PRODUCTS[key].type === type)
+      .reduce((sum, [, quantity]) => sum + quantity, 0);
+
+  const sleevesCount = countByType('sleeves');
+  const meshCount = countByType('mesh');
+  const gartersCount = countByType('garters');
+
+  if (gartersCount > 0 && meshCount === 0) {
+    return json({
+      error: 'Leg garters are available together with the mesh legwear.'
+    }, 400);
+  }
+
+  if (gartersCount > meshCount) {
+    return json({
+      error: 'You can add one pair of leg garters per pair of mesh legwear.'
+    }, 400);
+  }
+
+  const complimentaryGarters =
+    Math.min(sleevesCount, meshCount, gartersCount);
+
   const checkoutItems = [];
 
   for (const [productKey, quantity] of quantities.entries()) {
@@ -166,7 +219,43 @@ export async function onRequest({ request, env }) {
     });
   }
 
-  const shipping = SHIPPING[country];
+  /*
+    Stripe line items. Complimentary garters get their own
+    €0 line so the customer sees them on the payment page.
+  */
+  const lineItems = [];
+
+  for (const item of checkoutItems) {
+    if (item.type === 'garters' && complimentaryGarters > 0) {
+      const paidQuantity = item.quantity - complimentaryGarters;
+
+      if (paidQuantity > 0) {
+        lineItems.push({ ...item, quantity: paidQuantity });
+      }
+
+      lineItems.push({
+        ...item,
+        name: 'Leg Garters - complimentary with leg sleeves + mesh',
+        amount: 0,
+        quantity: complimentaryGarters
+      });
+    } else {
+      lineItems.push(item);
+    }
+  }
+
+  const subtotal = lineItems.reduce(
+    (sum, item) => sum + item.amount * item.quantity,
+    0
+  );
+
+  const qualifiesForFreeShipping =
+    subtotal >= FREE_SHIPPING_FROM;
+
+  const shipping = qualifiesForFreeShipping
+    ? { amount: 0, name: 'Free shipping' }
+    : SHIPPING[country];
+
   const origin = new URL(request.url).origin;
 
   const params = new URLSearchParams();
@@ -191,7 +280,7 @@ export async function onRequest({ request, env }) {
     `${origin}/collection.html?checkout=cancelled`
   );
 
-  checkoutItems.forEach((item, index) => {
+  lineItems.forEach((item, index) => {
     params.append(
       `line_items[${index}][price_data][currency]`,
       'eur'

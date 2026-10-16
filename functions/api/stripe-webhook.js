@@ -100,7 +100,10 @@ function formatProductName(productKey) {
 
     'red-s': 'Patent Leather Leg Sleeves · Red · Size S',
     'red-m': 'Patent Leather Leg Sleeves · Red · Size M',
-    'red-l': 'Patent Leather Leg Sleeves · Red · Size L'
+    'red-l': 'Patent Leather Leg Sleeves · Red · Size L',
+
+    'mesh-long': 'Sheer Mesh Legwear · Long 95 cm',
+    'leg-garters': 'Leg Garters'
   };
 
   return productNames[productKey] || productKey;
