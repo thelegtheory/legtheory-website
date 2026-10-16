@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Collection | Leg Theory</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #000;
+      color: #fff;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* SHIPPING BANNER */
+
+    .shipping-banner {
+      width: 100%;
+      padding: 9px 20px;
+
+      background: #000;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+
+      color: rgba(255,255,255,0.82);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    /* TOP NAV */
+
+    .top-nav {
+      position: sticky;
+      top: 0;
+
+      height: 48px;
+      padding: 0 20px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      background: #000;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+
+      font-size: 11px;
+      letter-spacing: 0.12em;
+
+      z-index: 10;
+    }
+
+    .top-nav .brand {
+      font-size: 12px;
+      letter-spacing: 0.18em;
+    }
+
+    .top-nav .side {
+      min-width: 70px;
+    }
+
+    .top-nav .side:last-child {
+      text-align: right;
+    }
+
+    /* COLLECTION GRID */
+
+    .collection {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 44px 20px 70px;
+    }
+
+    .collection-heading {
+      margin-bottom: 34px;
+
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 34px 16px;
+    }
+
+    @media (min-width: 800px) {
+      .collection {
+        padding: 56px 40px 90px;
+      }
+
+      .product-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 44px 24px;
+      }
+    }
+
+    .product-card {
+      display: block;
+    }
+
+    .product-card img {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 3 / 4;
+      object-fit: cover;
+
+      background: #111;
+      transition: opacity 0.25s ease;
+    }
+
+    .product-card:hover img {
+      opacity: 0.85;
+    }
+
+    .card-name {
+      margin-top: 14px;
+
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.5;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .card-color {
+      margin-top: 2px;
+
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+
+      color: rgba(255,255,255,0.6);
+    }
+
+    .card-price {
+      margin-top: 8px;
+
+      font-size: 12px;
+      letter-spacing: 0.08em;
+
+      color: rgba(255,255,255,0.75);
+    }
+
+    .card-sizes {
+      margin-top: 8px;
+
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+
+      color: rgba(255,255,255,0.55);
+    }
+
+    .card-sizes .size {
+      margin-left: 6px;
+      color: #fff;
+      white-space: nowrap;
+    }
+
+    .card-sizes .size.unavailable {
+      color: rgba(255,255,255,0.28);
+      text-decoration: line-through;
+    }
+
+    /* FOOTER */
+
+    .collection-footer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+
+      padding: 24px 20px 36px;
+      border-top: 1px solid rgba(255,255,255,0.12);
+
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .collection-footer a {
+      color: rgba(255,255,255,0.55);
+    }
+
+    .collection-footer a:hover {
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="shipping-banner">
+    Free shipping over €100 · NL · BE · DE · FR
+  </div>
+
+  <header class="top-nav">
+    <a class="side" href="index.html">HOME</a>
+    <a class="brand" href="index.html">LEG THEORY</a>
+    <a class="side" href="collection.html?cart=open">CART (<span id="cartCount">0</span>)</a>
+  </header>
+
+  <main class="collection">
+
+    <h1 class="collection-heading">COLLECTION</h1>
+
+    <div class="product-grid">
+
+      <a class="product-card" href="collection.html?color=Black">
+        <img src="thumb-sleeves-black.jpg" alt="Patent leather leg sleeves in black">
+        <div class="card-name">Patent Leather Leg Sleeves</div>
+        <div class="card-color">Black</div>
+        <div class="card-price">€65</div>
+        <div class="card-sizes">
+          Available in
+          <span class="size" data-key="black-s">S</span>
+          <span class="size" data-key="black-m">M</span>
+          <span class="size" data-key="black-l">L</span>
+        </div>
+      </a>
+
+      <a class="product-card" href="collection.html?color=White">
+        <img src="thumb-sleeves-white.jpg" alt="Patent leather leg sleeves in white">
+        <div class="card-name">Patent Leather Leg Sleeves</div>
+        <div class="card-color">White</div>
+        <div class="card-price">€65</div>
+        <div class="card-sizes">
+          Available in
+          <span class="size" data-key="white-s">S</span>
+          <span class="size" data-key="white-m">M</span>
+          <span class="size" data-key="white-l">L</span>
+        </div>
+      </a>
+
+      <a class="product-card" href="collection.html?color=Red">
+        <img src="thumb-sleeves-red.jpg" alt="Patent leather leg sleeves in red" loading="lazy">
+        <div class="card-name">Patent Leather Leg Sleeves</div>
+        <div class="card-color">Red</div>
+        <div class="card-price">€65</div>
+        <div class="card-sizes">
+          Available in
+          <span class="size" data-key="red-s">S</span>
+          <span class="size" data-key="red-m">M</span>
+          <span class="size" data-key="red-l">L</span>
+        </div>
+      </a>
+
+      <a class="product-card" href="collection.html?product=mesh&amp;color=black">
+        <img src="thumb-mesh-black.jpg" alt="Sheer mesh legwear in black" loading="lazy">
+        <div class="card-name">Sheer Mesh Legwear</div>
+        <div class="card-color">Black</div>
+        <div class="card-price">€35</div>
+        <div class="card-sizes">
+          Available in
+          <span class="size" data-key="mesh-long">Long · 95 cm</span>
+        </div>
+      </a>
+
+    </div>
+
+  </main>
+
+  <footer class="collection-footer">
+    <a href="policies.html">Shipping & Returns</a>
+    <a href="policies.html">Policies</a>
+    <a href="about.html">About</a>
+    <a href="mailto:hello@legtheory.com">Contact</a>
+  </footer>
+
+  <script>
+
+    /* Cart count, shared with the product page */
+    try {
+      const cart = JSON.parse(localStorage.getItem('legTheoryCart') || '[]');
+      document.getElementById('cartCount').textContent =
+        cart.reduce((total, item) => total + (Number(item.quantity) || 0), 0);
+    } catch (error) {
+      /* storage unavailable: keep 0 */
+    }
+
+    /* Grey out sizes that are sold out (or not stocked) */
+    fetch('/api/inventory', { cache: 'no-store' })
+      .then(response => response.ok ? response.json() : Promise.reject())
+      .then(availability => {
+        document
+          .querySelectorAll('.card-sizes .size')
+          .forEach(size => {
+            if (availability[size.dataset.key] !== 1) {
+              size.classList.add('unavailable');
+            }
+          });
+      })
+      .catch(() => {
+        /* inventory unavailable: show sizes without greying */
+      });
+
+  </script>
+
+</body>
+
+</html>

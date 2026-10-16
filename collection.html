@@ -935,9 +935,13 @@
         HOME
       </a>
 
-      <div class="drawer-label">
+      <a
+        class="drawer-label"
+        href="shop.html"
+        style="display:block; color:#fff; text-decoration:none;"
+      >
         COLLECTION
-      </div>
+      </a>
 
       <div class="drawer-product-title">
         PATENT LEATHER LEG SLEEVES
@@ -3031,6 +3035,12 @@
     enforceGarterRule();
     saveCart();
     loadInventoryAvailability();
+
+    if (
+      new URLSearchParams(window.location.search).get('cart') === 'open'
+    ) {
+      openCart();
+    }
 
   </script>
 
