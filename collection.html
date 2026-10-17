@@ -874,7 +874,7 @@
 <body>
 
   <div class="shipping-banner">
-    Free shipping over €100 · NL · BE · DE · FR
+    Free shipping over €100 · NL · BE · DE · FR · IT
   </div>
 
   <header class="mobile-nav">
@@ -1461,7 +1461,7 @@
       </button>
 
       <div class="cart-note cart-button-note">
-        Direct checkout for these four countries.
+        Direct checkout for these five countries.
       </div>
 
       <button
@@ -1539,6 +1539,14 @@
         onclick="startCheckout('FR')"
       >
         France — €8
+      </button>
+
+      <button
+        class="copy-button"
+        data-country="IT"
+        onclick="startCheckout('IT')"
+      >
+        Italy — €9
       </button>
 
     </div>
@@ -1668,7 +1676,8 @@
       NL: { label: 'Netherlands', price: 4.5 },
       BE: { label: 'Belgium', price: 8 },
       DE: { label: 'Germany', price: 8 },
-      FR: { label: 'France', price: 8 }
+      FR: { label: 'France', price: 8 },
+      IT: { label: 'Italy', price: 9 }
     };
 
     /*
@@ -2376,8 +2385,8 @@
 
       note.textContent =
         qualifiesForFreeShipping()
-          ? 'Your order ships free to the Netherlands, Belgium, Germany and France.'
-          : `Free shipping on orders of €${FREE_SHIPPING_FROM} or more to the Netherlands, Belgium, Germany and France.`;
+          ? 'Your order ships free to the Netherlands, Belgium, Germany, France and Italy.'
+          : `Free shipping on orders of €${FREE_SHIPPING_FROM} or more to the Netherlands, Belgium, Germany, France and Italy.`;
     }
 
 

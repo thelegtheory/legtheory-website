@@ -33,7 +33,8 @@ export async function onRequest({ request, env }) {
     NL: { amount: 450, name: 'NL Shipping' },
     BE: { amount: 800, name: 'EU Shipping' },
     DE: { amount: 800, name: 'EU Shipping' },
-    FR: { amount: 800, name: 'EU Shipping' }
+    FR: { amount: 800, name: 'EU Shipping' },
+    IT: { amount: 900, name: 'EU Shipping' }
   };
 
   /*
