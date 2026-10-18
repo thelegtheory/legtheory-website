@@ -397,6 +397,54 @@ export async function onRequestPost({
       : '';
 
   /*
+    Shipping address + shipping cost (shared by both emails).
+  */
+  const shipping =
+    session.collected_information?.shipping_details ||
+    session.shipping_details ||
+    session.customer_details;
+
+  const address =
+    shipping?.address || {};
+
+  const COUNTRY_NAMES = {
+    NL: 'the Netherlands',
+    BE: 'Belgium',
+    DE: 'Germany',
+    FR: 'France',
+    IT: 'Italy'
+  };
+
+  const countryLabel =
+    COUNTRY_NAMES[address.country] || address.country || '';
+
+  const shippingAddress = [
+    shipping?.name,
+    address.line1,
+    address.line2,
+    [address.postal_code, address.city].filter(Boolean).join(' '),
+    address.state,
+    countryLabel.replace(/^the /, 'The ')
+  ]
+    .filter(Boolean)
+    .map(escapeHtml)
+    .join('<br>');
+
+  const shippingAmount =
+    typeof session.shipping_cost?.amount_total === 'number'
+      ? session.shipping_cost.amount_total
+      : (typeof session.total_details?.amount_shipping === 'number'
+          ? session.total_details.amount_shipping
+          : null);
+
+  const shippingLine =
+    shippingAmount === null
+      ? ''
+      : shippingAmount === 0
+        ? `Free${countryLabel ? ` (to ${escapeHtml(countryLabel)})` : ''}`
+        : `€${(shippingAmount / 100).toFixed(2)}${countryLabel ? ` to ${escapeHtml(countryLabel)}` : ''}`;
+
+  /*
     CUSTOMER CONFIRMATION
   */
   if (customerEmail) {
@@ -443,10 +491,33 @@ export async function onRequestPost({
           </ul>
 
           ${
-            total
-              ? `<p><strong>Total paid:</strong> ${total}</p>`
+            shippingLine
+              ? `<p style="margin:0;"><strong>Shipping:</strong> ${shippingLine}</p>`
               : ''
           }
+
+          ${
+            total
+              ? `<p style="margin-top:4px;"><strong>Total paid:</strong> ${total}</p>`
+              : ''
+          }
+
+          ${
+            shippingAddress
+              ? `<p style="margin-top:24px;">
+                  <strong>Shipping to</strong><br>
+                  ${shippingAddress}
+                </p>
+                <p style="font-size:13px;color:#555;">
+                  Something not right with the address? Just reply to this email.
+                </p>`
+              : ''
+          }
+
+          <p style="margin-top:24px;">
+            We try to ship within 1 working day and will send you
+            the tracking link as soon as your parcel is on its way.
+          </p>
 
           <p style="margin-top:28px;">
             If you have any questions, simply reply to this email
@@ -467,26 +538,6 @@ export async function onRequestPost({
     OWNER NOTIFICATION
   */
   if (env.ORDER_NOTIFICATION_EMAIL) {
-
-    const shipping =
-      session.shipping_details ||
-      session.customer_details;
-
-    const address =
-      shipping?.address || {};
-
-    const shippingAddress = [
-      shipping?.name,
-      address.line1,
-      address.line2,
-      address.postal_code,
-      address.city,
-      address.state,
-      address.country
-    ]
-      .filter(Boolean)
-      .map(escapeHtml)
-      .join('<br>');
 
     await sendEmail(env, {
       to: env.ORDER_NOTIFICATION_EMAIL,
@@ -521,6 +572,12 @@ export async function onRequestPost({
             <strong>Shipping address:</strong><br>
             ${shippingAddress || 'Not available'}
           </p>
+
+          ${
+            shippingLine
+              ? `<p><strong>Shipping:</strong> ${shippingLine}</p>`
+              : ''
+          }
 
           ${
             total
