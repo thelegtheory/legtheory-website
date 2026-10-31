@@ -38,6 +38,26 @@ export async function onRequest({ request, env }) {
   };
 
   /*
+    ONE-TIME UK SHIPMENT (Nov 2026)
+    Only reachable from the hidden page one-time-uk-shipment-x7k2.html.
+    - mesh legwear + garters only (no sleeves)
+    - flat €5 shipping, never free (posted locally in the UK)
+    - closes automatically after UK_ONE_TIME.closesAt
+    To remove completely: delete this block, the GB checks below
+    and the hidden page.
+  */
+  const UK_ONE_TIME = {
+    country: 'GB',
+    amount: 500,
+    name: 'UK tracked shipping · one-time shipment',
+    closesAt: Date.parse('2026-11-03T23:59:59+01:00'),
+    allowedTypes: ['mesh', 'garters'],
+    page: '/one-time-uk-shipment-x7k2.html'
+  };
+
+  const isUkOneTime = country === UK_ONE_TIME.country;
+
+  /*
     type is used for the cart rules:
     - garters can only be bought together with mesh legwear in
       the same colour (never more pairs of garters than pairs of mesh)
@@ -89,9 +109,18 @@ export async function onRequest({ request, env }) {
 
   if (
     typeof country !== 'string' ||
-    !Object.prototype.hasOwnProperty.call(SHIPPING, country)
+    (
+      !isUkOneTime &&
+      !Object.prototype.hasOwnProperty.call(SHIPPING, country)
+    )
   ) {
     return json({ error: 'Invalid shipping country' }, 400);
+  }
+
+  if (isUkOneTime && Date.now() > UK_ONE_TIME.closesAt) {
+    return json({
+      error: 'The one-time UK shipment is now closed.'
+    }, 400);
   }
 
   if (!env.STRIPE_SECRET_KEY) {
@@ -160,6 +189,16 @@ export async function onRequest({ request, env }) {
     [...quantities.entries()]
       .filter(([key]) => PRODUCTS[key].type === type)
       .reduce((sum, [, quantity]) => sum + quantity, 0);
+
+  if (isUkOneTime) {
+    for (const key of quantities.keys()) {
+      if (!UK_ONE_TIME.allowedTypes.includes(PRODUCTS[key].type)) {
+        return json({
+          error: 'The UK shipment is for the mesh legwear and leg garters only.'
+        }, 400);
+      }
+    }
+  }
 
   const meshCount = countByType('mesh');
   const gartersCount = countByType('garters');
@@ -246,9 +285,11 @@ export async function onRequest({ request, env }) {
   const qualifiesForFreeShipping =
     subtotal >= FREE_SHIPPING_FROM;
 
-  const shipping = qualifiesForFreeShipping
-    ? { amount: 0, name: 'Free shipping' }
-    : SHIPPING[country];
+  const shipping = isUkOneTime
+    ? { amount: UK_ONE_TIME.amount, name: UK_ONE_TIME.name }
+    : qualifiesForFreeShipping
+      ? { amount: 0, name: 'Free shipping' }
+      : SHIPPING[country];
 
   const origin = new URL(request.url).origin;
 
@@ -271,7 +312,9 @@ export async function onRequest({ request, env }) {
 
   params.append(
     'cancel_url',
-    `${origin}/collection.html?checkout=cancelled`
+    isUkOneTime
+      ? `${origin}${UK_ONE_TIME.page}?checkout=cancelled`
+      : `${origin}/collection.html?checkout=cancelled`
   );
 
   lineItems.forEach((item, index) => {

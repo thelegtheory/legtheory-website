@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Hidden page: only reachable via the direct link. Not in menus, not indexed. -->
+  <meta name="robots" content="noindex, nofollow">
+
+  <title>One-time UK shipment | Leg Theory</title>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #000;
+      color: #fff;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .shipping-banner {
+      width: 100%;
+      padding: 9px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.82);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .nav {
+      height: 48px;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .nav a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 0.18em;
+    }
+
+    .content {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 40px 24px 60px;
+    }
+
+    .product-label {
+      font-size: clamp(30px, 5vw, 56px);
+      font-weight: 300;
+      letter-spacing: 0.05em;
+      margin-bottom: 10px;
+    }
+
+    .product-price {
+      font-size: 15px;
+      letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.75);
+      margin-bottom: 24px;
+    }
+
+    /* GALLERY */
+
+    .gallery {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      margin-bottom: 28px;
+      scrollbar-width: none;
+    }
+
+    .gallery::-webkit-scrollbar { display: none; }
+
+    .gallery img {
+      flex: 0 0 82%;
+      max-width: 420px;
+      aspect-ratio: 3 / 4;
+      object-fit: cover;
+      scroll-snap-align: start;
+    }
+
+    /* UK INFO BOX */
+
+    .uk-box {
+      border: 1px solid rgba(255,255,255,0.28);
+      padding: 18px 20px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.82);
+    }
+
+    .uk-box strong {
+      display: block;
+      font-weight: 400;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    /* GARTERS ADD-ON */
+
+    .addon {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+      padding: 14px 16px;
+      margin-bottom: 14px;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.28);
+      color: #fff;
+      font-family: inherit;
+      font-size: 14px;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .addon.selected { border-color: #fff; }
+
+    .addon img {
+      width: 56px;
+      height: 56px;
+      object-fit: cover;
+      flex: 0 0 56px;
+    }
+
+    .addon-check {
+      flex: 0 0 16px;
+      width: 16px;
+      height: 16px;
+      border: 1px solid rgba(255,255,255,0.6);
+    }
+
+    .addon.selected .addon-check { background: #fff; }
+
+    .addon small {
+      display: block;
+      margin-top: 4px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.55);
+    }
+
+    /* CHECKOUT */
+
+    .checkout-btn {
+      width: 100%;
+      padding: 16px;
+      margin-bottom: 10px;
+      background: #fff;
+      color: #000;
+      border: none;
+      font-family: inherit;
+      font-size: 13px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .checkout-btn:disabled {
+      background: rgba(255,255,255,0.25);
+      color: rgba(255,255,255,0.7);
+      cursor: default;
+    }
+
+    .status {
+      min-height: 20px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 28px;
+    }
+
+    /* DESCRIPTION */
+
+    .description {
+      font-size: 15px;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.76);
+    }
+
+    .description p { margin-bottom: 14px; }
+
+    .description-heading {
+      margin: 28px 0 10px;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #fff;
+    }
+
+    .description-list { margin: 0 0 14px 18px; }
+    .description-list li { margin-bottom: 6px; }
+
+    .footer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding: 28px 24px;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      justify-content: center;
+    }
+
+    .footer a {
+      color: rgba(255,255,255,0.6);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="shipping-banner">
+    One-time UK shipment · Orders close 3 November
+  </div>
+
+  <nav class="nav">
+    <a href="/">LEG THEORY</a>
+  </nav>
+
+  <main class="content">
+
+    <h1 class="product-label">Sheer Mesh Legwear</h1>
+    <p class="product-price">€35 · Black · 95 cm</p>
+
+    <div class="gallery">
+      <img src="Mesh1.jpg" alt="Sheer mesh legwear in black, worn with platform heels at the pole">
+      <img src="Mesh2.jpg" alt="Sheer mesh legwear in black, back view with ribbon ties" loading="lazy">
+      <img src="Mesh3.jpg" alt="Sheer mesh legwear in black, side view showing the flare" loading="lazy">
+      <img src="Mesh4.jpg" alt="Sheer mesh legwear in black, ties left loose" loading="lazy">
+      <img src="Mesh5.jpg" alt="Sheer mesh legwear in black, in motion on the pole" loading="lazy">
+    </div>
+
+    <div class="uk-box">
+      <strong>One-time UK shipment</strong>
+      Tracked UK shipping: €5. Your order is posted from London on 5 November
+      and usually arrives within 2–3 days.<br><br>
+      Returns are possible within 14 days (unworn), shipped back to Amsterdam
+      at your own cost, with customs in between. So we encourage a thoughtful
+      purchase. Any questions, message us on Instagram before ordering.
+    </div>
+
+    <button class="addon" id="garterOption" type="button" onclick="toggleGarters()">
+      <span class="addon-check"></span>
+      <img src="Garters1.jpg" alt="Close-up of a worn leg garter">
+      <span>
+        Add a pair of leg garters — €2
+        <small>Recommended if you fold the top over, or below 52 cm thigh.</small>
+      </span>
+    </button>
+
+    <button class="checkout-btn" id="checkoutBtn" type="button" onclick="startCheckout()">
+      Checkout · €40
+    </button>
+
+    <p class="status" id="status"></p>
+
+    <div class="description">
+      <p>
+        A long, flared silhouette in fine sheer mesh. Fitted through the thigh and
+        opening into a full flare that falls over the platform, it moves with every
+        step and spin.
+      </p>
+
+      <p>
+        Long ribbon ties finish the top of each leg. Knot them at the side, wrap them
+        around the waist, tie them to your shorts or bikini bottoms, or leave them loose.
+        The styling is yours.
+      </p>
+
+      <h3 class="description-heading">Details</h3>
+
+      <ul class="description-list">
+        <li>Material: 90% nylon, 10% spandex</li>
+        <li>Length: 95 cm</li>
+        <li>
+          Upper-thigh fit: tested on 52–67 cm circumference.
+          If you measure above 67 cm, message us before ordering.
+        </li>
+      </ul>
+
+      <h3 class="description-heading">Finding your length</h3>
+
+      <p>
+        Measure in your heels, from the very top of your inner thigh down to where
+        you want the mesh to finish. If it's longer than you'd like, fold over the
+        top 3–5 cm, and add the garters to keep it secure.
+      </p>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <a href="policies.html">Shipping & Returns</a>
+    <a href="terms.html">Terms</a>
+    <a href="mailto:hello@legtheory.com">Contact</a>
+  </footer>
+
+  <script>
+    /*
+      Keep in sync with UK_ONE_TIME in functions/api/create-checkout.js.
+      The server enforces the closing time too; this only updates the page.
+    */
+    const CLOSES_AT = Date.parse('2026-11-03T23:59:59+01:00');
+
+    let gartersSelected = false;
+
+    const btn = document.getElementById('checkoutBtn');
+    const status = document.getElementById('status');
+
+    function updateButton() {
+      if (Date.now() > CLOSES_AT) {
+        btn.disabled = true;
+        btn.textContent = 'This shipment is closed';
+        return;
+      }
+
+      btn.textContent = gartersSelected ? 'Checkout · €42' : 'Checkout · €40';
+    }
+
+    function toggleGarters() {
+      gartersSelected = !gartersSelected;
+      document
+        .getElementById('garterOption')
+        .classList.toggle('selected', gartersSelected);
+      updateButton();
+    }
+
+    async function startCheckout() {
+      if (btn.disabled) return;
+
+      const items = [{ product: 'mesh-long', quantity: 1 }];
+
+      if (gartersSelected) {
+        items.push({ product: 'leg-garters', quantity: 1 });
+      }
+
+      btn.disabled = true;
+      status.textContent = 'Opening checkout…';
+
+      try {
+        const response = await fetch('/api/create-checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ country: 'GB', items })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          status.textContent = data.error || 'Checkout could not be created. Please try again.';
+          btn.disabled = false;
+          return;
+        }
+
+        window.location.href = data.url;
+
+      } catch (error) {
+        console.error(error);
+        status.textContent = 'Checkout could not be created. Please try again.';
+        btn.disabled = false;
+      }
+    }
+
+    updateButton();
+  </script>
+
+</body>
+</html>

@@ -412,8 +412,20 @@ export async function onRequestPost({
     BE: 'Belgium',
     DE: 'Germany',
     FR: 'France',
-    IT: 'Italy'
+    IT: 'Italy',
+    GB: 'the United Kingdom'
   };
+
+  /*
+    One-time UK shipment: posted from London on 5 November
+    instead of the usual 1-working-day dispatch.
+  */
+  const dispatchNote =
+    address.country === 'GB'
+      ? `Your order will be posted from London on 5 November, and we’ll
+         send you the tracking link as soon as it’s on its way.`
+      : `We try to ship within 1 working day and will send you
+         the tracking link as soon as your parcel is on its way.`;
 
   const countryLabel =
     COUNTRY_NAMES[address.country] || address.country || '';
@@ -515,8 +527,7 @@ export async function onRequestPost({
           }
 
           <p style="margin-top:24px;">
-            We try to ship within 1 working day and will send you
-            the tracking link as soon as your parcel is on its way.
+            ${dispatchNote}
           </p>
 
           <p style="margin-top:28px;">
