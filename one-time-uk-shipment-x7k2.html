@@ -165,6 +165,15 @@
       cursor: pointer;
     }
 
+    .checkout-btn small {
+      display: block;
+      margin-top: 6px;
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      text-transform: none;
+      color: rgba(0,0,0,0.6);
+    }
+
     .checkout-btn:disabled {
       background: rgba(255,255,255,0.25);
       color: rgba(255,255,255,0.7);
@@ -326,7 +335,9 @@
         return;
       }
 
-      btn.textContent = gartersSelected ? 'Checkout · €42' : 'Checkout · €40';
+      btn.innerHTML = gartersSelected
+        ? 'Checkout · €42<small>€35 mesh + €2 garters + €5 tracked UK shipping</small>'
+        : 'Checkout · €40<small>€35 mesh legwear + €5 tracked UK shipping</small>';
     }
 
     function toggleGarters() {
