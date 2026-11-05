@@ -98,7 +98,7 @@
       A confirmation email will be sent to the email address you entered at checkout.
     </p>
 
-    <p class="small">
+    <p class="small" id="dispatchNote">
       We aim to ship within 1 working day. If you have any questions, you can always message us on Instagram.
     </p>
 
@@ -108,6 +108,16 @@
 
   </main>
 
+
+  <!-- TEMPORARY DISPATCH NOTICE: switches back automatically after 6 Nov -->
+  <script>
+    (function () {
+      if (Date.now() < Date.parse('2026-11-06T23:00:00Z')) {
+        var p = document.getElementById('dispatchNote');
+        if (p) p.textContent = 'A short note: orders placed on 5–6 November will be dispatched on Monday 9 November. If you have any questions, you can always message us on Instagram.';
+      }
+    })();
+  </script>
 </body>
 
 </html>

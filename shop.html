@@ -341,6 +341,16 @@
 
   </script>
 
+
+  <!-- TEMPORARY DISPATCH NOTICE: switches back automatically after 6 Nov -->
+  <script>
+    (function () {
+      if (Date.now() < Date.parse('2026-11-06T23:00:00Z')) {
+        var b = document.querySelector('.shipping-banner');
+        if (b) b.textContent = 'Orders placed 5–6 November ship on 9 November · Free shipping over €100';
+      }
+    })();
+  </script>
 </body>
 
 </html>

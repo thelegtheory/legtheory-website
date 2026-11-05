@@ -420,12 +420,23 @@ export async function onRequestPost({
     One-time UK shipment: posted from London on 5 November
     instead of the usual 1-working-day dispatch.
   */
+  /*
+    TEMPORARY: short break, orders placed 5–6 November ship on 9 November.
+    Switches back to the normal note automatically after 6 November.
+  */
+  const shortBreak =
+    Date.now() < Date.parse('2026-11-06T23:00:00Z');
+
   const dispatchNote =
     address.country === 'GB'
       ? `Your order will be posted from London on 5 November, and we’ll
          send you the tracking link as soon as it’s on its way.`
-      : `We try to ship within 1 working day and will send you
-         the tracking link as soon as your parcel is on its way.`;
+      : shortBreak
+        ? `A short note: orders placed on 5–6 November will be dispatched
+           on Monday 9 November. We’ll send you the tracking link as soon
+           as your parcel is on its way.`
+        : `We try to ship within 1 working day and will send you
+           the tracking link as soon as your parcel is on its way.`;
 
   const countryLabel =
     COUNTRY_NAMES[address.country] || address.country || '';
