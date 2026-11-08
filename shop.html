@@ -331,7 +331,11 @@
               note.dataset.sizes = note.dataset.sizes
                 ? `${note.dataset.sizes}, ${label}`
                 : label;
-              note.textContent = `Only 1 left in ${note.dataset.sizes}`;
+              /* One-size products (mesh): just "Only 1 left" */
+              note.textContent =
+                card.querySelectorAll('.card-sizes .size').length === 1
+                  ? 'Only 1 left'
+                  : `Only 1 left in ${note.dataset.sizes}`;
             }
           });
       })
