@@ -316,6 +316,15 @@
               size.classList.add('unavailable');
             }
 
+            /* Mesh sold out: "Restocking soon" under the card */
+            if (level === 0 && size.dataset.key === 'mesh-long') {
+              const card = size.closest('.product-card');
+              const note = document.createElement('div');
+              note.className = 'card-last';
+              note.textContent = 'Restocking soon';
+              card.appendChild(note);
+            }
+
             if (level === 1) {
               const card = size.closest('.product-card');
               let note = card.querySelector('.card-last');
