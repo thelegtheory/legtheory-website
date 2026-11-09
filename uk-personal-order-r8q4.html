@@ -7,7 +7,7 @@
   <!-- Hidden page: only reachable via the direct link. Not in menus, not indexed. -->
   <meta name="robots" content="noindex, nofollow">
 
-  <title>One-time UK shipment | Leg Theory</title>
+  <title>UK order | Leg Theory</title>
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -231,7 +231,7 @@
 <body>
 
   <div class="shipping-banner">
-    One-time UK shipment · Orders close 3 November
+    UK order · Posted from Amsterdam
   </div>
 
   <nav class="nav">
@@ -252,25 +252,28 @@
     </div>
 
     <div class="uk-box">
-      <strong>One-time UK shipment</strong>
-      Tracked UK shipping: €5. Your order is posted from London on 5 November
-      and usually arrives within 2–3 days.<br><br>
+      <strong>Shipping to the UK</strong>
+      Tracked shipping: €6. Your order is posted from Amsterdam within
+      1 working day and usually arrives within 3–6 working days.<br><br>
+      Since Brexit, Royal Mail may ask you to pay UK import VAT plus their
+      handling fee before delivery (around £15 in total). You'll get a notice
+      by email or text. Please only pay through the official Royal Mail website.<br><br>
       Returns are possible within 14 days (unworn), shipped back to Amsterdam
       at your own cost, with customs in between. So we encourage a thoughtful
       purchase. Any questions, message us on Instagram before ordering.
     </div>
 
-    <button class="addon" id="garterOption" type="button" onclick="toggleGarters()">
+    <div class="addon selected" id="garterGift" style="cursor: default;">
       <span class="addon-check"></span>
       <img src="Garters1.jpg" alt="Close-up of a worn leg garter">
       <span>
-        Add a pair of leg garters — €2
-        <small>Recommended if you fold the top over, or below 52 cm thigh.</small>
+        Leg garters — included as a gift
+        <small>A small thank-you for ordering from the UK.</small>
       </span>
-    </button>
+    </div>
 
     <button class="checkout-btn" id="checkoutBtn" type="button" onclick="startCheckout()">
-      Checkout · €40
+      Checkout · €41
     </button>
 
     <p class="status" id="status"></p>
@@ -318,44 +321,22 @@
 
   <script>
     /*
-      Keep in sync with UK_ONE_TIME in functions/api/create-checkout.js.
-      The server enforces the closing time too; this only updates the page.
+      Keep in sync with UK_ORDER in functions/api/create-checkout.js.
+      The garters are added as a gift on the server, not here.
+      Stock is shared with the main shop: first to pay gets the pair.
     */
-    const CLOSES_AT = Date.parse('2026-11-03T23:59:59+01:00');
-
-    let gartersSelected = false;
-
     const btn = document.getElementById('checkoutBtn');
     const status = document.getElementById('status');
 
     function updateButton() {
-      if (Date.now() > CLOSES_AT) {
-        btn.disabled = true;
-        btn.textContent = 'This shipment is closed';
-        return;
-      }
-
-      btn.innerHTML = gartersSelected
-        ? 'Checkout · €42<small>€35 mesh + €2 garters + €5 tracked UK shipping</small>'
-        : 'Checkout · €40<small>€35 mesh legwear + €5 tracked UK shipping</small>';
-    }
-
-    function toggleGarters() {
-      gartersSelected = !gartersSelected;
-      document
-        .getElementById('garterOption')
-        .classList.toggle('selected', gartersSelected);
-      updateButton();
+      btn.innerHTML =
+        'Checkout · €41<small>€35 mesh legwear + €6 tracked UK shipping · garters included</small>';
     }
 
     async function startCheckout() {
       if (btn.disabled) return;
 
       const items = [{ product: 'mesh-long', quantity: 1 }];
-
-      if (gartersSelected) {
-        items.push({ product: 'leg-garters', quantity: 1 });
-      }
 
       btn.disabled = true;
       status.textContent = 'Opening checkout…';

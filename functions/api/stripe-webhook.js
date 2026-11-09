@@ -383,9 +383,11 @@ export async function onRequestPost({
       const quantity =
         Number(item.quantity);
 
+      const giftNote = item.gift ? ' (gift)' : '';
+
       return `
         <li style="margin-bottom:8px;">
-          ${friendlyProductName} × ${quantity}
+          ${friendlyProductName} × ${quantity}${giftNote}
         </li>
       `;
     })
@@ -417,13 +419,16 @@ export async function onRequestPost({
   };
 
   /*
-    One-time UK shipment: posted from London on 5 November
-    instead of the usual 1-working-day dispatch.
+    UK orders: posted from Amsterdam; customer pays import VAT +
+    Royal Mail handling fee on delivery.
   */
   const dispatchNote =
     address.country === 'GB'
-      ? `Your order will be posted from London on 5 November, and we’ll
-         send you the tracking link as soon as it’s on its way.`
+      ? `We try to ship within 1 working day and will send you the
+         tracking link as soon as your parcel is on its way. Royal Mail
+         may contact you by email or text to pay UK import VAT and their
+         handling fee before delivery. Please only pay through the
+         official Royal Mail website.`
       : `We try to ship within 1 working day and will send you
          the tracking link as soon as your parcel is on its way.`;
 

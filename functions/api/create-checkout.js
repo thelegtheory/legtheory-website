@@ -38,24 +38,26 @@ export async function onRequest({ request, env }) {
   };
 
   /*
-    ONE-TIME UK SHIPMENT (Nov 2026)
-    Only reachable from the hidden page one-time-uk-shipment-x7k2.html.
-    - mesh legwear + garters only (no sleeves)
-    - flat €5 shipping, never free (posted locally in the UK)
-    - closes automatically after UK_ONE_TIME.closesAt
+    UK ORDER (personal link, Nov 2026)
+    Only reachable from the hidden page uk-personal-order-r8q4.html.
+    - mesh legwear only (no sleeves); stock shared with the main shop
+    - flat €6 tracked shipping from Amsterdam, never free
+    - one pair of leg garters per pair of mesh added as a gift
+      (not charged, but taken off the garters stock)
+    - customer pays UK import VAT + Royal Mail fee on delivery
     To remove completely: delete this block, the GB checks below
     and the hidden page.
   */
-  const UK_ONE_TIME = {
+  const UK_ORDER = {
     country: 'GB',
-    amount: 500,
-    name: 'UK tracked shipping · one-time shipment',
-    closesAt: Date.parse('2026-11-03T23:59:59+01:00'),
-    allowedTypes: ['mesh', 'garters'],
-    page: '/one-time-uk-shipment-x7k2.html'
+    amount: 600,
+    name: 'UK tracked shipping (from Amsterdam)',
+    allowedTypes: ['mesh'],
+    giftGarters: 'leg-garters',
+    page: '/uk-personal-order-r8q4.html'
   };
 
-  const isUkOneTime = country === UK_ONE_TIME.country;
+  const isUkOneTime = country === UK_ORDER.country;
 
   /*
     type is used for the cart rules:
@@ -115,12 +117,6 @@ export async function onRequest({ request, env }) {
     )
   ) {
     return json({ error: 'Invalid shipping country' }, 400);
-  }
-
-  if (isUkOneTime && Date.now() > UK_ONE_TIME.closesAt) {
-    return json({
-      error: 'The one-time UK shipment is now closed.'
-    }, 400);
   }
 
   if (!env.STRIPE_SECRET_KEY) {
@@ -192,9 +188,9 @@ export async function onRequest({ request, env }) {
 
   if (isUkOneTime) {
     for (const key of quantities.keys()) {
-      if (!UK_ONE_TIME.allowedTypes.includes(PRODUCTS[key].type)) {
+      if (!UK_ORDER.allowedTypes.includes(PRODUCTS[key].type)) {
         return json({
-          error: 'The UK shipment is for the mesh legwear and leg garters only.'
+          error: 'The UK order is for the mesh legwear only (garters are included as a gift).'
         }, 400);
       }
     }
@@ -277,6 +273,47 @@ export async function onRequest({ request, env }) {
 
   const lineItems = checkoutItems;
 
+  /*
+    UK order: gift garters go into the cart metadata only (so the
+    webhook takes them off stock and lists them in the emails), not
+    into the Stripe line items (so they are not charged).
+    Skipped quietly if the garters are out of stock.
+  */
+  const metadataCart = checkoutItems.map(item => ({
+    product: item.productKey,
+    quantity: item.quantity
+  }));
+
+  if (isUkOneTime) {
+    const meshPairs = countByType('mesh');
+
+    const garterRow = await env.DB
+      .prepare(
+        'SELECT stock FROM inventory WHERE product_key = ?'
+      )
+      .bind(UK_ORDER.giftGarters)
+      .first();
+
+    const giftQuantity = Math.min(
+      meshPairs,
+      Math.max(Number(garterRow?.stock) || 0, 0)
+    );
+
+    if (giftQuantity > 0) {
+      metadataCart.push({
+        product: UK_ORDER.giftGarters,
+        quantity: giftQuantity,
+        gift: true
+      });
+
+      const meshLine = lineItems.find(item => item.type === 'mesh');
+
+      if (meshLine) {
+        meshLine.name = `${meshLine.name} (+ leg garters as a gift)`;
+      }
+    }
+  }
+
   const subtotal = lineItems.reduce(
     (sum, item) => sum + item.amount * item.quantity,
     0
@@ -286,7 +323,7 @@ export async function onRequest({ request, env }) {
     subtotal >= FREE_SHIPPING_FROM;
 
   const shipping = isUkOneTime
-    ? { amount: UK_ONE_TIME.amount, name: UK_ONE_TIME.name }
+    ? { amount: UK_ORDER.amount, name: UK_ORDER.name }
     : qualifiesForFreeShipping
       ? { amount: 0, name: 'Free shipping' }
       : SHIPPING[country];
@@ -298,12 +335,7 @@ export async function onRequest({ request, env }) {
   params.append('mode', 'payment');
   params.append(
     'metadata[cart]',
-    JSON.stringify(
-      checkoutItems.map(item => ({
-        product: item.productKey,
-        quantity: item.quantity
-      }))
-    )
+    JSON.stringify(metadataCart)
   );
   params.append(
   'success_url',
@@ -313,7 +345,7 @@ export async function onRequest({ request, env }) {
   params.append(
     'cancel_url',
     isUkOneTime
-      ? `${origin}${UK_ONE_TIME.page}?checkout=cancelled`
+      ? `${origin}${UK_ORDER.page}?checkout=cancelled`
       : `${origin}/collection.html?checkout=cancelled`
   );
 
