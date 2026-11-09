@@ -375,6 +375,18 @@ export async function onRequestPost({
   const safeCustomerName =
     escapeHtml(customerName);
 
+  /*
+    Phone is only collected for UK orders (for Royal Mail notices).
+    Shown in both emails when present.
+  */
+  const customerPhone =
+    session.customer_details?.phone ||
+    session.collected_information?.shipping_details?.phone ||
+    '';
+
+  const safeCustomerPhone =
+    escapeHtml(customerPhone);
+
   const orderLines = cart
     .map(item => {
       const friendlyProductName =
@@ -524,6 +536,7 @@ export async function onRequestPost({
               ? `<p style="margin-top:24px;">
                   <strong>Shipping to</strong><br>
                   ${shippingAddress}
+                  ${safeCustomerPhone ? `<br>Phone: ${safeCustomerPhone}` : ''}
                 </p>
                 <p style="font-size:13px;color:#555;">
                   Something not right with the address? Just reply to this email.
@@ -583,6 +596,12 @@ export async function onRequestPost({
             <strong>Email:</strong>
             ${escapeHtml(customerEmail || 'Not available')}
           </p>
+
+          ${
+            safeCustomerPhone
+              ? `<p><strong>Phone:</strong> ${safeCustomerPhone}</p>`
+              : ''
+          }
 
           <p>
             <strong>Shipping address:</strong><br>
