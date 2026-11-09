@@ -381,6 +381,14 @@ export async function onRequest({ request, env }) {
     country
   );
 
+  /*
+    UK orders: phone number required, so Royal Mail can text the
+    customer about import VAT (email is always collected by Stripe).
+  */
+  if (isUkOneTime) {
+    params.append('phone_number_collection[enabled]', 'true');
+  }
+
   params.append(
     'shipping_options[0][shipping_rate_data][type]',
     'fixed_amount'
