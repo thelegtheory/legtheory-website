@@ -30,7 +30,7 @@ export async function onRequest({ request, env }) {
   const FREE_SHIPPING_FROM = 10000;
 
   const SHIPPING = {
-    NL: { amount: 450, name: 'NL Shipping' },
+    NL: { amount: 500, name: 'NL Shipping' },
     BE: { amount: 800, name: 'EU Shipping' },
     DE: { amount: 800, name: 'EU Shipping' },
     FR: { amount: 800, name: 'EU Shipping' },
