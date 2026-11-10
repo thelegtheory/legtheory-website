@@ -49,6 +49,12 @@ export async function onRequest({ request, env }) {
     and the hidden page.
   */
   const UK_ORDER = {
+    /*
+      PAUSED (Nov 2026): UK orders are switched off for now.
+      To turn them back on, set enabled to true here AND
+      UK_ORDERS_OPEN to true in uk-personal-order-r8q4.html.
+    */
+    enabled: false,
     country: 'GB',
     amount: 600,
     name: 'UK tracked shipping (from Amsterdam)',
@@ -57,7 +63,13 @@ export async function onRequest({ request, env }) {
     page: '/uk-personal-order-r8q4.html'
   };
 
-  const isUkOneTime = country === UK_ORDER.country;
+  if (country === UK_ORDER.country && !UK_ORDER.enabled) {
+    return json({
+      error: 'UK orders are paused for now. Follow us on Instagram for updates.'
+    }, 400);
+  }
+
+  const isUkOneTime = UK_ORDER.enabled && country === UK_ORDER.country;
 
   /*
     type is used for the cart rules:

@@ -328,7 +328,20 @@
     const btn = document.getElementById('checkoutBtn');
     const status = document.getElementById('status');
 
+    /*
+      PAUSED (Nov 2026): set to true to open UK orders again
+      (also set UK_ORDER.enabled to true in create-checkout.js).
+    */
+    const UK_ORDERS_OPEN = false;
+
     function updateButton() {
+      if (!UK_ORDERS_OPEN) {
+        btn.disabled = true;
+        btn.innerHTML = 'UK orders paused';
+        status.textContent = 'UK orders are paused for now. Follow us on Instagram for updates.';
+        return;
+      }
+
       btn.innerHTML =
         'Checkout · €41<small>€35 mesh legwear + €6 tracked UK shipping · garters included</small>';
     }
