@@ -535,7 +535,7 @@ export async function onRequestPost({
 
   const shippingLine =
     isPickup
-      ? 'Pickup in Amsterdam (free)'
+      ? 'Pickup in Amsterdam'
       : shippingAmount === null
       ? ''
       : shippingAmount === 0

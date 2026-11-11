@@ -594,7 +594,7 @@ export async function onRequest({ request, env }) {
     params.append('shipping_options[1][shipping_rate_data][fixed_amount][currency]', 'eur');
     params.append(
       'shipping_options[1][shipping_rate_data][display_name]',
-      'Pickup in Amsterdam (free) · we’ll message you to arrange'
+      'Pickup in Amsterdam · we’ll message you to arrange'
     );
     params.append('shipping_options[1][shipping_rate_data][metadata][method]', 'pickup');
   }
