@@ -459,10 +459,10 @@ export async function onRequestPost({
     carries metadata.method = 'pickup'. If the lookup fails, the
     order is simply treated as a normal shipment.
   */
-  let isPickup = false;
+  let isPickup = session.metadata?.delivery === 'pickup';
   const shippingRateId = session.shipping_cost?.shipping_rate;
 
-  if (shippingRateId && env.STRIPE_SECRET_KEY) {
+  if (!isPickup && shippingRateId && env.STRIPE_SECRET_KEY) {
     try {
       const rateResponse = await fetch(
         `https://api.stripe.com/v1/shipping_rates/${encodeURIComponent(shippingRateId)}`,

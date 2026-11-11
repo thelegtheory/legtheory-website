@@ -320,19 +320,90 @@
     .details ul { margin: 0 0 14px 18px; }
     .details li { margin-bottom: 6px; }
 
-    /* BAG */
+    /* BAG (slide-in panel) */
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      z-index: 20;
+    }
+
+    .overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
 
     .bag {
-      border: 1px solid rgba(255,255,255,0.28);
-      padding: 22px 20px;
-      margin-bottom: 20px;
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: min(420px, 92vw);
+      background: #000;
+      border-left: 1px solid rgba(255,255,255,0.18);
+      padding: 22px 20px 30px;
+      overflow-y: auto;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      z-index: 30;
     }
+
+    .bag.open { transform: translateX(0); }
+
+    .bag-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .close {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    /* UK NOTICE */
+
+    .modal {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: min(420px, 90vw);
+      background: #000;
+      border: 1px solid rgba(255,255,255,0.4);
+      padding: 26px 22px;
+      z-index: 50;
+      font-size: 14px;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.85);
+    }
+
+    .modal h3 {
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    .modal .btn { margin-top: 18px; }
+    .modal .btn.secondary { margin-top: 8px; }
+
+    .modal-overlay { z-index: 40; }
 
     .bag-title {
       font-size: 12px;
       letter-spacing: 0.14em;
       text-transform: uppercase;
-      margin-bottom: 14px;
     }
 
     .bag-line {
@@ -413,7 +484,7 @@
 
   <nav class="nav">
     <span>LEG THEORY</span>
-    <button type="button" onclick="scrollToBag()">BAG (<span id="bagCount">0</span>)</button>
+    <button type="button" onclick="openBag()">BAG (<span id="bagCount">0</span>)</button>
   </nav>
 
   <main class="content">
@@ -517,7 +588,7 @@
 
     <!-- DETAILS -->
 
-    <section class="details">
+    <section class="details" id="details" hidden>
 
       <h3 class="section-heading">Details</h3>
       <ul>
@@ -542,41 +613,62 @@
         <li>Short version: made for pre-orders only. Order by 15 November.</li>
         <li>Cream: off-white garters are free with pre-orders until 15 November.</li>
         <li>Shipping to NL, BE, DE, FR, IT, free over €100. Or choose free pickup in Amsterdam at checkout.</li>
-        <li>UK: ships from Amsterdam, shipping shown at checkout. Royal Mail (UK post) may ask you to pay UK import VAT plus a handling fee (around £15) before delivery. Questions? DM us.</li>
       </ul>
 
     </section>
 
 
-    <!-- BAG -->
-
-    <section class="bag" id="bag">
-      <div class="bag-title">Your pre-order</div>
-      <div id="bagLines"></div>
-      <div class="bag-total" id="bagTotal"></div>
-      <p class="bag-note" id="bagNote"></p>
-
-      <div id="checkoutArea" hidden>
-        <p class="bag-note" style="margin-top:14px;">Check out your pre-order: choose your shipping country.</p>
-        <div class="countries">
-          <button type="button" class="btn secondary" onclick="checkout('NL')">Netherlands</button>
-          <button type="button" class="btn secondary" onclick="checkout('BE')">Belgium</button>
-          <button type="button" class="btn secondary" onclick="checkout('DE')">Germany</button>
-          <button type="button" class="btn secondary" onclick="checkout('FR')">France</button>
-          <button type="button" class="btn secondary" onclick="checkout('IT')">Italy</button>
-          <button type="button" class="btn secondary" onclick="checkout('GB')">United Kingdom</button>
-        </div>
-        <p class="bag-note" style="margin-bottom:10px;">
-          UK orders ship from Amsterdam; shipping is shown at checkout.
-          Royal Mail (UK post) may ask you to pay UK import VAT plus a handling fee
-          (around £15) before delivery.
-        </p>
-        <p class="status" id="status"></p>
-        <p class="bag-note">Other countries? Message us on <a href="https://www.instagram.com/thelegtheory/" target="_blank" rel="noopener" style="color:#fff;">Instagram</a>.</p>
-      </div>
-    </section>
-
   </main>
+
+  <!-- BAG PANEL -->
+
+  <div class="overlay" id="bagOverlay" onclick="closeBag()"></div>
+
+  <aside class="bag" id="bag" aria-label="Your bag">
+    <div class="bag-head">
+      <div class="bag-title">Your pre-order</div>
+      <button type="button" class="close" aria-label="Close bag" onclick="closeBag()">×</button>
+    </div>
+
+    <div id="bagLines"></div>
+    <div class="bag-total" id="bagTotal"></div>
+    <p class="bag-note" id="bagNote"></p>
+
+    <div id="checkoutArea" hidden>
+      <p class="bag-note" style="margin-top:18px;">Check out your pre-order: where should it go?</p>
+      <div class="countries">
+        <button type="button" class="btn secondary" onclick="checkout('NL')">Netherlands</button>
+        <button type="button" class="btn secondary" onclick="checkout('NL', true)">Pickup Amsterdam · free</button>
+        <button type="button" class="btn secondary" onclick="checkout('BE')">Belgium</button>
+        <button type="button" class="btn secondary" onclick="checkout('DE')">Germany</button>
+        <button type="button" class="btn secondary" onclick="checkout('FR')">France</button>
+        <button type="button" class="btn secondary" onclick="checkout('IT')">Italy</button>
+        <button type="button" class="btn secondary" onclick="openUkNotice()">United Kingdom</button>
+      </div>
+      <p class="status" id="status"></p>
+      <p class="bag-note">Other countries? Message us on <a href="https://www.instagram.com/thelegtheory/" target="_blank" rel="noopener" style="color:#fff;">Instagram</a>.</p>
+    </div>
+  </aside>
+
+
+  <!-- UK NOTICE -->
+
+  <div class="overlay modal-overlay" id="ukOverlay" onclick="closeUkNotice()"></div>
+
+  <div class="modal" id="ukNotice" role="dialog" aria-modal="true" aria-labelledby="ukTitle" hidden>
+    <h3 id="ukTitle">Shipping to the UK</h3>
+    <p>
+      Your order ships from Amsterdam by tracked post; the shipping cost is shown at checkout.
+    </p>
+    <p style="margin-top:10px;">
+      Since Brexit, Royal Mail (UK post) may ask you to pay UK import VAT plus a
+      handling fee, around £15 in total, before delivery. You'll get a notice by
+      email or text. Please only pay through the official Royal Mail website.
+    </p>
+    <button type="button" class="btn" onclick="proceedUk()">I understand, continue to checkout</button>
+    <button type="button" class="btn secondary" onclick="closeUkNotice()">Back</button>
+  </div>
+
 
   <footer class="footer">
     <a href="policies.html">Shipping & Returns</a>
@@ -605,7 +697,7 @@
     };
 
     const bagLink =
-      '<a href="#bag" onclick="scrollToBag(); return false;" style="color:#fff;">View bag & check out</a>';
+      '<a href="#" onclick="openBag(); return false;" style="color:#fff;">View bag & check out</a>';
 
     const shortClosed = () => Date.now() > SHORT_CLOSES_AT;
     const giftActive = () => Date.now() <= GIFT_UNTIL;
@@ -776,11 +868,38 @@
           : `Free EU shipping from €${FREE_SHIPPING_FROM}. Ships by 15 December.`;
     }
 
-    function scrollToBag() {
-      document.getElementById('bag').scrollIntoView({ behavior: 'smooth' });
+    function openBag() {
+      document.getElementById('bag').classList.add('open');
+      document.getElementById('bagOverlay').classList.add('open');
     }
 
-    async function checkout(country) {
+    function closeBag() {
+      document.getElementById('bag').classList.remove('open');
+      document.getElementById('bagOverlay').classList.remove('open');
+    }
+
+    function openUkNotice() {
+      document.getElementById('ukNotice').hidden = false;
+      document.getElementById('ukOverlay').classList.add('open');
+    }
+
+    function closeUkNotice() {
+      document.getElementById('ukNotice').hidden = true;
+      document.getElementById('ukOverlay').classList.remove('open');
+    }
+
+    function proceedUk() {
+      closeUkNotice();
+      checkout('GB');
+    }
+
+    document.addEventListener('keydown', event => {
+      if (event.key !== 'Escape') return;
+      if (!document.getElementById('ukNotice').hidden) closeUkNotice();
+      else closeBag();
+    });
+
+    async function checkout(country, pickup = false) {
       const status = document.getElementById('status');
       const buttons = document.querySelectorAll('.countries .btn');
 
@@ -793,7 +912,7 @@
         const response = await fetch('/api/create-checkout', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ country, items: bag })
+          body: JSON.stringify({ country, pickup, items: bag })
         });
 
         const data = await response.json();
@@ -834,6 +953,7 @@
       ['black', 'cream'].forEach(id => {
         document.getElementById(id).hidden = id !== name;
       });
+      document.getElementById('details').hidden = false;
       if (push) history.pushState(null, '', `#${name}`);
       window.scrollTo({ top: 0 });
     }
@@ -843,6 +963,7 @@
       document.querySelector('.intro').hidden = false;
       document.getElementById('black').hidden = true;
       document.getElementById('cream').hidden = true;
+      document.getElementById('details').hidden = true;
       if (push) history.pushState(null, '', location.pathname + location.search);
       window.scrollTo({ top: 0 });
     }

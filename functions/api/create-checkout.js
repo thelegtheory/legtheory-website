@@ -23,6 +23,9 @@ export async function onRequest({ request, env }) {
 
   const { country, product, items } = body || {};
 
+  /* Amsterdam pickup chosen on the pre-order page (NL only) */
+  const isPickup = body?.pickup === true && country === 'NL';
+
   /*
     Shipping (amounts in cents).
     Orders of FREE_SHIPPING_FROM or more ship free to every country below.
@@ -536,6 +539,14 @@ export async function onRequest({ request, env }) {
     );
   });
 
+  /*
+    Pickup: no address or shipping options, just name, email and
+    phone so the pickup can be arranged. Marked in the metadata.
+  */
+  if (isPickup) {
+    params.append('metadata[delivery]', 'pickup');
+    params.append('phone_number_collection[enabled]', 'true');
+  } else {
   params.append(
     'shipping_address_collection[allowed_countries][0]',
     country
@@ -574,7 +585,7 @@ export async function onRequest({ request, env }) {
     Free second option for Netherlands orders. The webhook spots it
     via metadata[method]=pickup. To remove: delete this block.
   */
-  if (country === 'NL') {
+  if (country === 'NL' && !hasPreorderItem) {
     params.append('shipping_options[1][shipping_rate_data][type]', 'fixed_amount');
     params.append('shipping_options[1][shipping_rate_data][fixed_amount][amount]', '0');
     params.append('shipping_options[1][shipping_rate_data][fixed_amount][currency]', 'eur');
@@ -583,6 +594,7 @@ export async function onRequest({ request, env }) {
       'Pickup in Amsterdam (free) · we’ll message you to arrange'
     );
     params.append('shipping_options[1][shipping_rate_data][metadata][method]', 'pickup');
+  }
   }
 
   try {
