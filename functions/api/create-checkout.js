@@ -549,6 +549,22 @@ export async function onRequest({ request, env }) {
   if (isPickup) {
     params.append('metadata[delivery]', 'pickup');
     params.append('phone_number_collection[enabled]', 'true');
+
+    /* How to arrange the pickup: email or Instagram DM (+ handle) */
+    params.append('custom_fields[0][key]', 'contact');
+    params.append('custom_fields[0][type]', 'dropdown');
+    params.append('custom_fields[0][label][type]', 'custom');
+    params.append('custom_fields[0][label][custom]', 'How should we contact you about pickup?');
+    params.append('custom_fields[0][dropdown][options][0][label]', 'Email');
+    params.append('custom_fields[0][dropdown][options][0][value]', 'email');
+    params.append('custom_fields[0][dropdown][options][1][label]', 'Instagram DM');
+    params.append('custom_fields[0][dropdown][options][1][value]', 'instagram');
+
+    params.append('custom_fields[1][key]', 'instagram');
+    params.append('custom_fields[1][type]', 'text');
+    params.append('custom_fields[1][optional]', 'true');
+    params.append('custom_fields[1][label][type]', 'custom');
+    params.append('custom_fields[1][label][custom]', 'Instagram handle (if you chose DM)');
   } else {
   params.append(
     'shipping_address_collection[allowed_countries][0]',

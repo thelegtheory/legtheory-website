@@ -460,6 +460,19 @@ export async function onRequestPost({
     order is simply treated as a normal shipment.
   */
   let isPickup = session.metadata?.delivery === 'pickup';
+
+  /* Pickup contact preference (Stripe custom fields), for the owner email */
+  const customFields = Array.isArray(session.custom_fields) ? session.custom_fields : [];
+  const contactField = customFields.find(field => field.key === 'contact');
+  const instagramField = customFields.find(field => field.key === 'instagram');
+  const contactChoice = contactField?.dropdown?.value === 'instagram' ? 'Instagram DM' : (contactField?.dropdown?.value ? 'Email' : '');
+  const instagramHandle = instagramField?.text?.value || '';
+
+  const pickupContactHtml = contactChoice
+    ? `<p><strong>Pickup contact:</strong> ${escapeHtml(contactChoice)}${
+        instagramHandle ? ` · Instagram: ${escapeHtml(instagramHandle)}` : ''
+      }</p>`
+    : '';
   const shippingRateId = session.shipping_cost?.shipping_rate;
 
   if (!isPickup && shippingRateId && env.STRIPE_SECRET_KEY) {
@@ -671,6 +684,8 @@ export async function onRequestPost({
               ? `<p><strong>Phone:</strong> ${safeCustomerPhone}</p>`
               : ''
           }
+
+          ${pickupContactHtml}
 
           <p>
             <strong>Shipping address:</strong><br>
