@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pre-order · Sheer Mesh Legwear | Leg Theory</title>
+  <meta name="description" content="Pre-order the Sheer Mesh Legwear in black (long and short) and in limited cream. Ships by 15 December.">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #000;
+      color: #fff;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .shipping-banner {
+      width: 100%;
+      padding: 9px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.82);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .nav {
+      height: 48px;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+      font-size: 12px;
+      letter-spacing: 0.18em;
+    }
+
+    .nav button {
+      background: none;
+      border: none;
+      color: #fff;
+      font-family: inherit;
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      cursor: pointer;
+    }
+
+    .content {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 40px 24px 60px;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      font-size: clamp(32px, 6vw, 58px);
+      font-weight: 300;
+      letter-spacing: 0.04em;
+      margin-bottom: 18px;
+    }
+
+    .intro {
+      font-size: 15px;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.76);
+      margin-bottom: 44px;
+      max-width: 560px;
+    }
+
+    /* PRODUCT */
+
+    .product {
+      border-top: 1px solid rgba(255,255,255,0.18);
+      padding-top: 32px;
+      margin-bottom: 48px;
+    }
+
+    .product-name {
+      font-size: clamp(24px, 4vw, 34px);
+      font-weight: 300;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+
+    .product-meta {
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.75);
+      margin-bottom: 6px;
+    }
+
+    .product-note {
+      font-size: 12px;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 18px;
+    }
+
+    .gallery {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      margin-bottom: 20px;
+      scrollbar-width: none;
+    }
+
+    .gallery::-webkit-scrollbar { display: none; }
+
+    .gallery img {
+      flex: 0 0 82%;
+      max-width: 420px;
+      aspect-ratio: 3 / 4;
+      object-fit: cover;
+      scroll-snap-align: start;
+    }
+
+    .gallery.single img { flex-basis: 100%; }
+
+    .lengths {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .length {
+      width: 120px;
+      padding: 12px 10px;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.35);
+      color: #fff;
+      font-family: inherit;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .length.selected {
+      background: #fff;
+      color: #000;
+      border-color: #fff;
+    }
+
+    .length:disabled {
+      color: rgba(255,255,255,0.4);
+      border-color: rgba(255,255,255,0.2);
+      cursor: default;
+    }
+
+    .length-note {
+      min-height: 18px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 14px;
+    }
+
+    .addon {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+      padding: 14px 16px;
+      margin-bottom: 14px;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.28);
+      color: #fff;
+      font-family: inherit;
+      font-size: 14px;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .addon.selected { border-color: #fff; }
+    .addon.gift { cursor: default; }
+
+    .addon img {
+      width: 56px;
+      height: 56px;
+      object-fit: cover;
+      flex: 0 0 56px;
+    }
+
+    .addon-check {
+      flex: 0 0 16px;
+      width: 16px;
+      height: 16px;
+      border: 1px solid rgba(255,255,255,0.6);
+    }
+
+    .addon.selected .addon-check { background: #fff; }
+
+    .addon small {
+      display: block;
+      margin-top: 4px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.55);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 16px;
+      background: #fff;
+      color: #000;
+      border: none;
+      font-family: inherit;
+      font-size: 13px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .btn.secondary {
+      background: transparent;
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.5);
+    }
+
+    .btn:disabled {
+      background: rgba(255,255,255,0.25);
+      color: rgba(255,255,255,0.7);
+      cursor: default;
+    }
+
+    .added {
+      min-height: 20px;
+      margin-top: 10px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.7);
+    }
+
+    /* DETAILS */
+
+    .section-heading {
+      margin: 28px 0 10px;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .details {
+      font-size: 15px;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.76);
+      border-top: 1px solid rgba(255,255,255,0.18);
+      padding-top: 8px;
+      margin-bottom: 40px;
+    }
+
+    .details p { margin-bottom: 14px; }
+    .details ul { margin: 0 0 14px 18px; }
+    .details li { margin-bottom: 6px; }
+
+    /* BAG */
+
+    .bag {
+      border: 1px solid rgba(255,255,255,0.28);
+      padding: 22px 20px;
+      margin-bottom: 20px;
+    }
+
+    .bag-title {
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .bag-line {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+      font-size: 14px;
+    }
+
+    .bag-line span.name { flex: 1; line-height: 1.5; }
+
+    .qty {
+      width: 32px;
+      height: 32px;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.4);
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .bag-empty,
+    .bag-note {
+      font-size: 13px;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.6);
+    }
+
+    .bag-total {
+      margin: 16px 0 6px;
+      font-size: 15px;
+    }
+
+    .countries {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 8px;
+      margin: 16px 0 10px;
+    }
+
+    .countries .btn {
+      padding: 13px 10px;
+      font-size: 12px;
+    }
+
+    .status {
+      min-height: 20px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.75);
+    }
+
+    .footer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding: 28px 24px;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      justify-content: center;
+    }
+
+    .footer a {
+      color: rgba(255,255,255,0.6);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="shipping-banner">
+    Pre-order · Ships by 15 December · Free shipping over €100
+  </div>
+
+  <nav class="nav">
+    <span>LEG THEORY</span>
+    <button type="button" onclick="scrollToBag()">BAG (<span id="bagCount">0</span>)</button>
+  </nav>
+
+  <main class="content">
+
+    <p class="eyebrow">Pre-order</p>
+    <h1>Sheer Mesh Legwear</h1>
+
+    <p class="intro">
+      We produce in very small quantities. Pre-ordering secures your pair and
+      helps us decide how many to make. Everything ships by 15 December.
+    </p>
+
+
+    <!-- BLACK -->
+
+    <section class="product" id="black">
+
+      <h2 class="product-name">Black</h2>
+      <p class="product-meta">€35 / pair</p>
+      <p class="product-note">The original. Long or short.</p>
+
+      <div class="gallery">
+        <img src="Mesh1.jpg" alt="Sheer mesh legwear in black, worn with platform heels at the pole">
+        <img src="Mesh2.jpg" alt="Sheer mesh legwear in black, back view with ribbon ties" loading="lazy">
+        <img src="Mesh3.jpg" alt="Sheer mesh legwear in black, side view showing the flare" loading="lazy">
+        <img src="Mesh4.jpg" alt="Sheer mesh legwear in black, ties left loose" loading="lazy">
+        <img src="Mesh5.jpg" alt="Sheer mesh legwear in black, in motion on the pole" loading="lazy">
+      </div>
+
+      <div class="lengths">
+        <button type="button" class="length selected" data-length="long" onclick="selectLength('long')">Long · 95 cm</button>
+        <button type="button" class="length" data-length="short" id="shortButton" onclick="selectLength('short')">Short · 80 cm</button>
+      </div>
+      <p class="length-note" id="lengthNote"></p>
+
+      <button type="button" class="addon" id="blackGarters" onclick="toggleBlackGarters()">
+        <span class="addon-check"></span>
+        <img src="Garters1.jpg" alt="Black leg garter with gold buckle">
+        <span>
+          Add a pair of black leg garters — €2
+          <small>Recommended below 52 cm thigh, or if you fold the top over.</small>
+        </span>
+      </button>
+
+      <button type="button" class="btn" id="blackAdd" onclick="addBlack()">Pre-order — €35</button>
+      <p class="added" id="blackAdded"></p>
+
+    </section>
+
+
+    <!-- CREAM -->
+
+    <section class="product" id="cream">
+
+      <h2 class="product-name">Cream</h2>
+      <p class="product-meta">€35 / pair · Long · 95 cm</p>
+      <p class="product-note">
+        A limited colour, in a small batch. Soft and warm on skin in daylight,
+        with champagne ribbon ties. Fabric preview shown; product photos coming soon.
+      </p>
+
+      <div class="gallery single">
+        <img src="Cream1.jpg" alt="Cream sheer mesh fabric, preview from our supplier">
+      </div>
+
+      <div class="addon selected gift" id="creamGift">
+        <span class="addon-check"></span>
+        <img src="GartersWhite1.jpg" alt="Off-white leg garter with gold rings">
+        <span id="creamGiftText">
+          Off-white leg garters included, free with pre-orders until 15 November
+          <small>A thank-you for trusting the colour before seeing it on.</small>
+        </span>
+      </div>
+
+      <button type="button" class="btn" id="creamAdd" onclick="addCream()">Pre-order — €35</button>
+      <p class="added" id="creamAdded"></p>
+
+    </section>
+
+
+    <!-- DETAILS -->
+
+    <section class="details">
+
+      <h3 class="section-heading">Details</h3>
+      <ul>
+        <li>Material: 90% polyamide, 10% elastane</li>
+        <li>Length: long 95 cm, short 80 cm (black only)</li>
+        <li>Upper-thigh fit: tested on 52–67 cm circumference. Above 67 cm? Message us before ordering.</li>
+        <li>Long ribbon ties at the top of each leg: knot at the side, wrap around the waist, tie to your shorts, or leave them loose.</li>
+      </ul>
+
+      <h3 class="section-heading">Finding your length</h3>
+      <p>
+        Measure in your heels, from the very top of your inner thigh down to where
+        you want the mesh to finish. The long version gives a dramatic drape over the
+        platform; the short version suits shorter legs or a cleaner finish.
+      </p>
+
+      <h3 class="section-heading">How the pre-order works</h3>
+      <ul>
+        <li>Everything ships by 15 December. If anything changes on our side, we'll let you know right away.</li>
+        <li>Short version: made for pre-orders only. Order by 15 November.</li>
+        <li>Cream: off-white garters are free with pre-orders until 15 November.</li>
+        <li>Shipping to NL, BE, DE, FR, IT, free over €100. Or choose free pickup in Amsterdam at checkout.</li>
+      </ul>
+
+    </section>
+
+
+    <!-- BAG -->
+
+    <section class="bag" id="bag">
+      <div class="bag-title">Your pre-order</div>
+      <div id="bagLines"></div>
+      <div class="bag-total" id="bagTotal"></div>
+      <p class="bag-note" id="bagNote"></p>
+
+      <div id="checkoutArea" hidden>
+        <p class="bag-note" style="margin-top:14px;">Choose your shipping country to check out:</p>
+        <div class="countries">
+          <button type="button" class="btn secondary" onclick="checkout('NL')">Netherlands</button>
+          <button type="button" class="btn secondary" onclick="checkout('BE')">Belgium</button>
+          <button type="button" class="btn secondary" onclick="checkout('DE')">Germany</button>
+          <button type="button" class="btn secondary" onclick="checkout('FR')">France</button>
+          <button type="button" class="btn secondary" onclick="checkout('IT')">Italy</button>
+        </div>
+        <p class="status" id="status"></p>
+        <p class="bag-note">Other countries? Message us on <a href="https://www.instagram.com/thelegtheory/" target="_blank" rel="noopener" style="color:#fff;">Instagram</a>.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <a href="policies.html">Shipping & Returns</a>
+    <a href="terms.html">Terms</a>
+    <a href="about.html">About</a>
+    <a href="mailto:hello@legtheory.com">Contact</a>
+  </footer>
+
+  <script>
+    /*
+      PRE-ORDER PAGE (Nov 2026)
+      Keep dates and keys in sync with PREORDER in
+      functions/api/create-checkout.js. Has its own bag, separate from
+      the main shop cart, so pre-orders never mix with the sleeves.
+    */
+    const SHORT_CLOSES_AT = Date.parse('2026-11-15T23:59:59+01:00');
+    const GIFT_UNTIL = Date.parse('2026-11-15T23:59:59+01:00');
+    const FREE_SHIPPING_FROM = 100;
+    const BAG_KEY = 'legTheoryPreorderBag';
+
+    const PRODUCTS = {
+      'mesh-long':         { name: 'Black · Long 95 cm', price: 35 },
+      'mesh-short':        { name: 'Black · Short 80 cm', price: 35 },
+      'mesh-cream':        { name: 'Cream · Long 95 cm', price: 35 },
+      'leg-garters':       { name: 'Black leg garters', price: 2 }
+    };
+
+    const shortClosed = () => Date.now() > SHORT_CLOSES_AT;
+    const giftActive = () => Date.now() <= GIFT_UNTIL;
+
+    let blackLength = 'long';
+    let blackGarters = false;
+    let blackGartersAvailable = true;
+
+    let bag = [];
+
+    try {
+      bag = JSON.parse(localStorage.getItem(BAG_KEY) || '[]')
+        .filter(item => PRODUCTS[item.product] && item.quantity > 0);
+    } catch (error) {
+      bag = [];
+    }
+
+    function saveBag() {
+      try {
+        localStorage.setItem(BAG_KEY, JSON.stringify(bag));
+      } catch (error) {
+        /* storage unavailable: the bag still works on this page */
+      }
+      renderBag();
+    }
+
+    function quantityOf(product) {
+      const item = bag.find(entry => entry.product === product);
+      return item ? item.quantity : 0;
+    }
+
+    function addToBag(product, quantity = 1) {
+      const item = bag.find(entry => entry.product === product);
+      if (item) {
+        item.quantity += quantity;
+      } else {
+        bag.push({ product, quantity });
+      }
+    }
+
+    function blackPairs() {
+      return quantityOf('mesh-long') + quantityOf('mesh-short');
+    }
+
+    /* Garters never outnumber the black pairs */
+    function fixGarters() {
+      const garters = bag.find(entry => entry.product === 'leg-garters');
+      if (!garters) return;
+      garters.quantity = Math.min(garters.quantity, blackPairs());
+      bag = bag.filter(entry => entry.quantity > 0);
+    }
+
+    /* BLACK */
+
+    function selectLength(length) {
+      if (length === 'short' && shortClosed()) return;
+      blackLength = length;
+      document.querySelectorAll('.length').forEach(button => {
+        button.classList.toggle('selected', button.dataset.length === length);
+      });
+      updateLengthNote();
+    }
+
+    function updateLengthNote() {
+      const note = document.getElementById('lengthNote');
+      const shortButton = document.getElementById('shortButton');
+
+      if (shortClosed()) {
+        shortButton.disabled = true;
+        note.textContent = 'Pre-orders for the short version are closed.';
+        if (blackLength === 'short') selectLength('long');
+        return;
+      }
+
+      note.textContent = blackLength === 'short'
+        ? 'Short version: made for pre-orders only. Order by 15 November.'
+        : '';
+    }
+
+    function toggleBlackGarters() {
+      if (!blackGartersAvailable) return;
+      blackGarters = !blackGarters;
+      document.getElementById('blackGarters').classList.toggle('selected', blackGarters);
+      document.getElementById('blackAdd').textContent =
+        blackGarters ? 'Pre-order — €37' : 'Pre-order — €35';
+    }
+
+    function addBlack() {
+      const key = blackLength === 'short' ? 'mesh-short' : 'mesh-long';
+      if (key === 'mesh-short' && shortClosed()) return;
+
+      addToBag(key);
+      if (blackGarters && blackGartersAvailable) addToBag('leg-garters');
+      saveBag();
+
+      document.getElementById('blackAdded').textContent =
+        `Added: ${PRODUCTS[key].name}${blackGarters ? ' + garters' : ''}`;
+    }
+
+    /* CREAM */
+
+    function addCream() {
+      addToBag('mesh-cream');
+      saveBag();
+      document.getElementById('creamAdded').textContent =
+        giftActive() ? 'Added: Cream · garters included free' : 'Added: Cream';
+    }
+
+    function setupCreamGift() {
+      if (giftActive()) return;
+      const gift = document.getElementById('creamGift');
+      gift.hidden = true;
+    }
+
+    /* BAG */
+
+    function changeQuantity(product, change) {
+      const item = bag.find(entry => entry.product === product);
+      if (!item) return;
+      item.quantity += change;
+      bag = bag.filter(entry => entry.quantity > 0);
+      fixGarters();
+      saveBag();
+    }
+
+    function subtotal() {
+      return bag.reduce((sum, item) => sum + PRODUCTS[item.product].price * item.quantity, 0);
+    }
+
+    function renderBag() {
+      const lines = document.getElementById('bagLines');
+      const count = bag.reduce((sum, item) => sum + item.quantity, 0);
+
+      document.getElementById('bagCount').textContent = count;
+      document.getElementById('checkoutArea').hidden = count === 0;
+
+      if (count === 0) {
+        lines.innerHTML = '<p class="bag-empty">Nothing here yet.</p>';
+        document.getElementById('bagTotal').textContent = '';
+        document.getElementById('bagNote').textContent = '';
+        return;
+      }
+
+      lines.innerHTML = bag.map(item => {
+        const product = PRODUCTS[item.product];
+        const gift = item.product === 'mesh-cream' && giftActive()
+          ? '<br><small style="color:rgba(255,255,255,0.55);">+ off-white garters, free</small>'
+          : '';
+        return `
+          <div class="bag-line">
+            <span class="name">${product.name} · €${product.price}${gift}</span>
+            <button type="button" class="qty" aria-label="One less" onclick="changeQuantity('${item.product}', -1)">−</button>
+            <span>${item.quantity}</span>
+            <button type="button" class="qty" aria-label="One more" onclick="changeQuantity('${item.product}', 1)">+</button>
+          </div>`;
+      }).join('');
+
+      const total = subtotal();
+
+      document.getElementById('bagTotal').textContent = `Subtotal: €${total}`;
+      document.getElementById('bagNote').textContent =
+        total >= FREE_SHIPPING_FROM
+          ? 'Your order ships free. Ships by 15 December.'
+          : `Free shipping from €${FREE_SHIPPING_FROM}. Ships by 15 December.`;
+    }
+
+    function scrollToBag() {
+      document.getElementById('bag').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    async function checkout(country) {
+      const status = document.getElementById('status');
+      const buttons = document.querySelectorAll('.countries .btn');
+
+      if (bag.length === 0) return;
+
+      buttons.forEach(button => { button.disabled = true; });
+      status.textContent = 'Opening checkout…';
+
+      try {
+        const response = await fetch('/api/create-checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ country, items: bag })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          status.textContent = data.error || 'Checkout could not be created. Please try again.';
+          buttons.forEach(button => { button.disabled = false; });
+          return;
+        }
+
+        window.location.href = data.url;
+
+      } catch (error) {
+        console.error(error);
+        status.textContent = 'Checkout could not be created. Please try again.';
+        buttons.forEach(button => { button.disabled = false; });
+      }
+    }
+
+    /* Black garters: hide the add-on if they are out of stock */
+    fetch('/api/inventory', { cache: 'no-store' })
+      .then(response => response.ok ? response.json() : Promise.reject())
+      .then(availability => {
+        if (availability['leg-garters'] === 0) {
+          blackGartersAvailable = false;
+          document.getElementById('blackGarters').hidden = true;
+          bag = bag.filter(item => item.product !== 'leg-garters');
+          saveBag();
+        }
+      })
+      .catch(() => { /* keep the add-on visible */ });
+
+    updateLengthNote();
+    setupCreamGift();
+    renderBag();
+  </script>
+
+</body>
+</html>

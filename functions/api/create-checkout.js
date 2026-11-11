@@ -240,6 +240,22 @@ export async function onRequest({ request, env }) {
     return json({ error: 'Your cart is empty' }, 400);
   }
 
+  /*
+    Pre-orders check out on their own page, never together with
+    the in-stock leg sleeves.
+  */
+  const hasPreorderItem =
+    [...quantities.keys()].some(isPreorder);
+
+  const hasSleeves =
+    [...quantities.keys()].some(key => PRODUCTS[key].type === 'sleeves');
+
+  if (hasPreorderItem && hasSleeves) {
+    return json({
+      error: 'Pre-order items check out separately from the leg sleeves.'
+    }, 400);
+  }
+
   if (
     quantities.has('mesh-short') &&
     Date.now() > PREORDER.shortClosesAt
@@ -447,7 +463,9 @@ export async function onRequest({ request, env }) {
     'cancel_url',
     isUkOneTime
       ? `${origin}${UK_ORDER.page}?checkout=cancelled`
-      : `${origin}/collection.html?checkout=cancelled`
+      : hasPreorderItem
+        ? `${origin}/preorder?checkout=cancelled`
+        : `${origin}/collection.html?checkout=cancelled`
   );
 
   lineItems.forEach((item, index) => {
