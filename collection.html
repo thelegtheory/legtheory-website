@@ -418,6 +418,40 @@
       color: #000;
     }
 
+    .length-options {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .length-options[hidden] {
+      display: none;
+    }
+
+    .length-option {
+      width: 110px;
+      padding: 12px 10px;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.35);
+      color: #fff;
+      font-family: inherit;
+      cursor: pointer;
+      text-align: center;
+      transition: 0.2s ease;
+    }
+
+    .length-option:hover,
+    .length-option.selected {
+      border-color: #fff;
+      background: #fff;
+      color: #000;
+    }
+
+    .length-option.sold-out {
+      color: rgba(255,255,255,0.55);
+      border-color: rgba(255,255,255,0.30);
+    }
+
     .size-option.sold-out {
       color: rgba(255,255,255,0.55);
       border-color: rgba(255,255,255,0.30);
@@ -988,6 +1022,16 @@
         BLACK
       </button>
 
+      <button
+        class="drawer-link"
+        type="button"
+        data-product="mesh"
+        data-color="cream"
+        onclick="selectDrawerMesh('cream', this)"
+      >
+        CREAM
+      </button>
+
     </div>
 
   </aside>
@@ -1157,6 +1201,29 @@
           style="margin-top:-14px; margin-bottom:10px;"
         ></div>
 
+        <div
+          class="length-options"
+          id="meshLengths"
+        >
+          <button
+            type="button"
+            class="length-option selected"
+            data-length="long"
+            onclick="selectMeshLength('long')"
+          >
+            Long · 95 cm
+          </button>
+
+          <button
+            type="button"
+            class="length-option"
+            data-length="short"
+            onclick="selectMeshLength('short')"
+          >
+            Short · 80 cm
+          </button>
+        </div>
+
 
         <section class="product-carousel">
 
@@ -1203,7 +1270,7 @@
             onclick="openGarterGallery()"
             aria-label="View leg garter photos"
           >
-            <img src="Garters1.jpg" alt="Close-up of the gold buckle on a worn leg garter">
+            <img id="garterThumb" src="Garters1.jpg" alt="Close-up of the gold buckle on a worn leg garter">
           </button>
 
           <button
@@ -1279,7 +1346,7 @@
 
           <ul class="description-list">
             <li>Material: 90% polyamide, 10% elastane</li>
-            <li>Length: 95 cm</li>
+            <li id="meshLengthDetail">Length: 95 cm</li>
             <li>
               Upper-thigh fit: tested on 52–67 cm circumference.
               If you measure above 67 cm, message us before ordering.
@@ -1291,7 +1358,9 @@
           <p>
             Measure in your heels, from the very top of your inner thigh down to where
             you want the mesh to finish. The 95 cm length gives a dramatic drape and
-            generous platform coverage. Message us if you're unsure.
+            generous platform coverage. The short version (80 cm, black only) is
+            made for shorter legs or a cleaner finish above the platform.
+            Message us if you're unsure.
           </p>
 
           <h3 class="description-heading">Leg garters — optional</h3>
@@ -1689,15 +1758,50 @@
     const MESH_COLORS = {
       black: {
         title: 'Black',
-        meshKey: 'mesh-long',
-        gartersKey: 'leg-garters'
+        lengths: { long: 'mesh-long', short: 'mesh-short' },
+        gartersKey: 'leg-garters',
+        gartersTitle: 'Black',
+        gartersImage: 'Garters1.jpg'
+      },
+      cream: {
+        title: 'Cream',
+        lengths: { long: 'mesh-cream' },
+        gartersKey: 'leg-garters-white',
+        gartersTitle: 'Off-white',
+        gartersImage: 'GartersWhite1.jpg',
+        gallery: [
+          { src: 'Cream1.jpg', alt: 'Cream sheer mesh fabric, preview from our supplier' }
+        ],
+        note: 'Fabric preview shown · product photos coming soon'
       }
     };
 
+    /*
+      PRE-ORDER (Nov 2026)
+      Keep in sync with PREORDER in functions/api/create-checkout.js.
+      Pre-order products have no stock limit. When stock arrives,
+      remove the key here and in the functions.
+    */
+    const PREORDER = {
+      keys: ['mesh-long', 'mesh-short', 'mesh-cream', 'leg-garters-white'],
+      shipsBy: '15 December',
+      shortClosesAt: Date.parse('2026-11-15T23:59:59+01:00'),
+      giftUntil: Date.parse('2026-11-15T23:59:59+01:00'),
+      cutoffLabel: '15 November'
+    };
+
+    const isPreorderKey = key => PREORDER.keys.includes(key);
+
+    const shortClosed = () => Date.now() > PREORDER.shortClosesAt;
+
+    const creamGiftActive = () => Date.now() <= PREORDER.giftUntil;
+
     let currentMeshColor = 'black';
+    let currentMeshLength = 'long';
 
     const meshKey = () =>
-      MESH_COLORS[currentMeshColor].meshKey;
+      MESH_COLORS[currentMeshColor].lengths[currentMeshLength] ||
+      MESH_COLORS[currentMeshColor].lengths.long;
 
     const gartersKey = () =>
       MESH_COLORS[currentMeshColor].gartersKey;
@@ -1709,20 +1813,25 @@
 
       for (const color of Object.values(MESH_COLORS)) {
 
-        if (productKey === color.meshKey) {
-          return {
-            type: 'mesh',
-            color: color.title,
-            name: `Sheer Mesh Legwear · ${color.title}`,
-            price: 35
-          };
+        for (const [length, key] of Object.entries(color.lengths)) {
+          if (productKey === key) {
+            return {
+              type: 'mesh',
+              color: color.title,
+              name:
+                `Sheer Mesh Legwear · ${color.title}` +
+                (length === 'short' ? ' · Short 80 cm' : '') +
+                (isPreorderKey(key) ? ' · Pre-order' : ''),
+              price: 35
+            };
+          }
         }
 
         if (productKey === color.gartersKey) {
           return {
             type: 'garters',
             color: color.title,
-            name: `Leg Garters · ${color.title}`,
+            name: `Leg Garters · ${color.gartersTitle || color.title}`,
             price: 2
           };
         }
@@ -1802,7 +1911,22 @@
           entry.gartersKey === gartersProductKey
         );
 
-      return color ? color.meshKey : null;
+      return color ? color.lengths.long : null;
+    }
+
+
+    /* All mesh pairs (any length) in the garters' colour */
+    function countMatchingMesh(gartersProductKey) {
+
+      const color =
+        Object.values(MESH_COLORS).find(entry =>
+          entry.gartersKey === gartersProductKey
+        );
+
+      if (!color) return 0;
+
+      return Object.values(color.lengths)
+        .reduce((sum, key) => sum + getCartQuantity(key), 0);
     }
 
 
@@ -1817,7 +1941,7 @@
         if (!isGartersKey(item.product)) return true;
 
         const meshCount =
-          getCartQuantity(getMatchingMeshKey(item.product));
+          countMatchingMesh(item.product);
 
         if (meshCount === 0) return false;
 
@@ -2179,6 +2303,10 @@
 
 
     async function hasEnoughStock(product, quantity) {
+  if (isPreorderKey(product)) {
+    return product !== 'mesh-short' || !shortClosed();
+  }
+
   try {
     const response = await fetch('/api/check-stock', {
       method: 'POST',
@@ -2383,10 +2511,19 @@
 
       if (!note) return;
 
+      const preorderNote =
+        (cart.some(item => isPreorderKey(item.product))
+          ? ` Includes pre-order items: your order ships together by ${PREORDER.shipsBy}.`
+          : '') +
+        (getCartQuantity(MESH_COLORS.cream.lengths.long) > 0 && creamGiftActive()
+          ? ' Off-white leg garters are included free with your cream pre-order.'
+          : '');
+
       note.textContent =
-        qualifiesForFreeShipping()
+        (qualifiesForFreeShipping()
           ? 'Your order ships free to the Netherlands, Belgium, Germany, France and Italy.'
-          : `Free shipping on orders of €${FREE_SHIPPING_FROM} or more to the Netherlands, Belgium, Germany, France and Italy.`;
+          : `Free shipping on orders of €${FREE_SHIPPING_FROM} or more to the Netherlands, Belgium, Germany, France and Italy.`) +
+        preorderNote;
     }
 
 
@@ -2423,7 +2560,7 @@
   if (
     change > 0 &&
     isGartersKey(item.product) &&
-    item.quantity >= getCartQuantity(getMatchingMeshKey(item.product))
+    item.quantity >= countMatchingMesh(item.product)
   ) {
     alert(
       'Leg garters can be added once per pair of mesh legwear.'
@@ -2610,6 +2747,45 @@
     */
 
     let meshCarouselReady = false;
+    let blackMeshGalleryHtml = '';
+
+
+    function selectMeshLength(length) {
+
+      if (!MESH_COLORS[currentMeshColor].lengths[length]) return;
+
+      currentMeshLength = length;
+
+      updateMeshLengthButtons();
+
+      document
+        .getElementById('meshConfirmation')
+        .textContent = '';
+
+      applyMeshAvailability();
+    }
+
+
+    function updateMeshLengthButtons() {
+
+      document
+        .querySelectorAll('#meshLengths .length-option')
+        .forEach(button => {
+          const length = button.dataset.length;
+
+          button.classList.toggle('selected', length === currentMeshLength);
+
+          button.classList.toggle(
+            'sold-out',
+            length === 'short' && shortClosed()
+          );
+        });
+
+      document
+        .getElementById('meshLengthDetail')
+        .textContent =
+        currentMeshLength === 'short' ? 'Length: 80 cm' : 'Length: 95 cm';
+    }
 
 
     function showMesh(drawerButton, color = 'black') {
@@ -2619,10 +2795,47 @@
       currentMeshColor =
         MESH_COLORS[color] ? color : 'black';
 
+      const meshColor = MESH_COLORS[currentMeshColor];
+
+      if (!meshColor.lengths[currentMeshLength]) {
+        currentMeshLength = 'long';
+      }
+
       document
         .getElementById('meshTitle')
         .textContent =
-        MESH_COLORS[currentMeshColor].title;
+        meshColor.title;
+
+      /* Gallery: black uses the photos in the HTML, other colours their own */
+      const gallery = document.getElementById('meshGallery');
+
+      if (!blackMeshGalleryHtml) {
+        blackMeshGalleryHtml = gallery.innerHTML;
+      }
+
+      gallery.innerHTML = meshColor.gallery
+        ? meshColor.gallery
+            .map(image => `<div class="gallery-item"><img src="${image.src}" alt="${image.alt}"></div>`)
+            .join('')
+        : blackMeshGalleryHtml;
+
+      gallery.scrollLeft = 0;
+      meshCarouselReady = false;
+
+      /* Length buttons only when the colour has more than one length */
+      document
+        .getElementById('meshLengths')
+        .hidden = Object.keys(meshColor.lengths).length < 2;
+
+      updateMeshLengthButtons();
+
+      const garterThumb = document.getElementById('garterThumb');
+      garterThumb.src = meshColor.gartersImage;
+      garterThumb.alt = `${meshColor.gartersTitle} leg garter`;
+
+      if (gartersSelected) {
+        toggleGarters();
+      }
 
       document
         .querySelectorAll('.drawer-link')
@@ -2665,47 +2878,83 @@
       const meshButton =
         document.getElementById('meshAddButton');
 
-      const garterOption =
-        document.getElementById('garterOption');
+      const meshColor = MESH_COLORS[currentMeshColor];
+      const key = meshKey();
+      const preorder = isPreorderKey(key);
 
-      const meshSoldOut =
-        inventoryAvailability[meshKey()] === 0;
+      const meshSoldOut = preorder
+        ? (key === 'mesh-short' && shortClosed())
+        : inventoryAvailability[key] === 0;
+
+      const gift =
+        currentMeshColor === 'cream' && creamGiftActive();
 
       const gartersSoldOut =
+        !isPreorderKey(gartersKey()) &&
         inventoryAvailability[gartersKey()] === 0;
+
+      if (gift || gartersSoldOut) {
+        gartersSelected = false;
+      }
+
+      const action = preorder ? 'Pre-order' : 'Add to cart';
 
       meshButton.disabled = meshSoldOut;
       meshButton.classList.toggle('disabled', meshSoldOut);
       meshButton.textContent =
         meshSoldOut
-          ? 'Sold out'
-          : (gartersSelected ? 'Add to cart — €37' : 'Add to cart — €35');
+          ? (preorder ? 'Pre-order closed' : 'Sold out')
+          : (gartersSelected ? `${action} — €37` : `${action} — €35`);
 
       document
         .getElementById('garterAddon')
         .hidden = gartersSoldOut;
 
-      /*
-        Sold out: show the restock note (goes away by itself
-        once stock is added again).
-      */
+      /* Note under the price */
+      let note = '';
+
+      if (preorder) {
+        if (key === 'mesh-short') {
+          note = shortClosed()
+            ? 'Pre-orders for the short version are closed.'
+            : `Pre-order · ships by ${PREORDER.shipsBy} · Short version made for pre-orders only, order by ${PREORDER.cutoffLabel}`;
+        } else {
+          note = `Pre-order · ships by ${PREORDER.shipsBy}`;
+        }
+
+        if (meshColor.note) {
+          note += ` · ${meshColor.note}`;
+        }
+      } else if (meshSoldOut) {
+        note = 'Restocking soon. <a href="https://www.instagram.com/thelegtheory/" target="_blank" rel="noopener" style="color:#fff;">Follow us on Instagram</a> — we’ll announce when pre-order opens.';
+      } else if (inventoryAvailability[key] === 1) {
+        note = 'Only 1 left';
+      }
+
       document
         .getElementById('meshStockNote')
-        .innerHTML =
-        meshSoldOut
-          ? 'Restocking soon. <a href="https://www.instagram.com/thelegtheory/" target="_blank" rel="noopener" style="color:#fff;">Follow us on Instagram</a> — we’ll announce when pre-order opens.'
-          : (inventoryAvailability[meshKey()] === 1 ? 'Only 1 left' : '');
+        .innerHTML = note;
+
+      /* Garters option: a free gift for cream pre-orders until the cut-off */
+      const garterOption = document.getElementById('garterOption');
+
+      garterOption.disabled = gift;
+      garterOption.classList.toggle('selected', gift || gartersSelected);
+      garterOption.setAttribute('aria-pressed', String(gift || gartersSelected));
+      document
+        .getElementById('garterAddon')
+        .classList.toggle('selected', gift || gartersSelected);
+
+      const gartersName = `${meshColor.gartersTitle.toLowerCase()} leg garters`;
 
       document
         .querySelector('#garterOption .addon-title')
         .textContent =
-        inventoryAvailability[gartersKey()] === 1
-          ? 'Add a pair of leg garters — €2 · Only 1 left'
-          : 'Add a pair of leg garters — €2';
-
-      if (gartersSoldOut) {
-        gartersSelected = false;
-      }
+        gift
+          ? `Includes a pair of ${gartersName}, free with pre-orders until ${PREORDER.cutoffLabel}`
+          : (!isPreorderKey(gartersKey()) && inventoryAvailability[gartersKey()] === 1
+              ? `Add a pair of ${gartersName} — €2 · Only 1 left`
+              : `Add a pair of ${gartersName} — €2`);
     }
 
 
@@ -2739,6 +2988,8 @@
 
     function toggleGarters() {
 
+      if (currentMeshColor === 'cream' && creamGiftActive()) return;
+
       gartersSelected = !gartersSelected;
 
       const option =
@@ -2769,9 +3020,14 @@
 
       if (!(await hasEnoughStock(meshKey(), meshQuantity))) {
         confirmation.textContent =
-          'No more mesh legwear is currently available.';
+          meshKey() === 'mesh-short' && shortClosed()
+            ? 'Pre-orders for the short version are closed.'
+            : 'No more mesh legwear is currently available.';
         return;
       }
+
+      const preorder = isPreorderKey(meshKey());
+      const gift = currentMeshColor === 'cream' && creamGiftActive();
 
       let addGarters = gartersSelected;
 
@@ -2808,12 +3064,16 @@
 
       saveCart();
 
+      const added = preorder ? 'Pre-order' : 'Mesh legwear';
+
       confirmation.textContent =
-        addGarters
-          ? 'Mesh legwear and leg garters added to cart'
-          : (gartersSelected
-              ? 'Mesh legwear added to cart. The leg garters are currently unavailable.'
-              : 'Mesh legwear added to cart');
+        gift
+          ? 'Pre-order added to cart · garters included free'
+          : addGarters
+            ? `${added} and leg garters added to cart`
+            : (gartersSelected
+                ? `${added} added to cart. The leg garters are currently unavailable.`
+                : `${added} added to cart`);
     }
 
 
@@ -3010,6 +3270,10 @@
       ) {
         const meshColor =
           MESH_COLORS[requestedColor] ? requestedColor : 'black';
+
+        if (urlParams.get('length')?.toLowerCase() === 'short') {
+          currentMeshLength = 'short';
+        }
 
         showMesh(
           document.querySelector(

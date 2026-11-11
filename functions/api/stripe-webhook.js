@@ -88,6 +88,15 @@ function escapeHtml(value = '') {
     .replaceAll("'", '&#039;');
 }
 
+/*
+  PRE-ORDER (Nov 2026)
+  Keep in sync with PREORDER in create-checkout.js and check-stock.js.
+  These products have no stock rows yet: they are not checked or
+  reduced here, and are marked "pre-order" in the emails.
+*/
+const PREORDER_KEYS = ['mesh-long', 'mesh-short', 'mesh-cream', 'leg-garters-white'];
+const PREORDER_SHIPS_BY = '15 December';
+
 function formatProductName(productKey) {
   const productNames = {
     'black-s': 'Patent Leather Leg Sleeves · Black · Size S',
@@ -103,7 +112,10 @@ function formatProductName(productKey) {
     'red-l': 'Patent Leather Leg Sleeves · Red · Size L',
 
     'mesh-long': 'Sheer Mesh Legwear · Black',
-    'leg-garters': 'Leg Garters · Black'
+    'mesh-short': 'Sheer Mesh Legwear · Black · Short (80 cm)',
+    'mesh-cream': 'Sheer Mesh Legwear · Cream',
+    'leg-garters': 'Leg Garters · Black',
+    'leg-garters-white': 'Leg Garters · Off-white'
   };
 
   return productNames[productKey] || productKey;
@@ -303,6 +315,10 @@ export async function onRequestPost({
       }, 400);
     }
 
+    if (PREORDER_KEYS.includes(item.product)) {
+      continue;
+    }
+
     const row = await env.DB
       .prepare(`
         SELECT stock
@@ -324,6 +340,10 @@ export async function onRequestPost({
     Reduce stock for each purchased SKU.
   */
   for (const item of cart) {
+    if (PREORDER_KEYS.includes(item.product)) {
+      continue;
+    }
+
     const quantity = Number(item.quantity);
 
     await env.DB
@@ -396,10 +416,14 @@ export async function onRequestPost({
         Number(item.quantity);
 
       const giftNote = item.gift ? ' (gift)' : '';
+      const preorderNote =
+        PREORDER_KEYS.includes(item.product) && !item.gift
+          ? ' · pre-order'
+          : '';
 
       return `
         <li style="margin-bottom:8px;">
-          ${friendlyProductName} × ${quantity}${giftNote}
+          ${friendlyProductName} × ${quantity}${preorderNote}${giftNote}
         </li>
       `;
     })
@@ -434,8 +458,15 @@ export async function onRequestPost({
     UK orders: posted from Amsterdam; customer pays import VAT +
     Royal Mail handling fee on delivery.
   */
+  const hasPreorder =
+    cart.some(item => PREORDER_KEYS.includes(item.product));
+
   const dispatchNote =
-    address.country === 'GB'
+    hasPreorder
+      ? `Your order includes pre-order items, so everything ships together
+         by ${PREORDER_SHIPS_BY}. We'll send you the tracking link as soon
+         as it's on its way.`
+      : address.country === 'GB'
       ? `We try to ship within 1 working day and will send you the
          tracking link as soon as your parcel is on its way. Royal Mail
          may contact you by email or text to pay UK import VAT and their

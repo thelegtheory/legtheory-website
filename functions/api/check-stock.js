@@ -44,6 +44,20 @@ export async function onRequestPost({ request, env }) {
     }, 400);
   }
 
+  /*
+    PRE-ORDER (Nov 2026): keep in sync with create-checkout.js.
+    No stock limit; the short version closes after the cut-off.
+  */
+  const PREORDER_KEYS = ['mesh-long', 'mesh-short', 'mesh-cream', 'leg-garters-white'];
+  const SHORT_CLOSES_AT = Date.parse('2026-11-15T23:59:59+01:00');
+
+  if (PREORDER_KEYS.includes(product)) {
+    return json({
+      available:
+        product !== 'mesh-short' || Date.now() <= SHORT_CLOSES_AT
+    });
+  }
+
   const row = await env.DB
     .prepare(`
       SELECT stock

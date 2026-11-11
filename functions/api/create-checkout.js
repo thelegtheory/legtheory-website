@@ -72,6 +72,28 @@ export async function onRequest({ request, env }) {
   const isUkOneTime = UK_ORDER.enabled && country === UK_ORDER.country;
 
   /*
+    PRE-ORDER (Nov 2026)
+    Keep in sync with PREORDER in collection.html, check-stock.js
+    and stripe-webhook.js.
+    - these products have no stock limit (no inventory rows needed)
+    - the short version closes after shortClosesAt
+    - cream orders get off-white garters as a gift until giftUntil
+      (added to the metadata only, so not charged)
+    When stock arrives: remove a key from keys and give it a
+    normal inventory row with the real stock.
+  */
+  const PREORDER = {
+    keys: ['mesh-long', 'mesh-short', 'mesh-cream', 'leg-garters-white'],
+    shipsBy: '15 December',
+    shortClosesAt: Date.parse('2026-11-15T23:59:59+01:00'),
+    giftUntil: Date.parse('2026-11-15T23:59:59+01:00'),
+    giftGarters: 'leg-garters-white',
+    giftFor: 'mesh-cream'
+  };
+
+  const isPreorder = key => PREORDER.keys.includes(key);
+
+  /*
     type is used for the cart rules:
     - garters can only be bought together with mesh legwear in
       the same colour (never more pairs of garters than pairs of mesh)
@@ -113,11 +135,29 @@ export async function onRequest({ request, env }) {
       type: 'mesh',
       color: 'black'
     },
+    'mesh-short': {
+      name: 'Sheer Mesh Legwear - Black Short (80 cm)',
+      amount: 3500,
+      type: 'mesh',
+      color: 'black'
+    },
+    'mesh-cream': {
+      name: 'Sheer Mesh Legwear - Cream',
+      amount: 3500,
+      type: 'mesh',
+      color: 'cream'
+    },
     'leg-garters': {
       name: 'Leg Garters - Black',
       amount: 200,
       type: 'garters',
       color: 'black'
+    },
+    'leg-garters-white': {
+      name: 'Leg Garters - Off-white',
+      amount: 200,
+      type: 'garters',
+      color: 'cream'
     }
   };
 
@@ -190,6 +230,25 @@ export async function onRequest({ request, env }) {
     );
   }
 
+  const giftActive = Date.now() <= PREORDER.giftUntil;
+
+  if (giftActive) {
+    quantities.delete(PREORDER.giftGarters);
+  }
+
+  if (quantities.size === 0) {
+    return json({ error: 'Your cart is empty' }, 400);
+  }
+
+  if (
+    quantities.has('mesh-short') &&
+    Date.now() > PREORDER.shortClosesAt
+  ) {
+    return json({
+      error: 'Pre-orders for the short version are closed.'
+    }, 400);
+  }
+
   /*
     Cart rules for the garters add-on.
   */
@@ -248,6 +307,16 @@ export async function onRequest({ request, env }) {
 
   for (const [productKey, quantity] of quantities.entries()) {
     const selectedProduct = PRODUCTS[productKey];
+
+    if (isPreorder(productKey)) {
+      checkoutItems.push({
+        ...selectedProduct,
+        name: `${selectedProduct.name} · Pre-order (ships by ${PREORDER.shipsBy})`,
+        productKey,
+        quantity
+      });
+      continue;
+    }
 
     const stockRow = await env.DB
       .prepare(
@@ -323,6 +392,26 @@ export async function onRequest({ request, env }) {
       if (meshLine) {
         meshLine.name = `${meshLine.name} (+ leg garters as a gift)`;
       }
+    }
+  }
+
+  /*
+    Pre-order gift: off-white garters with cream, until the cut-off.
+  */
+  const creamPairs = quantities.get(PREORDER.giftFor) || 0;
+
+  if (giftActive && creamPairs > 0) {
+    metadataCart.push({
+      product: PREORDER.giftGarters,
+      quantity: creamPairs,
+      gift: true
+    });
+
+    const creamLine =
+      lineItems.find(item => item.productKey === PREORDER.giftFor);
+
+    if (creamLine) {
+      creamLine.name = `${creamLine.name} + off-white leg garters as a gift`;
     }
   }
 
