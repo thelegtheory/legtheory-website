@@ -63,13 +63,24 @@ export async function onRequest({ request, env }) {
     page: '/uk-personal-order-r8q4.html'
   };
 
-  if (country === UK_ORDER.country && !UK_ORDER.enabled) {
-    return json({
-      error: 'UK orders are paused for now. Follow us on Instagram for updates.'
-    }, 400);
-  }
-
   const isUkOneTime = UK_ORDER.enabled && country === UK_ORDER.country;
+
+  /*
+    UK PRE-ORDER (Nov 2026)
+    While the UK order page is paused, the UK is open for pre-order
+    items only (from /preorder). Shipped from Amsterdam by tracked
+    letterbox; the customer pays UK import VAT + Royal Mail fee on
+    delivery. Shipping: 1 pair €7, 2 pairs €9, 3 pairs €10 (PostNL
+    letterbox €6.05 / €8.15 / €9.00 plus a small buffer), never free.
+    More than 3 pairs: arranged by DM.
+  */
+  const isUkPreorder = country === 'GB' && !isUkOneTime;
+
+  const UK_PREORDER_SHIPPING = {
+    byPairs: { 1: 700, 2: 900, 3: 1000 },
+    name: 'UK tracked shipping (from Amsterdam)',
+    maxPairs: 3
+  };
 
   /*
     PRE-ORDER (Nov 2026)
@@ -165,6 +176,7 @@ export async function onRequest({ request, env }) {
     typeof country !== 'string' ||
     (
       !isUkOneTime &&
+      !isUkPreorder &&
       !Object.prototype.hasOwnProperty.call(SHIPPING, country)
     )
   ) {
@@ -249,6 +261,28 @@ export async function onRequest({ request, env }) {
 
   const hasSleeves =
     [...quantities.keys()].some(key => PRODUCTS[key].type === 'sleeves');
+
+  if (isUkPreorder) {
+    const onlyPreorder = [...quantities.keys()].every(key =>
+      isPreorder(key) || key === 'leg-garters'
+    );
+
+    if (!onlyPreorder || !hasPreorderItem) {
+      return json({
+        error: 'UK orders are open for the pre-order only. Questions? DM us on Instagram.'
+      }, 400);
+    }
+
+    const meshPairs = [...quantities.entries()]
+      .filter(([key]) => PRODUCTS[key].type === 'mesh')
+      .reduce((sum, [, quantity]) => sum + quantity, 0);
+
+    if (meshPairs > UK_PREORDER_SHIPPING.maxPairs) {
+      return json({
+        error: 'For more than 3 pairs to the UK, please DM us on Instagram.'
+      }, 400);
+    }
+  }
 
   if (hasPreorderItem && hasSleeves) {
     return json({
@@ -439,8 +473,15 @@ export async function onRequest({ request, env }) {
   const qualifiesForFreeShipping =
     subtotal >= FREE_SHIPPING_FROM;
 
+  const ukPairs = countByType('mesh');
+
   const shipping = isUkOneTime
     ? { amount: UK_ORDER.amount, name: UK_ORDER.name }
+    : isUkPreorder
+      ? {
+          amount: UK_PREORDER_SHIPPING.byPairs[Math.max(1, ukPairs)],
+          name: UK_PREORDER_SHIPPING.name
+        }
     : qualifiesForFreeShipping
       ? { amount: 0, name: 'Free shipping' }
       : SHIPPING[country];
@@ -504,7 +545,7 @@ export async function onRequest({ request, env }) {
     UK orders: phone number required, so Royal Mail can text the
     customer about import VAT (email is always collected by Stripe).
   */
-  if (isUkOneTime) {
+  if (isUkOneTime || isUkPreorder) {
     params.append('phone_number_collection[enabled]', 'true');
   }
 

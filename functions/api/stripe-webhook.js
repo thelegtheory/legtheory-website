@@ -496,7 +496,12 @@ export async function onRequestPost({
       : hasPreorder
       ? `Your order includes pre-order items, so everything ships together
          by ${PREORDER_SHIPS_BY}. We'll send you the tracking link as soon
-         as it's on its way.`
+         as it's on its way.` +
+        (address.country === 'GB'
+          ? ` Royal Mail (UK post) may contact you by email or text to pay UK
+             import VAT and their handling fee before delivery. Please only
+             pay through the official Royal Mail website.`
+          : '')
       : address.country === 'GB'
       ? `We try to ship within 1 working day and will send you the
          tracking link as soon as your parcel is on its way. Royal Mail

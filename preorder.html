@@ -542,6 +542,7 @@
         <li>Short version: made for pre-orders only. Order by 15 November.</li>
         <li>Cream: off-white garters are free with pre-orders until 15 November.</li>
         <li>Shipping to NL, BE, DE, FR, IT, free over €100. Or choose free pickup in Amsterdam at checkout.</li>
+        <li>UK: €7 for 1 pair, €9 for 2, €10 for 3. Royal Mail (UK post) may ask you to pay UK import VAT plus a handling fee (around £15) before delivery. Questions? DM us.</li>
       </ul>
 
     </section>
@@ -563,7 +564,13 @@
           <button type="button" class="btn secondary" onclick="checkout('DE')">Germany</button>
           <button type="button" class="btn secondary" onclick="checkout('FR')">France</button>
           <button type="button" class="btn secondary" onclick="checkout('IT')">Italy</button>
+          <button type="button" class="btn secondary" onclick="checkout('GB')">United Kingdom</button>
         </div>
+        <p class="bag-note" style="margin-bottom:10px;">
+          UK: shipped from Amsterdam, €7 for 1 pair, €9 for 2, €10 for 3.
+          Royal Mail (UK post) may ask you to pay UK import VAT plus a handling fee
+          (around £15) before delivery.
+        </p>
         <p class="status" id="status"></p>
         <p class="bag-note">Other countries? Message us on <a href="https://www.instagram.com/thelegtheory/" target="_blank" rel="noopener" style="color:#fff;">Instagram</a>.</p>
       </div>
@@ -761,8 +768,8 @@
       document.getElementById('bagTotal').textContent = `Subtotal: €${total}`;
       document.getElementById('bagNote').textContent =
         total >= FREE_SHIPPING_FROM
-          ? 'Your order ships free. Ships by 15 December.'
-          : `Free shipping from €${FREE_SHIPPING_FROM}. Ships by 15 December.`;
+          ? 'Ships free within the EU (NL, BE, DE, FR, IT). Ships by 15 December.'
+          : `Free EU shipping from €${FREE_SHIPPING_FROM}. Ships by 15 December.`;
     }
 
     function scrollToBag() {
