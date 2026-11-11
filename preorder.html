@@ -79,6 +79,64 @@
       max-width: 560px;
     }
 
+    /* TILES */
+
+    .tiles {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+
+    .tile {
+      display: block;
+      align-self: start;
+      background: none;
+      border: none;
+      padding: 0;
+      color: #fff;
+      font-family: inherit;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .tile img {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      object-fit: cover;
+      display: block;
+      margin-bottom: 12px;
+    }
+
+    .tile-name {
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .tile-meta {
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.6;
+    }
+
+    .back {
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.7);
+      font-family: inherit;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      cursor: pointer;
+      margin-bottom: 24px;
+    }
+
+    [hidden] { display: none !important; }
+
     /* PRODUCT */
 
     .product {
@@ -369,13 +427,32 @@
     </p>
 
 
+    <!-- TILES -->
+
+    <div class="tiles" id="tiles">
+      <button type="button" class="tile" onclick="openProduct('black')">
+        <img src="Mesh1.jpg" alt="Sheer mesh legwear in black, worn at the pole">
+        <div class="tile-name">Black</div>
+        <div class="tile-meta">€35 · Long 95 cm or Short 80 cm</div>
+      </button>
+
+      <button type="button" class="tile" onclick="openProduct('cream')">
+        <img src="Cream1.jpg" alt="Cream sheer mesh fabric, preview from our supplier">
+        <div class="tile-name">Cream</div>
+        <div class="tile-meta">€35 · Limited colour<br>Garters free until 15 Nov</div>
+      </button>
+    </div>
+
+
     <!-- BLACK -->
 
-    <section class="product" id="black">
+    <section class="product" id="black" hidden>
+
+      <button type="button" class="back" onclick="showTiles()">← Pre-order</button>
 
       <h2 class="product-name">Black</h2>
       <p class="product-meta">€35 / pair</p>
-      <p class="product-note">The original. Long or short.</p>
+      <p class="product-note">The original. Long (95 cm) or short (80 cm).</p>
 
       <div class="gallery">
         <img src="Mesh1.jpg" alt="Sheer mesh legwear in black, worn with platform heels at the pole">
@@ -408,7 +485,9 @@
 
     <!-- CREAM -->
 
-    <section class="product" id="cream">
+    <section class="product" id="cream" hidden>
+
+      <button type="button" class="back" onclick="showTiles()">← Pre-order</button>
 
       <h2 class="product-name">Cream</h2>
       <p class="product-meta">€35 / pair · Long · 95 cm</p>
@@ -589,8 +668,9 @@
         return;
       }
 
-      note.textContent = blackLength === 'short'
-        ? 'Short version: made for pre-orders only. Order by 15 November.'
+      note.innerHTML = blackLength === 'short'
+        ? 'Short: 80 cm. Made for pre-orders only, order by 15 November. ' +
+          'Want to see it on? Check our <a href="https://www.instagram.com/thelegtheory/" target="_blank" rel="noopener" style="color:#fff;">Instagram story highlights</a> or DM us.'
         : '';
     }
 
@@ -625,6 +705,7 @@
 
     function setupCreamGift() {
       if (giftActive()) return;
+      document.querySelectorAll('.tile-meta')[1].textContent = '€35 · Limited colour';
       const gift = document.getElementById('creamGift');
       gift.hidden = true;
     }
@@ -731,9 +812,42 @@
       })
       .catch(() => { /* keep the add-on visible */ });
 
+    /* VIEWS: tiles, or one product (also via #black / #cream) */
+
+    function openProduct(name, push = true) {
+      document.getElementById('tiles').hidden = true;
+      document.querySelector('.intro').hidden = true;
+      ['black', 'cream'].forEach(id => {
+        document.getElementById(id).hidden = id !== name;
+      });
+      if (push) history.pushState(null, '', `#${name}`);
+      window.scrollTo({ top: 0 });
+    }
+
+    function showTiles(push = true) {
+      document.getElementById('tiles').hidden = false;
+      document.querySelector('.intro').hidden = false;
+      document.getElementById('black').hidden = true;
+      document.getElementById('cream').hidden = true;
+      if (push) history.pushState(null, '', location.pathname + location.search);
+      window.scrollTo({ top: 0 });
+    }
+
+    function applyHash() {
+      const name = location.hash.slice(1);
+      if (name === 'black' || name === 'cream') {
+        openProduct(name, false);
+      } else {
+        showTiles(false);
+      }
+    }
+
+    window.addEventListener('popstate', applyHash);
+
     updateLengthNote();
     setupCreamGift();
     renderBag();
+    applyHash();
   </script>
 
 </body>
