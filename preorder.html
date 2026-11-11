@@ -479,7 +479,7 @@
 <body>
 
   <div class="shipping-banner">
-    Pre-order · Ships by 15 December · Free shipping over €100
+    Pre-order · Ships by 15 December
   </div>
 
   <nav class="nav">
@@ -612,8 +612,12 @@
         <li>Everything ships by 15 December. If anything changes on our side, we'll let you know right away.</li>
         <li>Short version: made for pre-orders only. Order by 15 November.</li>
         <li>Cream: off-white garters are free with pre-orders until 15 November.</li>
-        <li>Shipping to NL, BE, DE, FR, IT, free over €100. Or choose free pickup in Amsterdam at checkout.</li>
+        <li>Shipping to NL, BE, DE, FR, IT and the UK*. Or choose free pickup in Amsterdam at checkout.</li>
       </ul>
+      <p style="font-size:12px; color:rgba(255,255,255,0.55);">
+        * UK orders ship from Amsterdam. Royal Mail (UK post) may ask you to pay
+        UK import VAT plus a handling fee, around £15, before delivery.
+      </p>
 
     </section>
 
@@ -686,7 +690,6 @@
     */
     const SHORT_CLOSES_AT = Date.parse('2026-11-15T23:59:59+01:00');
     const GIFT_UNTIL = Date.parse('2026-11-15T23:59:59+01:00');
-    const FREE_SHIPPING_FROM = 100;
     const BAG_KEY = 'legTheoryPreorderBag';
 
     const PRODUCTS = {
@@ -863,9 +866,7 @@
 
       document.getElementById('bagTotal').textContent = `Subtotal: €${total}`;
       document.getElementById('bagNote').textContent =
-        total >= FREE_SHIPPING_FROM
-          ? 'Ships free within the EU (NL, BE, DE, FR, IT). Ships by 15 December.'
-          : `Free EU shipping from €${FREE_SHIPPING_FROM}. Ships by 15 December.`;
+        'Ships by 15 December. Shipping is added at checkout.';
     }
 
     function openBag() {
