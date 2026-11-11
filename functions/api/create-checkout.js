@@ -510,6 +510,22 @@ export async function onRequest({ request, env }) {
     shipping.name
   );
 
+  /*
+    AMSTERDAM PICKUP (temporary, Nov 2026)
+    Free second option for Netherlands orders. The webhook spots it
+    via metadata[method]=pickup. To remove: delete this block.
+  */
+  if (country === 'NL') {
+    params.append('shipping_options[1][shipping_rate_data][type]', 'fixed_amount');
+    params.append('shipping_options[1][shipping_rate_data][fixed_amount][amount]', '0');
+    params.append('shipping_options[1][shipping_rate_data][fixed_amount][currency]', 'eur');
+    params.append(
+      'shipping_options[1][shipping_rate_data][display_name]',
+      'Pickup in Amsterdam (free) · we’ll message you to arrange'
+    );
+    params.append('shipping_options[1][shipping_rate_data][metadata][method]', 'pickup');
+  }
+
   try {
     const response = await fetch(
       'https://api.stripe.com/v1/checkout/sessions',

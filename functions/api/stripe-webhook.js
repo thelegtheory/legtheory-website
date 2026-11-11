@@ -455,6 +455,30 @@ export async function onRequestPost({
   };
 
   /*
+    Amsterdam pickup (temporary): the chosen Stripe shipping rate
+    carries metadata.method = 'pickup'. If the lookup fails, the
+    order is simply treated as a normal shipment.
+  */
+  let isPickup = false;
+  const shippingRateId = session.shipping_cost?.shipping_rate;
+
+  if (shippingRateId && env.STRIPE_SECRET_KEY) {
+    try {
+      const rateResponse = await fetch(
+        `https://api.stripe.com/v1/shipping_rates/${encodeURIComponent(shippingRateId)}`,
+        { headers: { Authorization: `Bearer ${env.STRIPE_SECRET_KEY}` } }
+      );
+
+      if (rateResponse.ok) {
+        const rate = await rateResponse.json();
+        isPickup = rate?.metadata?.method === 'pickup';
+      }
+    } catch (error) {
+      console.error('Shipping rate lookup failed:', error);
+    }
+  }
+
+  /*
     UK orders: posted from Amsterdam; customer pays import VAT +
     Royal Mail handling fee on delivery.
   */
@@ -462,7 +486,14 @@ export async function onRequestPost({
     cart.some(item => PREORDER_KEYS.includes(item.product));
 
   const dispatchNote =
-    hasPreorder
+    isPickup
+      ? (hasPreorder
+          ? `You chose pickup in Amsterdam. Your order includes pre-order
+             items, so we'll message you to arrange a pickup time once
+             everything is in, by ${PREORDER_SHIPS_BY}.`
+          : `You chose pickup in Amsterdam. We'll message you shortly to
+             arrange a pickup time.`)
+      : hasPreorder
       ? `Your order includes pre-order items, so everything ships together
          by ${PREORDER_SHIPS_BY}. We'll send you the tracking link as soon
          as it's on its way.`
@@ -498,7 +529,9 @@ export async function onRequestPost({
           : null);
 
   const shippingLine =
-    shippingAmount === null
+    isPickup
+      ? 'Pickup in Amsterdam (free)'
+      : shippingAmount === null
       ? ''
       : shippingAmount === 0
         ? `Free${countryLabel ? ` (to ${escapeHtml(countryLabel)})` : ''}`
@@ -601,7 +634,7 @@ export async function onRequestPost({
 
     await sendEmail(env, {
       to: env.ORDER_NOTIFICATION_EMAIL,
-      subject: `New paid Leg Theory order${total ? ` — ${total}` : ''}`,
+      subject: `${isPickup ? 'PICKUP · ' : ''}New paid Leg Theory order${total ? ` — ${total}` : ''}`,
       idempotencyKey:
         `legtheory-owner-${session.id}`,
       html: `
