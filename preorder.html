@@ -484,7 +484,7 @@
 
   <nav class="nav">
     <a href="/" style="color:#fff; text-decoration:none;" aria-label="Leg Theory home">LEG THEORY</a>
-    <button type="button" onclick="openBag()">BAG (<span id="bagCount">0</span>)</button>
+    <button type="button" onclick="openBag()">PRE-ORDER BAG (<span id="bagCount">0</span>)</button>
   </nav>
 
   <main class="content">
@@ -548,7 +548,7 @@
         </span>
       </button>
 
-      <button type="button" class="btn" id="blackAdd" onclick="addBlack()">Add to bag — €35</button>
+      <button type="button" class="btn" id="blackAdd" onclick="addBlack()">Add to pre-order bag — €35</button>
       <p class="added" id="blackAdded"></p>
 
     </section>
@@ -580,7 +580,7 @@
         </span>
       </div>
 
-      <button type="button" class="btn" id="creamAdd" onclick="addCream()">Add to bag — €35</button>
+      <button type="button" class="btn" id="creamAdd" onclick="addCream()">Add to pre-order bag — €35</button>
       <p class="added" id="creamAdded"></p>
 
     </section>
@@ -629,10 +629,10 @@
 
   <div class="overlay" id="bagOverlay" onclick="closeBag()"></div>
 
-  <aside class="bag" id="bag" aria-label="Your bag">
+  <aside class="bag" id="bag" aria-label="Your pre-order bag">
     <div class="bag-head">
-      <div class="bag-title">Your pre-order</div>
-      <button type="button" class="close" aria-label="Close bag" onclick="closeBag()">×</button>
+      <div class="bag-title">Your pre-order bag</div>
+      <button type="button" class="close" aria-label="Close pre-order bag" onclick="closeBag()">×</button>
     </div>
 
     <div id="bagLines"></div>
@@ -703,7 +703,7 @@
     };
 
     const bagLink =
-      '<a href="#" onclick="openBag(); return false;" style="color:#fff;">View bag & check out</a>';
+      '<a href="#" onclick="openBag(); return false;" style="color:#fff;">View pre-order bag & check out</a>';
 
     const shortClosed = () => Date.now() > SHORT_CLOSES_AT;
     const giftActive = () => Date.now() <= GIFT_UNTIL;
@@ -790,7 +790,7 @@
       blackGarters = !blackGarters;
       document.getElementById('blackGarters').classList.toggle('selected', blackGarters);
       document.getElementById('blackAdd').textContent =
-        blackGarters ? 'Add to bag — €37' : 'Add to bag — €35';
+        blackGarters ? 'Add to pre-order bag — €37' : 'Add to pre-order bag — €35';
     }
 
     function addBlack() {
@@ -802,7 +802,7 @@
       saveBag();
 
       document.getElementById('blackAdded').innerHTML =
-        `Added to bag: ${PRODUCTS[key].name}${blackGarters ? ' + garters' : ''} · ${bagLink}`;
+        `Added to pre-order bag: ${PRODUCTS[key].name}${blackGarters ? ' + garters' : ''} · ${bagLink}`;
     }
 
     /* CREAM */
@@ -811,7 +811,7 @@
       addToBag('mesh-cream');
       saveBag();
       document.getElementById('creamAdded').innerHTML =
-        (giftActive() ? 'Added to bag: Cream · garters included free' : 'Added to bag: Cream') +
+        (giftActive() ? 'Added to pre-order bag: Cream · garters included free' : 'Added to pre-order bag: Cream') +
         ` · ${bagLink}`;
     }
 
