@@ -61,6 +61,29 @@
       text-indent: 0;
     }
 
+    /* ?font=sans : clean, like the website */
+    body.sans {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-weight: 300;
+    }
+    body.sans h1 { font-weight: 300; letter-spacing: 0.04em; }
+
+    /* ?font=editorial : Didot titles, Helvetica text */
+    body.editorial {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-weight: 300;
+    }
+    body.editorial h1 {
+      font-family: Didot, "Bodoni 72", "Bodoni MT", "Times New Roman", serif;
+      font-size: 9vw;
+      line-height: 1.15;
+      letter-spacing: 0.01em;
+    }
+
+    @media (min-width: 600px) {
+      body.editorial h1 { font-size: 48px; }
+    }
+
     @media (min-width: 600px) {
       body { padding: 0 calc(50vw - 260px); }
       h1 { font-size: 40px; margin-bottom: 36px; }
@@ -71,6 +94,11 @@
   </style>
 </head>
 <body>
+
+  <script>
+    const font = new URLSearchParams(location.search).get('font');
+    if (font === 'sans' || font === 'editorial') document.body.classList.add(font);
+  </script>
 
   <h1>Mesh Legwear<br>Pre-order is open</h1>
 
