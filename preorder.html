@@ -477,7 +477,7 @@
         </span>
       </button>
 
-      <button type="button" class="btn" id="blackAdd" onclick="addBlack()">Pre-order — €35</button>
+      <button type="button" class="btn" id="blackAdd" onclick="addBlack()">Add to bag — €35</button>
       <p class="added" id="blackAdded"></p>
 
     </section>
@@ -509,7 +509,7 @@
         </span>
       </div>
 
-      <button type="button" class="btn" id="creamAdd" onclick="addCream()">Pre-order — €35</button>
+      <button type="button" class="btn" id="creamAdd" onclick="addCream()">Add to bag — €35</button>
       <p class="added" id="creamAdded"></p>
 
     </section>
@@ -542,7 +542,7 @@
         <li>Short version: made for pre-orders only. Order by 15 November.</li>
         <li>Cream: off-white garters are free with pre-orders until 15 November.</li>
         <li>Shipping to NL, BE, DE, FR, IT, free over €100. Or choose free pickup in Amsterdam at checkout.</li>
-        <li>UK shipping: €7 for 1 pair, €9 for 2 pairs, €10 for 3 pairs. Royal Mail (UK post) may ask you to pay UK import VAT plus a handling fee (around £15) before delivery. Questions? DM us.</li>
+        <li>UK: ships from Amsterdam, shipping shown at checkout. Royal Mail (UK post) may ask you to pay UK import VAT plus a handling fee (around £15) before delivery. Questions? DM us.</li>
       </ul>
 
     </section>
@@ -557,7 +557,7 @@
       <p class="bag-note" id="bagNote"></p>
 
       <div id="checkoutArea" hidden>
-        <p class="bag-note" style="margin-top:14px;">Choose your shipping country to check out:</p>
+        <p class="bag-note" style="margin-top:14px;">Check out your pre-order: choose your shipping country.</p>
         <div class="countries">
           <button type="button" class="btn secondary" onclick="checkout('NL')">Netherlands</button>
           <button type="button" class="btn secondary" onclick="checkout('BE')">Belgium</button>
@@ -567,7 +567,7 @@
           <button type="button" class="btn secondary" onclick="checkout('GB')">United Kingdom</button>
         </div>
         <p class="bag-note" style="margin-bottom:10px;">
-          UK shipping (from Amsterdam): €7 for 1 pair, €9 for 2 pairs, €10 for 3 pairs.
+          UK orders ship from Amsterdam; shipping is shown at checkout.
           Royal Mail (UK post) may ask you to pay UK import VAT plus a handling fee
           (around £15) before delivery.
         </p>
@@ -603,6 +603,9 @@
       'mesh-cream':        { name: 'Cream · Long 95 cm', price: 35 },
       'leg-garters':       { name: 'Black leg garters', price: 2 }
     };
+
+    const bagLink =
+      '<a href="#bag" onclick="scrollToBag(); return false;" style="color:#fff;">View bag & check out</a>';
 
     const shortClosed = () => Date.now() > SHORT_CLOSES_AT;
     const giftActive = () => Date.now() <= GIFT_UNTIL;
@@ -689,7 +692,7 @@
       blackGarters = !blackGarters;
       document.getElementById('blackGarters').classList.toggle('selected', blackGarters);
       document.getElementById('blackAdd').textContent =
-        blackGarters ? 'Pre-order — €37' : 'Pre-order — €35';
+        blackGarters ? 'Add to bag — €37' : 'Add to bag — €35';
     }
 
     function addBlack() {
@@ -700,8 +703,8 @@
       if (blackGarters && blackGartersAvailable) addToBag('leg-garters');
       saveBag();
 
-      document.getElementById('blackAdded').textContent =
-        `Added: ${PRODUCTS[key].name}${blackGarters ? ' + garters' : ''}`;
+      document.getElementById('blackAdded').innerHTML =
+        `Added to bag: ${PRODUCTS[key].name}${blackGarters ? ' + garters' : ''} · ${bagLink}`;
     }
 
     /* CREAM */
@@ -709,8 +712,9 @@
     function addCream() {
       addToBag('mesh-cream');
       saveBag();
-      document.getElementById('creamAdded').textContent =
-        giftActive() ? 'Added: Cream · garters included free' : 'Added: Cream';
+      document.getElementById('creamAdded').innerHTML =
+        (giftActive() ? 'Added to bag: Cream · garters included free' : 'Added to bag: Cream') +
+        ` · ${bagLink}`;
     }
 
     function setupCreamGift() {
