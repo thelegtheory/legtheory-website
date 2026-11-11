@@ -73,16 +73,17 @@ export async function onRequest({ request, env }) {
     While the UK order page is paused, the UK is open for pre-order
     items only (from /preorder). Shipped from Amsterdam by tracked
     letterbox; the customer pays UK import VAT + Royal Mail fee on
-    delivery. Shipping: 1 pair €7, 2 pairs €9, 3 pairs €10 (PostNL
-    letterbox €6.05 / €8.15 / €9.00 plus a small buffer), never free.
+    delivery. Shipping: 1 pair €7, 2 pairs €9, 3 pairs €10, 4 pairs €12
+    (PostNL rates plus a small buffer); free from €100, like the EU.
+    Max 4 pairs: 5+ would pass £135, where UK customs duty starts.
     More than 3 pairs: arranged by DM.
   */
   const isUkPreorder = country === 'GB' && !isUkOneTime;
 
   const UK_PREORDER_SHIPPING = {
-    byPairs: { 1: 700, 2: 900, 3: 1000 },
+    byPairs: { 1: 700, 2: 900, 3: 1000, 4: 1200 },
     name: 'UK tracked shipping (from Amsterdam)',
-    maxPairs: 3
+    maxPairs: 4
   };
 
   /*
@@ -282,7 +283,7 @@ export async function onRequest({ request, env }) {
 
     if (meshPairs > UK_PREORDER_SHIPPING.maxPairs) {
       return json({
-        error: 'For more than 3 pairs to the UK, please DM us on Instagram.'
+        error: 'UK orders are limited to 4 pairs, to stay under the UK customs-duty limit. Questions? DM us on Instagram.'
       }, 400);
     }
   }
@@ -481,10 +482,12 @@ export async function onRequest({ request, env }) {
   const shipping = isUkOneTime
     ? { amount: UK_ORDER.amount, name: UK_ORDER.name }
     : isUkPreorder
-      ? {
-          amount: UK_PREORDER_SHIPPING.byPairs[Math.max(1, ukPairs)],
-          name: UK_PREORDER_SHIPPING.name
-        }
+      ? (qualifiesForFreeShipping
+          ? { amount: 0, name: 'Free UK shipping (from Amsterdam)' }
+          : {
+              amount: UK_PREORDER_SHIPPING.byPairs[Math.max(1, ukPairs)],
+              name: UK_PREORDER_SHIPPING.name
+            })
     : qualifiesForFreeShipping
       ? { amount: 0, name: 'Free shipping' }
       : SHIPPING[country];
