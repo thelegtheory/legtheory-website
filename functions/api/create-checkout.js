@@ -73,7 +73,7 @@ export async function onRequest({ request, env }) {
     While the UK order page is paused, the UK is open for pre-order
     items only (from /preorder). Shipped from Amsterdam by tracked
     letterbox; the customer pays UK import VAT + Royal Mail fee on
-    delivery. Shipping: 1 pair €7, 2 pairs €9, 3 pairs €10, 4 pairs €12
+    delivery. Shipping: 1 pair €8, 2 pairs €9, 3 pairs €10, 4 pairs €12
     (PostNL rates plus a small buffer); free from €100, like the EU.
     Max 4 pairs: 5+ would pass £135, where UK customs duty starts.
     More than 3 pairs: arranged by DM.
@@ -81,7 +81,7 @@ export async function onRequest({ request, env }) {
   const isUkPreorder = country === 'GB' && !isUkOneTime;
 
   const UK_PREORDER_SHIPPING = {
-    byPairs: { 1: 700, 2: 900, 3: 1000, 4: 1200 },
+    byPairs: { 1: 800, 2: 900, 3: 1000, 4: 1200 },
     name: 'UK tracked shipping (from Amsterdam)',
     maxPairs: 4
   };
