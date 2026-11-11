@@ -473,10 +473,8 @@ export async function onRequest({ request, env }) {
     0
   );
 
-  /* Pre-orders: no free shipping (flat shipping per country) */
   const qualifiesForFreeShipping =
-    subtotal >= FREE_SHIPPING_FROM &&
-    ![...quantities.keys()].some(isPreorder);
+    subtotal >= FREE_SHIPPING_FROM;
 
   const ukPairs = countByType('mesh');
 
