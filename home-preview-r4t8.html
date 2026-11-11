@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- SECRET PREVIEW of the new homepage. Not linked anywhere. -->
+  <meta name="robots" content="noindex, nofollow">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Leg Theory</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      background: #000;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      color: #fff;
+    }
+
+    /* HERO */
+
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .hero-video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      z-index: 1;
+    }
+
+    .hero-poster {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      z-index: 2;
+      transition: opacity 0.2s ease;
+    }
+
+    .hero-poster.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.18);
+      z-index: 2;
+    }
+
+    /* HOMEPAGE MENU */
+
+    .site-menu {
+      position: absolute;
+      top: 28px;
+      right: 32px;
+      z-index: 5;
+
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .site-menu > a,
+    .info-toggle {
+      display: block;
+      padding: 5px 0;
+
+      color: rgba(255,255,255,0.82);
+      background: none;
+      border: none;
+
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+
+      text-decoration: none;
+      text-align: right;
+
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .site-menu > a:hover,
+    .info-toggle:hover {
+      color: #fff;
+    }
+
+    .info-links {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+
+      margin-top: 0;
+
+      transition:
+        max-height 0.3s ease,
+        opacity 0.25s ease,
+        margin-top 0.25s ease;
+    }
+
+    .info-links.open {
+      max-height: 150px;
+      opacity: 1;
+      margin-top: 4px;
+    }
+
+    .info-links a {
+      display: block;
+      padding: 4px 0;
+
+      color: rgba(255,255,255,0.58);
+      text-decoration: none;
+
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+
+      transition: color 0.2s ease;
+    }
+
+    .info-links a:hover {
+      color: #fff;
+    }
+
+    /* HERO CONTENT */
+
+    .hero-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 3;
+
+      width: 100%;
+      text-align: center;
+      color: #fff;
+    }
+
+    .hero-content h1 {
+      font-size: clamp(42px, 8vw, 110px);
+      font-weight: 300;
+      letter-spacing: 0.18em;
+      margin-bottom: 30px;
+      white-space: nowrap;
+    }
+
+    .collection-button {
+      display: inline-block;
+
+      padding: 13px 25px;
+
+      border: 1px solid #fff;
+      color: #fff;
+      background: transparent;
+
+      text-decoration: none;
+      text-transform: uppercase;
+
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+
+      transition: 0.25s ease;
+    }
+
+    .collection-button:hover {
+      background: #fff;
+      color: #000;
+    }
+
+    /* NEW HERO (preview): campaign photo, line, two buttons */
+
+    .hero-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 30%;
+      z-index: 1;
+    }
+
+    .overlay {
+      background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.35) 0%,
+        rgba(0,0,0,0) 30%,
+        rgba(0,0,0,0) 50%,
+        rgba(0,0,0,0.85) 100%
+      );
+    }
+
+    .hero-content {
+      top: auto;
+      bottom: 7vh;
+      transform: translateX(-50%);
+      padding: 0 22px;
+    }
+
+    .hero-content h1 {
+      margin-bottom: 14px;
+    }
+
+    .hero-line {
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.85);
+      margin-bottom: 24px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hero-buttons .collection-button {
+      width: min(300px, 86vw);
+      text-align: center;
+    }
+
+    .collection-button.primary {
+      background: #fff;
+      color: #000;
+    }
+
+    .collection-button.primary:hover {
+      background: transparent;
+      color: #fff;
+    }
+
+    /* Desktop: photo on the right half, text on the black left half */
+    @media (min-width: 900px) {
+      .hero-image {
+        left: 50%;
+        width: 50%;
+        object-position: center 8%;
+      }
+
+      .overlay {
+        background: linear-gradient(
+          to right,
+          #000 50%,
+          rgba(0,0,0,0) 62%
+        );
+      }
+
+      .hero-content {
+        top: 50%;
+        bottom: auto;
+        left: 25%;
+        width: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .hero-content h1 {
+        font-size: clamp(42px, 5vw, 80px);
+      }
+    }
+
+    /* COLLECTION DRAWER */
+
+    .collection-overlay {
+      position: fixed;
+      inset: 0;
+
+      background: rgba(0, 0, 0, 0.55);
+
+      opacity: 0;
+      visibility: hidden;
+
+      transition:
+        opacity 0.35s ease,
+        visibility 0.35s ease;
+
+      z-index: 998;
+    }
+
+    .collection-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .collection-drawer {
+      position: fixed;
+      top: 0;
+      left: 0;
+
+      width: min(420px, 88vw);
+      height: 100vh;
+
+      background: #000;
+      border-right: 1px solid rgba(255,255,255,0.15);
+
+      transform: translateX(-100%);
+      transition: transform 0.4s ease;
+
+      z-index: 999;
+      padding: 44px 36px;
+    }
+
+    .collection-drawer.open {
+      transform: translateX(0);
+    }
+
+    .drawer-close {
+      position: absolute;
+      top: 22px;
+      right: 24px;
+
+      background: none;
+      border: none;
+      color: #fff;
+
+      font-size: 28px;
+      font-weight: 200;
+
+      cursor: pointer;
+    }
+
+    .drawer-content {
+      margin-top: 70px;
+    }
+
+    .drawer-label {
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      color: #fff;
+      margin-bottom: 34px;
+    }
+
+    .drawer-product-title {
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      line-height: 1.4;
+      color: #fff;
+      margin-bottom: 18px;
+    }
+
+    .drawer-link {
+      display: block;
+      padding: 9px 0 9px 22px;
+
+      color: rgba(255,255,255,0.62);
+      text-decoration: none;
+
+      font-size: 14px;
+      letter-spacing: 0.12em;
+
+      transition: color 0.2s ease;
+    }
+
+    .drawer-link:hover {
+      color: #fff;
+    }
+
+    .drawer-coming-soon {
+      margin-top: 34px;
+
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      line-height: 1.4;
+
+      color: rgba(255,255,255,0.52);
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 600px) {
+
+      .site-menu {
+        top: 22px;
+        right: 22px;
+      }
+
+      .site-menu > a,
+      .info-toggle {
+        font-size: 10px;
+      }
+
+      .info-links a {
+        font-size: 9px;
+      }
+
+      .hero-content h1 {
+        font-size: 11vw;
+        letter-spacing: 0.12em;
+        margin-bottom: 24px;
+      }
+
+      .collection-button {
+        padding: 12px 22px;
+        font-size: 11px;
+      }
+
+      .collection-drawer {
+        width: 88vw;
+        padding: 34px 28px;
+      }
+
+      .drawer-content {
+        margin-top: 58px;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- COLLECTION DRAWER OVERLAY -->
+
+  <div
+    class="collection-overlay"
+    id="collectionOverlay"
+    onclick="closeCollectionDrawer()"
+  ></div>
+
+
+  <!-- COLLECTION DRAWER -->
+
+  <aside
+    class="collection-drawer"
+    id="collectionDrawer"
+  >
+
+    <button
+      class="drawer-close"
+      type="button"
+      onclick="closeCollectionDrawer()"
+      aria-label="Close collection"
+    >
+      ×
+    </button>
+
+    <div class="drawer-content">
+
+      <div class="drawer-label">
+        COLLECTION
+      </div>
+
+      <div class="drawer-product-title">
+        PATENT LEATHER LEG SLEEVES
+      </div>
+
+      <a
+        class="drawer-link"
+        href="collection.html?color=Black"
+      >
+        BLACK
+      </a>
+
+      <a
+        class="drawer-link"
+        href="collection.html?color=White"
+      >
+        WHITE
+      </a>
+
+      <a
+        class="drawer-link"
+        href="collection.html?color=Red"
+      >
+        RED
+      </a>
+
+      <div
+        class="drawer-product-title"
+        style="margin-top:34px;"
+      >
+        SHEER MESH LEGWEAR
+      </div>
+
+      <a
+        class="drawer-link"
+        href="collection.html?product=mesh&amp;color=black"
+      >
+        BLACK
+      </a>
+
+    </div>
+
+  </aside>
+
+
+  <!-- HERO -->
+
+  <section class="hero">
+
+    <img
+      src="Campaign1.jpg"
+      class="hero-image"
+      alt="Three dancers at the pole wearing the black Sheer Mesh Legwear, in red light"
+    >
+
+    <div class="overlay"></div>
+
+
+    <!-- TOP-RIGHT MENU -->
+
+    <nav class="site-menu">
+
+      <a href="about.html">
+        About Leg Theory
+      </a>
+
+      <a href="policies.html">
+        Policies
+      </a>
+
+      <button
+        class="info-toggle"
+        id="infoToggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="infoLinks"
+        onclick="toggleInfo(event)"
+      >
+        + Info
+      </button>
+
+      <div
+        class="info-links"
+        id="infoLinks"
+      >
+
+        <a href="terms.html">
+          Terms
+        </a>
+
+        <a href="privacy.html">
+          Privacy
+        </a>
+
+        <a href="mailto:hello@legtheory.com">
+          Contact
+        </a>
+
+      </div>
+
+    </nav>
+
+
+    <!-- CENTER -->
+
+    <div class="hero-content">
+
+      <h1>
+        LEG THEORY
+      </h1>
+
+      <p class="hero-line">
+        Sheer Mesh Legwear · Pre-order open
+      </p>
+
+      <div class="hero-buttons">
+        <a
+          class="collection-button primary"
+          href="/preorder"
+        >
+          Pre-order Mesh Legwear
+        </a>
+
+        <a
+          class="collection-button"
+          href="shop.html"
+        >
+          Shop Leg Sleeves
+        </a>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <script>
+
+    function openCollectionDrawer() {
+
+      closeInfo();
+
+      document
+        .getElementById('collectionDrawer')
+        .classList.add('open');
+
+      document
+        .getElementById('collectionOverlay')
+        .classList.add('open');
+
+      document.body.style.overflow = 'hidden';
+    }
+
+
+    function closeCollectionDrawer() {
+
+      document
+        .getElementById('collectionDrawer')
+        .classList.remove('open');
+
+      document
+        .getElementById('collectionOverlay')
+        .classList.remove('open');
+
+      document.body.style.overflow = '';
+    }
+
+
+    function toggleInfo(event) {
+
+      event.stopPropagation();
+
+      const infoLinks =
+        document.getElementById('infoLinks');
+
+      const infoToggle =
+        document.getElementById('infoToggle');
+
+      const isOpen =
+        infoLinks.classList.contains('open');
+
+      if (isOpen) {
+        closeInfo();
+      } else {
+        infoLinks.classList.add('open');
+        infoToggle.textContent = '− Info';
+        infoToggle.setAttribute('aria-expanded', 'true');
+      }
+    }
+
+
+    function closeInfo() {
+
+      const infoLinks =
+        document.getElementById('infoLinks');
+
+      const infoToggle =
+        document.getElementById('infoToggle');
+
+      infoLinks.classList.remove('open');
+      infoToggle.textContent = '+ Info';
+      infoToggle.setAttribute('aria-expanded', 'false');
+    }
+
+
+    document.addEventListener('click', event => {
+
+      if (!event.target.closest('.site-menu')) {
+        closeInfo();
+      }
+
+    });
+
+
+    document.addEventListener('keydown', event => {
+
+      if (event.key === 'Escape') {
+        closeInfo();
+        closeCollectionDrawer();
+      }
+
+    });
+
+
+  </script>
+
+</body>
+
+</html>
