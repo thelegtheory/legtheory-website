@@ -201,6 +201,98 @@
       color: #000;
     }
 
+    /* NEW HERO (preview): campaign photo, line, two buttons */
+
+    .hero-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 30%;
+      z-index: 1;
+    }
+
+    .overlay {
+      background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.35) 0%,
+        rgba(0,0,0,0) 30%,
+        rgba(0,0,0,0) 50%,
+        rgba(0,0,0,0.85) 100%
+      );
+    }
+
+    .hero-content {
+      top: auto;
+      bottom: 7vh;
+      transform: translateX(-50%);
+      padding: 0 22px;
+    }
+
+    .hero-content h1 {
+      margin-bottom: 14px;
+    }
+
+    .hero-line {
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.85);
+      margin-bottom: 24px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hero-buttons .collection-button {
+      width: min(300px, 86vw);
+      text-align: center;
+    }
+
+    .collection-button.primary {
+      background: #fff;
+      color: #000;
+    }
+
+    .collection-button.primary:hover {
+      background: transparent;
+      color: #fff;
+    }
+
+    /* Desktop: photo on the right half, text on the black left half */
+    @media (min-width: 900px) {
+      .hero-image {
+        left: 50%;
+        width: 50%;
+        object-position: center 8%;
+      }
+
+      .overlay {
+        background: linear-gradient(
+          to right,
+          #000 50%,
+          rgba(0,0,0,0) 62%
+        );
+      }
+
+      .hero-content {
+        top: 50%;
+        bottom: auto;
+        left: 25%;
+        width: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .hero-content h1 {
+        font-size: clamp(42px, 5vw, 80px);
+      }
+    }
+
     /* COLLECTION DRAWER */
 
     .collection-overlay {
@@ -433,26 +525,10 @@
 
   <section class="hero">
 
-    <video
-      class="hero-video"
-      autoplay
-      muted
-      loop
-      playsinline
-      preload="auto"
-    >
-      <source
-        src="hero%20vid.mov"
-        type="video/quicktime"
-      >
-
-      Your browser does not support the video tag.
-    </video>
-
     <img
-      src="hero-poster.jpg"
-      class="hero-poster"
-      alt=""
+      src="Campaign1.jpg"
+      class="hero-image"
+      alt="Three dancers at the pole wearing the black Sheer Mesh Legwear, in red light"
     >
 
     <div class="overlay"></div>
@@ -511,12 +587,25 @@
         LEG THEORY
       </h1>
 
-      <a
-        class="collection-button"
-        href="shop.html"
-      >
-        View Collection
-      </a>
+      <p class="hero-line">
+        Sheer Mesh Legwear · Pre-order open
+      </p>
+
+      <div class="hero-buttons">
+        <a
+          class="collection-button primary"
+          href="/preorder"
+        >
+          Pre-order Mesh Legwear
+        </a>
+
+        <a
+          class="collection-button"
+          href="shop.html"
+        >
+          Shop Leg Sleeves
+        </a>
+      </div>
 
     </div>
 
@@ -610,17 +699,6 @@
 
     });
 
-
-    const heroVideo =
-      document.querySelector('.hero-video');
-
-    const heroPoster =
-      document.querySelector('.hero-poster');
-
-
-    heroVideo.addEventListener('playing', () => {
-      heroPoster.classList.add('hidden');
-    });
 
   </script>
 
