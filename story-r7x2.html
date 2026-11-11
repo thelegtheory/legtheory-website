@@ -96,7 +96,8 @@
 <body>
 
   <script>
-    const font = new URLSearchParams(location.search).get('font');
+    /* Editorial is the default; ?font=typewriter or ?font=sans for the others */
+    const font = new URLSearchParams(location.search).get('font') || 'editorial';
     if (font === 'sans' || font === 'editorial') document.body.classList.add(font);
   </script>
 
@@ -113,7 +114,7 @@
     <li>Two colors: black and cream</li>
     <li>Ships by 15 December, likely sooner</li>
     <li>Short version: black only, pre-order by 15 Nov</li>
-    <li>Cream: pre-order by 15 Nov and get free off-white garters, a thank-you for trusting a new colour</li>
+    <li>Cream: pre-order by 15 Nov and get free off-white garters, a thank-you for trusting a new color</li>
     <li>Now shipping to the UK, please read the note at checkout</li>
   </ul>
 
