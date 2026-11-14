@@ -1509,13 +1509,31 @@
         id="shippingNote"
       ></div>
 
+      <!-- Netherlands: choose delivery or Amsterdam pickup -->
       <button
         class="copy-button"
-        data-country="NL"
-        onclick="startCheckout('NL')"
+        id="nlButton"
+        onclick="showNlOptions()"
       >
-        Netherlands — €5
+        Netherlands
       </button>
+
+      <div id="nlOptions" style="display:none; padding-left:16px">
+        <button
+          class="copy-button"
+          id="nlShipButton"
+          onclick="startCheckout('NL')"
+        >
+          Delivery — €5
+        </button>
+
+        <button
+          class="copy-button"
+          onclick="startCheckout('NL', true)"
+        >
+          Pickup in Amsterdam — Free
+        </button>
+      </div>
 
       <button
         class="copy-button"
@@ -2501,6 +2519,13 @@
 
         });
 
+      document
+        .getElementById('nlShipButton')
+        .textContent =
+        `Delivery — ${free ? 'Free' : formatEuro(SHIPPING_PRICES.NL.price)}`;
+
+      document.getElementById('nlOptions').style.display = 'none';
+
       renderShippingNote('shippingNote');
 
       document
@@ -2550,7 +2575,14 @@
     }
 
 
-    async function startCheckout(country) {
+    function showNlOptions() {
+      const options = document.getElementById('nlOptions');
+      options.style.display =
+        options.style.display === 'none' ? '' : 'none';
+    }
+
+
+    async function startCheckout(country, pickup = false) {
 
       try {
 
@@ -2565,6 +2597,7 @@
               },
               body: JSON.stringify({
                 country,
+                pickup,
                 items: cart
               })
             }
