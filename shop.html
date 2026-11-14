@@ -344,6 +344,17 @@
                   : `Only 1 left in ${note.dataset.sizes}`;
             }
           });
+
+        /* Every size sold out: replace "Available in S M L" with "Sold out" */
+        document
+          .querySelectorAll('.card-sizes')
+          .forEach(line => {
+            const sizes = line.querySelectorAll('.size');
+            if (sizes.length > 1 &&
+                [...sizes].every(size => !availability[size.dataset.key])) {
+              line.textContent = 'Sold out';
+            }
+          });
       })
       .catch(() => {
         /* inventory unavailable: show sizes without greying */
