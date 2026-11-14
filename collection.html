@@ -1994,6 +1994,14 @@
     }
 
 
+    /* True when every size of this colour is at 0 stock */
+    function colorSoldOut(color) {
+      return ['s', 'm', 'l'].every(
+        size => inventoryAvailability[`${color.toLowerCase()}-${size}`] === 0
+      );
+    }
+
+
     function selectSize(size, button) {
 
       document
@@ -2021,7 +2029,9 @@
         document
           .getElementById('sizeError')
           .innerHTML =
-          `Size ${size} is sold out in this color. Another size may still work depending on fit. <a href="https://www.instagram.com/thelegtheory/" onclick="return handleOrderClick(event)" style="color:#fff;">DM us and we can help.</a>`;
+          colorSoldOut(currentColor)
+            ? `${currentColor} is sold out, and there’s no restock planned for now. <a href="https://www.instagram.com/thelegtheory/" target="_blank" rel="noopener" style="color:#fff;">Follow us on Instagram</a>, we’ll announce it there if that changes.`
+            : `Size ${size} is sold out in this color. Another size may still work depending on fit. <a href="https://www.instagram.com/thelegtheory/" onclick="return handleOrderClick(event)" style="color:#fff;">DM us and we can help.</a>`;
 
         const buyButton =
           document.querySelector(
