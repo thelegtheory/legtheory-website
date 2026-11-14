@@ -1910,6 +1910,24 @@
 
         });
 
+      /* Whole colour sold out: show the note right away, no size needed */
+      if (colorSoldOut(currentColor)) {
+
+        document
+          .getElementById('sizeError')
+          .innerHTML = colorSoldOutMessage();
+
+        const buyButton =
+          document.querySelector(
+            '.order-option-box:last-child .order-button'
+          );
+
+        if (buyButton) {
+          buyButton.disabled = true;
+          buyButton.classList.add('disabled');
+        }
+      }
+
     }
 
 
@@ -1994,6 +2012,11 @@
     }
 
 
+    function colorSoldOutMessage() {
+      return `${currentColor} is sold out, and there’s no restock planned for now. <a href="https://www.instagram.com/thelegtheory/" target="_blank" rel="noopener" style="color:#fff;">Follow us on Instagram</a>, we’ll announce it there if that changes.`;
+    }
+
+
     /* True when every size of this colour is at 0 stock */
     function colorSoldOut(color) {
       return ['s', 'm', 'l'].every(
@@ -2030,7 +2053,7 @@
           .getElementById('sizeError')
           .innerHTML =
           colorSoldOut(currentColor)
-            ? `${currentColor} is sold out, and there’s no restock planned for now. <a href="https://www.instagram.com/thelegtheory/" target="_blank" rel="noopener" style="color:#fff;">Follow us on Instagram</a>, we’ll announce it there if that changes.`
+            ? colorSoldOutMessage()
             : `Size ${size} is sold out in this color. Another size may still work depending on fit. <a href="https://www.instagram.com/thelegtheory/" onclick="return handleOrderClick(event)" style="color:#fff;">DM us and we can help.</a>`;
 
         const buyButton =
