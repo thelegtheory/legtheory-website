@@ -113,9 +113,9 @@
       display: block;
     }
 
+    /* Sold out: light, washed-out "sun-bleached" look */
     .product-card.sold-out img {
-      opacity: 0.4;
-      filter: grayscale(30%);
+      filter: brightness(1.35) contrast(0.5) saturate(0.5);
     }
 
     .product-card img {
@@ -135,7 +135,7 @@
 
     /* Sold-out cards stay faded, also on hover */
     .product-card.sold-out:hover img {
-      opacity: 0.5;
+      opacity: 1;
     }
 
     .card-name {
