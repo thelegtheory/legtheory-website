@@ -208,7 +208,8 @@
       border-color: #fff;
     }
 
-    .length:disabled {
+    .length:disabled,
+    .length.closed {
       color: rgba(255,255,255,0.4);
       border-color: rgba(255,255,255,0.2);
       cursor: default;
@@ -769,7 +770,12 @@
     /* BLACK */
 
     function selectLength(length) {
-      if (length === 'short' && shortClosed()) return;
+      if (length === 'short' && shortClosed()) {
+        /* Closed: only explain when someone taps it */
+        document.getElementById('lengthNote').textContent =
+          'Pre-orders for the short version are closed.';
+        return;
+      }
       blackLength = length;
       document.querySelectorAll('.length').forEach(button => {
         button.classList.toggle('selected', button.dataset.length === length);
@@ -782,8 +788,8 @@
       const shortButton = document.getElementById('shortButton');
 
       if (shortClosed()) {
-        shortButton.disabled = true;
-        note.textContent = 'Pre-orders for the short version are closed.';
+        shortButton.classList.add('closed');
+        note.textContent = '';
         if (blackLength === 'short') selectLength('long');
         return;
       }
