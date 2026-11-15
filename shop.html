@@ -113,9 +113,14 @@
       display: block;
     }
 
-    /* Sold out: light, washed-out "sun-bleached" look */
+    /* Sold out: same colours, lighter, like a soft white veil */
+    .img-veil {
+      display: block;
+      background: #fff;
+    }
+
     .product-card.sold-out img {
-      filter: brightness(1.35) contrast(0.5) saturate(0.5);
+      opacity: 0.65;
     }
 
     .product-card img {
@@ -135,7 +140,7 @@
 
     /* Sold-out cards stay faded, also on hover */
     .product-card.sold-out:hover img {
-      opacity: 1;
+      opacity: 0.65;
     }
 
     .card-name {
@@ -367,6 +372,14 @@
               /* Fade the photo and move the card to the end of the grid */
               const card = line.closest('.product-card');
               card.classList.add('sold-out');
+
+              const img = card.querySelector('img');
+              if (img && !img.parentElement.classList.contains('img-veil')) {
+                const veil = document.createElement('span');
+                veil.className = 'img-veil';
+                img.replaceWith(veil);
+                veil.appendChild(img);
+              }
               card.parentElement.appendChild(card);
             }
           });
