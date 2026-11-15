@@ -113,6 +113,11 @@
       display: block;
     }
 
+    .product-card.sold-out img {
+      opacity: 0.4;
+      filter: grayscale(30%);
+    }
+
     .product-card img {
       display: block;
       width: 100%;
@@ -353,6 +358,11 @@
             if (sizes.length > 1 &&
                 [...sizes].every(size => !availability[size.dataset.key])) {
               line.textContent = 'Sold out';
+
+              /* Fade the photo and move the card to the end of the grid */
+              const card = line.closest('.product-card');
+              card.classList.add('sold-out');
+              card.parentElement.appendChild(card);
             }
           });
       })
