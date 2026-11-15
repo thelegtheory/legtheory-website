@@ -578,6 +578,16 @@
         </span>
       </div>
 
+      <!-- After the gift ends: off-white garters as a €2 add-on, like black -->
+      <button type="button" class="addon" id="creamGarters" onclick="toggleCreamGarters()" hidden>
+        <span class="addon-check"></span>
+        <img src="GartersWhite1.jpg" alt="Off-white leg garter with gold rings">
+        <span>
+          Add a pair of off-white leg garters — €2
+          <small>Recommended below 52 cm thigh, or if you fold the top over.</small>
+        </span>
+      </button>
+
       <button type="button" class="btn" id="creamAdd" onclick="addCream()">Add to pre-order bag — €35</button>
       <p class="added" id="creamAdded"></p>
 
@@ -697,7 +707,8 @@
       'mesh-long':         { name: 'Black · Long 95 cm', price: 35 },
       'mesh-short':        { name: 'Black · Short 80 cm', price: 35 },
       'mesh-cream':        { name: 'Cream · Long 95 cm', price: 35 },
-      'leg-garters':       { name: 'Black leg garters', price: 2 }
+      'leg-garters':       { name: 'Black leg garters', price: 2 },
+      'leg-garters-white': { name: 'Off-white leg garters', price: 2 }
     };
 
     const bagLink =
@@ -709,6 +720,7 @@
     let blackLength = 'long';
     let blackGarters = false;
     let blackGartersAvailable = true;
+    let creamGarters = false;
 
     let bag = [];
 
@@ -746,11 +758,12 @@
       return quantityOf('mesh-long') + quantityOf('mesh-short');
     }
 
-    /* Garters never outnumber the black pairs */
+    /* Garters never outnumber the pairs of their colour */
     function fixGarters() {
-      const garters = bag.find(entry => entry.product === 'leg-garters');
-      if (!garters) return;
-      garters.quantity = Math.min(garters.quantity, blackPairs());
+      const black = bag.find(entry => entry.product === 'leg-garters');
+      if (black) black.quantity = Math.min(black.quantity, blackPairs());
+      const white = bag.find(entry => entry.product === 'leg-garters-white');
+      if (white) white.quantity = Math.min(white.quantity, quantityOf('mesh-cream'));
       bag = bag.filter(entry => entry.quantity > 0);
     }
 
@@ -805,11 +818,23 @@
 
     /* CREAM */
 
+    function toggleCreamGarters() {
+      if (giftActive()) return;
+      creamGarters = !creamGarters;
+      document.getElementById('creamGarters').classList.toggle('selected', creamGarters);
+      document.getElementById('creamAdd').textContent =
+        creamGarters ? 'Add to pre-order bag — €37' : 'Add to pre-order bag — €35';
+    }
+
     function addCream() {
       addToBag('mesh-cream');
+      const withGarters = !giftActive() && creamGarters;
+      if (withGarters) addToBag('leg-garters-white');
       saveBag();
       document.getElementById('creamAdded').innerHTML =
-        (giftActive() ? 'Added to pre-order bag: Cream · garters included free' : 'Added to pre-order bag: Cream') +
+        (giftActive()
+          ? 'Added to pre-order bag: Cream · garters included free'
+          : `Added to pre-order bag: Cream${withGarters ? ' + garters' : ''}`) +
         ` · ${bagLink}`;
     }
 
@@ -818,6 +843,7 @@
       document.querySelectorAll('.tile-meta')[1].textContent = '€35 · Limited colour';
       const gift = document.getElementById('creamGift');
       gift.hidden = true;
+      document.getElementById('creamGarters').hidden = false;
     }
 
     /* BAG */
