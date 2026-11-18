@@ -6,6 +6,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Collection | Leg Theory</title>
+  <meta name="description" content="Sheer mesh legwear and patent leather leg sleeves, designed in Amsterdam for pole and heels.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Leg Theory">
+  <meta property="og:title" content="Collection | Leg Theory">
+  <meta property="og:description" content="Sheer mesh legwear and patent leather leg sleeves, designed in Amsterdam for pole and heels.">
+  <meta property="og:url" content="https://legtheory.com/collection.html">
+  <meta property="og:image" content="https://legtheory.com/Campaign1.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
   <style>
     * {
@@ -43,12 +53,58 @@
     }
 
     .product-label {
-      font-size: clamp(34px, 5vw, 68px);
-      font-weight: 300;
-      letter-spacing: 0.05em;
+      font-size: 15px;
+      font-weight: 400;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
       color: #fff;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
+
+    /* Details / Size & fit / Care / Shipping fold-outs */
+    .info-folds {
+      margin-top: 28px;
+      border-top: 1px solid rgba(255,255,255,0.15);
+    }
+
+    .info-folds details {
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+    }
+
+    .info-folds summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 16px 0;
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .info-folds summary::-webkit-details-marker { display: none; }
+    .info-folds summary::after { content: '+'; color: rgba(255,255,255,0.6); }
+    .info-folds details[open] summary::after { content: '–'; }
+
+    .info-folds .fold-body {
+      padding: 0 0 18px;
+      font-size: 13px;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.72);
+    }
+
+    .info-folds ul, .info-folds ol { margin: 0 0 8px 18px; padding: 0; }
+    .info-folds p { margin: 0 0 8px; }
+    .info-folds a { color: #fff; }
+
+    .fit-table { width: 100%; border-collapse: collapse; margin: 4px 0 10px; font-size: 12px; }
+    .fit-table th, .fit-table td {
+      text-align: left; padding: 7px 6px 7px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+      font-weight: 400;
+    }
+    .fit-table th { color: rgba(255,255,255,0.5); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; }
 
     .product-title {
       font-size: 15px;
@@ -1125,6 +1181,52 @@
           Leg sleeves only. Heels not included.
         </p>
 
+        <div class="info-folds">
+
+          <details>
+            <summary>Details</summary>
+            <div class="fold-body">
+              <ul>
+                <li>High-shine patent finish with a soft inner lining</li>
+                <li>Side zipper, lace-up front and elastic strap under the heel</li>
+                <li>Works with platforms, regular heels, sandals and ankle boots</li>
+                <li>Optional: the top of the front panel is folded down and held by a few small stitches. Cut them carefully to let the panel stand up for more coverage (this can't be undone). DM us for a how-to video.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details>
+            <summary>Size &amp; fit</summary>
+            <div class="fold-body">
+              <table class="fit-table">
+                <tr><th>Size</th><th>Heels</th><th>Ankle to thigh</th><th>Upper leg*</th></tr>
+                <tr><td>S</td><td>EU 34–35</td><td>approx. 55 cm</td><td>46–49 cm</td></tr>
+                <tr><td>M</td><td>EU 36–38</td><td>approx. 58 cm</td><td>50–53 cm</td></tr>
+                <tr><td>L</td><td>EU 39–41</td><td>approx. 61 cm</td><td>53–56 cm</td></tr>
+              </table>
+              <p>* Measured unstretched. The range comes from the lacing, which you can tighten or loosen. Very stretchy, so fuller legs fit well; on slim legs they sit a bit more relaxed.</p>
+              <p>Ankle to thigh shows where the sleeve ends on your leg. Not sure? <a href="https://www.instagram.com/thelegtheory/" target="_blank" rel="noopener">Message us on Instagram</a> and we'll help you choose.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary>Care</summary>
+            <div class="fold-body">
+              <p>After each session, open the zipper and let the sleeves air out inside-out. Wipe the glossy outside with a soft cloth, dampened with water or a little 70% alcohol for sticky spots.</p>
+              <p>If needed, hand wash gently in cool water with a little mild soap, inside-out, without soaking. Pat dry with a towel (don't twist) and lay flat to dry fully.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary>Shipping &amp; returns</summary>
+            <div class="fold-body">
+              <p>Dispatched within 1 working day, tracked. Netherlands €5 (or free pickup in Amsterdam), Belgium, Germany and France €8, Italy €9. Free shipping on orders of €100 or more.</p>
+              <p>Returns are possible. See our <a href="policies.html">shipping &amp; returns policy</a>.</p>
+            </div>
+          </details>
+
+        </div>
+
       </section>
 
 
@@ -1311,10 +1413,11 @@
       </section>
 
     <footer class="collection-footer">
-      <a href="policies.html">Shipping & Returns</a>
-      <a href="policies.html">Policies</a>
+      <a href="shop.html">Shop</a>
       <a href="about.html">About</a>
+      <a href="policies.html">Shipping &amp; Returns</a>
       <a href="mailto:hello@legtheory.com">Contact</a>
+      <a href="https://www.instagram.com/thelegtheory/" target="_blank" rel="noopener">Instagram</a>
     </footer>
           
     </main>

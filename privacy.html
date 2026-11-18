@@ -136,9 +136,18 @@
 
   <main class="page">
 
-    <a href="index.html" class="brand">
-      LEG THEORY
-    </a>
+    <nav class="info-nav" style="display:flex;justify-content:space-between;align-items:center;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:60px;">
+      <a href="shop.html" style="color:rgba(255,255,255,0.7);text-decoration:none;">Shop</a>
+      <a href="index.html" class="brand" style="margin:0;">LEG THEORY</a>
+      <a href="collection.html?cart=open" style="color:rgba(255,255,255,0.7);text-decoration:none;">Cart (<span id="infoCartCount">0</span>)</a>
+    </nav>
+    <script>
+      try {
+        const c = JSON.parse(localStorage.getItem('legTheoryCart') || '[]');
+        document.getElementById('infoCartCount').textContent =
+          c.reduce((t, i) => t + (Number(i.quantity) || 0), 0);
+      } catch (e) {}
+    </script>
 
     <h1>
       Privacy
@@ -305,10 +314,11 @@
     <div class="divider"></div>
 
     <div class="footer-links">
-      <a href="index.html">Home</a>
-      <a href="collection.html">Shop</a>
+      <a href="shop.html">Shop</a>
       <a href="about.html">About</a>
-      <a href="policies.html">Policies</a>
+      <a href="policies.html">Shipping &amp; Returns</a>
+      <a href="mailto:hello@legtheory.com">Contact</a>
+      <a href="https://www.instagram.com/thelegtheory/" target="_blank" rel="noopener">Instagram</a>
     </div>
 
   </main>
